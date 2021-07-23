@@ -1,0 +1,36 @@
+
+\section{Summary, Conclusions, and Future Work}
+\label{section:summary}
+\subsection{Summary}
+In this report, we analysed the difficulties in modelling discontinuous epidemiology models. We reported on the stability and discontinuity problems associated with these models. We showed how stability affects out solutions even if there is a small change in the initial values. We showed how discontinuities reduce the efficiency of the solvers and presented a trivial way to detect that the problem at hand is discontinuous.
+
+We then used ODE software packages in R, Python and Scilab to model two Covid-19 problems, one with a time dependent discontinuity and one with a state dependent discontinuity.
+
+In the time dependent discontinuity problem, we have shown that error-controlled ODE solvers can step over one discontinuity with sufficiently sharp tolerances while fixed step-size solvers cannot. We have shown that though error-controlled can solve the problem, the use of discontinuity handling in the form of cold starts lead to more efficient solutions that allow us to use coarser tolerances. 
+
+In the state dependent discontinuity problem, we have shown that even error control solvers cannot step over multiple discontinuities. We have shown that if the discontinuity is state dependent, we cannot model it trivially using the model function $f(t, y)$ alone as we need a way for the solver to use a previous model function before the discontinuity and a new model function after it. We then introduced event detection and showed how it can be used to model state dependent discontinuity problems by encoding the thresholds as events and applying cold starts. Using event detection provides an efficient and accurate way to solve such problems.
+
+\subsection{Conclusion}
+\label{subsection:conclusion}
+We begin our conclusions by making recommendations to epidemiologists. 
+We recommend that epidemiologists avoid using fixed step-size solvers. They must also avoid coding their own solvers, especially if they are not implementing a fixed step-size solver and prefer the high quality software packages available in their respective programming environments.
+
+We recommend using a form of discontinuity detection whenever there is an if-statement in their right hand side function. The trivial experiment detailed in Section $\ref{subsection:effect_of_discontinuity}$ should be a start.
+
+When they have a problem which has a time dependent discontinuity and know when the discontinuity occur, they should use the form of discontinuity handling presented in this report. Using cold starts allow the researcher to integrate continuous subinterval of the problems in separate calls leading to efficient and accurate solutions.
+
+When they have a problem which has a state dependent discontinuity, they should map out the thresholds at which these discontinuity occur and look to use event detection with these thresholds as events. They can then cold start at each event and integrate continuous subintervals of the problem in separate calls to the solvers. This leads to efficiency and accuracy that is not possible using a naive treatment. 
+
+\subsection{Future Work}
+\label{subsection:future_work}
+In Section $\ref{subsection:naive_state_problem}$, we see that Radau exhibits a strange behaviour when solving the naive state dependent problem. A further analysis needs to be done on the algorithm itself as two different implementation of the algorithm gave similarly bad solutions.
+
+We also propose to do the same discontinuity analysis on Covid-19 PDE models to see how error-controlled and fixed PDE solvers differ. We can also use BACOLIRK or other root finding capable software to analyse how they improve the solutions to discontinuous PDE problems.
+
+VI ================
+We also propose a research on finding and categorising discontinuity detection algorithms and how they can be implemented in IVODE, BVODE and PDE software efficiently.
+=========== VI
+
+VI ======================
+LOOK INTO DDE (delay differential equations) solvers to solve state dependent problems.
+====================== VI
