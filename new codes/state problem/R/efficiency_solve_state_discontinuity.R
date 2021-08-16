@@ -60,7 +60,6 @@ experiment <- function(method) {
     S0 <- N - (E0 + I0 + R0)
     y0 <- c(S0, E0, I0, R0)
     t0 <- 0
-    time <- 0
     nfev <- 0
 
     res <- matrix(nrow=0, ncol=5)
@@ -68,34 +67,31 @@ experiment <- function(method) {
     y_initial <- y0
     measures_implemented <- FALSE
 
-
+    # need to use 179 for t_span to have at least one value
     while (t_initial < 180) {
         tspan = seq(from=t_initial, to=180, by=1)
+        if (length(tspan) == 1) {
+            break
+        }
         out <- 1
         if (measures_implemented) {
-            tic <- Sys.time()   
             out <- ode(func=model_with_measures, y=y_initial, 
                        times=tspan, parms=NULL, method=method, 
                        rootfun=root_10000)
-            toc <- Sys.time()   
-            time <- time + (toc-tic)
             diag <- diagnostics(out)
             nfev <- nfev + diag$istate[3]
             measures_implemented <- FALSE
         } else {
-            tic <- Sys.time()
             out <- ode(func=model_no_measures, y=y_initial, 
                        times=tspan, parms=NULL, method=method,
                        rootfun=root_25000)
-            toc <- Sys.time()   
-            time <- time + (toc-tic)
             diag <- diagnostics(out)
             nfev <- nfev + diag$istate[3]
             measures_implemented <- TRUE
         }
         
         t_change <- length(out[, 1])
-        t_initial <- round(out[t_change, 1]) #round(out[t_change, 1])
+        t_initial <- (out[t_change, 1]) #round(out[t_change, 1])
         y_initial <- out[t_change, ]
         y_initial <- y_initial[!(names(y_initial) %in% c("time"))]
         res <- rbind(res, out)
@@ -107,13 +103,12 @@ experiment <- function(method) {
                         paste("I", method, sep="_"),
                         paste("R", method, sep="_")
                       )
-    list(res=res, nfev=nfev, time=time)
+    list(res=res, nfev=nfev)
 }
 
 out <- experiment("lsoda")
 lsoda_res <- out$res
 lsoda_nfev <- out$nfev
-lsoda_time <- out$time
 #daspk_res <- experiment("daspk") => no root finding
 #euler_res <- experiment("euler") => no root finding
 #rk4_res <- experiment("rk4")     => no root finding
@@ -121,66 +116,28 @@ lsoda_time <- out$time
 out <- experiment("radau")
 radau_res <- out$res
 radau_nfev <- out$nfev
-radau_time <- out$time
 
 out <- experiment("bdf")
 bdf_res <- out$res
 bdf_nfev <- out$nfev
-bdf_time <- out$time
 
 out <- experiment("adams")
 adams_res <- out$res
 adams_nfev <- out$nfev
-adams_time <- out$time
-
-#p <- ggplot(as.data.frame(res), aes(x=time))
-#p <- p + geom_line(aes(y=E_root), color="green")
-#p <- p + geom_line(aes(y=I_root), color="blue")
-#p
-
-final <- as.data.frame(lsoda_res)
-final <- join(final, as.data.frame(radau_res), by="time", type="left")
-final <- join(final, as.data.frame(bdf_res), by="time", type="left")
-final <- join(final, as.data.frame(adams_res), by="time", type="left")
-
-colors <- c("lsoda"="blue", "radau"="orange", "bdf"="brown", "adams"="red")
-p <- ggplot(as.data.frame(final), aes(x=time)) + 
-    geom_line(aes(y=E_lsoda, color="lsoda"), size=1.2) +
-    geom_line(aes(y=E_radau, color="radau"), size=1.2) +
-    geom_line(aes(y=E_bdf, color="bdf"), size=1.2)     + 
-    geom_line(aes(y=E_adams, color="adams"), size=1.2) +
-    labs(x="time", y="E", color="legend") +
-    scale_color_manual(values=colors)
-p
 
 m <- rbind(
-           c("lsoda", lsoda_nfev, lsoda_time), 
-           c("radau", radau_nfev, radau_time), 
-           c("bdf", bdf_nfev, bdf_time), 
-           c("adams", adams_nfev, adams_time) 
-           )
+    c("lsoda", lsoda_nfev), 
+    c("radau", radau_nfev), 
+    c("bdf", bdf_nfev), 
+    c("adams", adams_nfev) 
+)
 m
 
-# lsoda
-#h1 <- ggplot(as.data.frame(final), aes(x=time))
-#h1 <- h1 + geom_line(aes(y=E_lsoda), color="green")
-#h1 <- h1 + geom_line(aes(y=I_lsoda), color="blue")
-#h1
-
-# radau
-#h2 <- ggplot(as.data.frame(final), aes(x=time))
-#h2 <- h2 + geom_line(aes(y=E_radau), color="green")
-#h2 <- h2 + geom_line(aes(y=I_radau), color="blue")
-#h2
-
-# bdf
-#h3 <- ggplot(as.data.frame(final), aes(x=time))
-#h3 <- h3 + geom_line(aes(y=E_bdf), color="green")
-#h3 <- h3 + geom_line(aes(y=I_bdf), color="blue")
-#h3
-
-# adams
-#h4 <- ggplot(as.data.frame(final), aes(x=time))
-#h4 <- h4 + geom_line(aes(y=E_adams), color="green")
-#h4 <- h4 + geom_line(aes(y=I_adams), color="blue")
-#h4
+plot(lsoda_res[, 1], lsoda_res[, 3], type="l", col="black", lwd=2)
+lines(radau_res[, 1], radau_res[, 3], col="orange", lwd=2)
+lines(adams_res[, 1], adams_res[, 3], col="green", lwd=2)
+lines(bdf_res[, 1], bdf_res[, 3], col="blue", lwd=2)
+legend(-6, 25000, 
+       legend=c("lsoda", "radau", "adams", "bdf"),
+       col=   c("black", "orange", "blue", "red"), lty=1:2, cex=0.8,
+       title="Line types", text.font=4)

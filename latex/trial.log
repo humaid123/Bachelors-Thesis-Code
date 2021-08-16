@@ -1,0 +1,1163 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.2) (preloaded format=pdflatex 2021.5.23)  15 AUG 2021 21:23
+entering extended mode
+**./trial.tex
+(trial.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18> xparse <2020-03-03>
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count179
+\c@section=\count180
+\c@subsection=\count181
+\c@subsubsection=\count182
+\c@paragraph=\count183
+\c@subparagraph=\count184
+\c@figure=\count185
+\c@table=\count186
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks15
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.
+cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.de
+f
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen141
+\captionmargin@=\dimen142
+\captionwidth=\dimen143
+\caption@tempdima=\dimen144
+\caption@indent=\dimen145
+\caption@parindent=\dimen146
+\caption@hangindent=\dimen147
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count187
+\c@continuedfloat=\count188
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+\c@subfigure=\count189
+\c@subtable=\count190
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
+\lst@mode=\count191
+\lst@gtempboxa=\box47
+\lst@token=\toks17
+\lst@length=\count192
+\lst@currlwidth=\dimen148
+\lst@column=\count193
+\lst@pos=\count194
+\lst@lostspace=\dimen149
+\lst@width=\dimen150
+\lst@newlines=\count195
+\lst@lineno=\count196
+\lst@maxwidth=\dimen151
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+\c@lstnumber=\count197
+\lst@skipnumbers=\count198
+\lst@framebox=\box48
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
+File: listings.cfg 2020/03/24 1.8d listings configuration
+))
+Package: listings 2020/03/24 1.8d (Carsten Heinz)
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\adjustbox.st
+y
+Package: adjustbox 2020/08/19 v1.3 Adjusting TeX boxes (trim, clip, ...)
+ (C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/xkeyval\xkeyval.sty
+Package: xkeyval 2020/11/20 v2.8 package option processing (HA)
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkeyval.tex
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkvutils.tex
+\XKV@toks=\toks18
+\XKV@tempa@toks=\toks19
+)
+\XKV@depth=\count199
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\adjcalc.sty
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back
+-ends (calc, etex, pgfmath)
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\trimclip.sty
+Package: trimclip 2020/08/19 v1.2 Trim and clip general TeX material
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/collectbox\collectbox.
+sty
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box49
+)
+\tc@llx=\dimen152
+\tc@lly=\dimen153
+\tc@urx=\dimen154
+\tc@ury=\dimen155
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\tc-pdftex.de
+f
+File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen156
+\adjbox@Height=\dimen157
+\adjbox@Depth=\dimen158
+\adjbox@Totalheight=\dimen159
+\adjbox@pwidth=\dimen160
+\adjbox@pheight=\dimen161
+\adjbox@pdepth=\dimen162
+\adjbox@ptotalheight=\dimen163
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/ifoddpage\ifoddpage.st
+y
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count266
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/varwidth\varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box50
+\sift@deathcycles=\count267
+\@vwid@loff=\dimen164
+\@vwid@roff=\dimen165
+))
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pd
+ftex.def
+File: l3backend-pdftex.def 2021-02-18 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count268
+\l__pdf_internal_box=\box51
+) (trial.aux (introduction.aux) (timeProblem.aux) (stateProblem.aux)
+(investigation.aux) (summary.aux) (bibliography.aux) (ebolaPaper.aux))
+\openout1 = `trial.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.m
+kii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count269
+\scratchdimen=\dimen166
+\scratchbox=\box52
+\nofMPsegments=\count270
+\nofMParguments=\count271
+\everyMPshowfont=\toks20
+\MPscratchCnt=\count272
+\MPscratchDim=\dimen167
+\MPnumerator=\count273
+\makeMPintoPDFobject=\count274
+\everyMPtoPDFconversion=\toks21
+)
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-
+base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: listings package is loaded.
+Package caption Info: End \AtBeginDocument code.
+\c@lstlisting=\count275
+\openout2 = `introduction.aux'.
+
+ (introduction.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 11.
+
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 11.
+
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+[1
+
+
+{C:/Users/Agowun/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2]
+Overfull \hbox (1.49945pt too wide) in paragraph at lines 62--63
+[]\OT1/cmr/m/n/10 The other pa-ram-e-ters are as-sumed to al-ways be con-stant 
+with N at 37,741,000
+ []
+
+[3]
+<./figures/unstability_of_exponential_growth.png, id=18, 462.528pt x 346.896pt>
+
+File: ./figures/unstability_of_exponential_growth.png Graphic file (type png)
+<use ./figures/unstability_of_exponential_growth.png>
+Package pdftex.def Info: ./figures/unstability_of_exponential_growth.png  used 
+on input line 80.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [4 <./figures/unstability_of_exponential_growth.png>]
+<./figures/regain_stability_after_measures.png, id=24, 462.528pt x 346.896pt>
+File: ./figures/regain_stability_after_measures.png Graphic file (type png)
+<use ./figures/regain_stability_after_measures.png>
+Package pdftex.def Info: ./figures/regain_stability_after_measures.png  used on
+ input line 91.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [5 <./figures/regain_stability_after_measures.png>] [6] [7]
+Overfull \hbox (4.22284pt too wide) in paragraph at lines 157--158
+[]\OT1/cmr/m/n/10 Using `Radau' uses an im-plicit Runge-Kutta method, the three
+-stage Radau
+ []
+
+[8] [9]
+Overfull \hbox (118.13902pt too wide) in paragraph at lines 211--214
+\OT1/cmr/m/n/10 VI =================== In-clude para-graph on in-ter-po-la-tion
+ ===================
+ []
+
+[10]
+<./figures/R_ode45_spacing_experiment.png, id=48, 601.4972pt x 406.51875pt>
+File: ./figures/R_ode45_spacing_experiment.png Graphic file (type png)
+<use ./figures/R_ode45_spacing_experiment.png>
+Package pdftex.def Info: ./figures/R_ode45_spacing_experiment.png  used on inpu
+t line 225.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+ [11 <./figures/R_ode45_spacing_experiment.png>] [12]
+<./figures/lsoda_vs_discontinuity.png, id=56, 462.528pt x 346.896pt>
+File: ./figures/lsoda_vs_discontinuity.png Graphic file (type png)
+<use ./figures/lsoda_vs_discontinuity.png>
+Package pdftex.def Info: ./figures/lsoda_vs_discontinuity.png  used on input li
+ne 261.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/dop853_vs_discontinuity.png, id=57, 462.528pt x 346.896pt>
+File: ./figures/dop853_vs_discontinuity.png Graphic file (type png)
+<use ./figures/dop853_vs_discontinuity.png>
+Package pdftex.def Info: ./figures/dop853_vs_discontinuity.png  used on input l
+ine 268.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+LaTeX Font Info:    Trying to load font information for OML+cmr on input line 2
+90.
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/base\omlcmr.fd
+File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 290.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 277--295
+[]$[]$ 
+ []
+
+[13 <./figures/lsoda_vs_discontinuity.png>]) [14 <./figures/dop853_vs_discontin
+uity.png>]
+\openout2 = `timeProblem.aux'.
+
+ (timeProblem.tex
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
+4.
+
+(C:\Users\Agowun\AppData\Local\Programs\MiKTeX\tex/latex/base\omscmr.fd
+File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 14.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 11--22
+[]$[]$ 
+ []
+
+<./figures/time_discontinuity_R.png, id=67, 566.115pt x 406.51875pt>
+File: ./figures/time_discontinuity_R.png Graphic file (type png)
+<use ./figures/time_discontinuity_R.png>
+Package pdftex.def Info: ./figures/time_discontinuity_R.png  used on input line
+ 27.
+(pdftex.def)             Requested size: 241.49895pt x 173.41638pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[15
+
+
+
+]
+<./figures/rk4_messing_up_no_event_R.png, id=71, 601.4972pt x 406.51875pt>
+File: ./figures/rk4_messing_up_no_event_R.png Graphic file (type png)
+<use ./figures/rk4_messing_up_no_event_R.png>
+Package pdftex.def Info: ./figures/rk4_messing_up_no_event_R.png  used on input
+ line 39.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+<./figures/time_discontinuity_py.png, id=72, 462.528pt x 346.896pt>
+File: ./figures/time_discontinuity_py.png Graphic file (type png)
+<use ./figures/time_discontinuity_py.png>
+Package pdftex.def Info: ./figures/time_discontinuity_py.png  used on input lin
+e 48.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [16 <./figures/time_discontinuity_R.png> <./figures/rk4_messing_up_no_event_R.
+png>]
+<./figures/time_discontinuity_scilab.png, id=78, 612.2875pt x 461.725pt>
+File: ./figures/time_discontinuity_scilab.png Graphic file (type png)
+<use ./figures/time_discontinuity_scilab.png>
+Package pdftex.def Info: ./figures/time_discontinuity_scilab.png  used on input
+ line 57.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/time_discontinuity_matlab.png, id=79, 526.96875pt x 395.22656pt>
+File: ./figures/time_discontinuity_matlab.png Graphic file (type png)
+<use ./figures/time_discontinuity_matlab.png>
+Package pdftex.def Info: ./figures/time_discontinuity_matlab.png  used on input
+ line 70.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[17 <./figures/time_discontinuity_py.png>]
+Overfull \hbox (9.0036pt too wide) in paragraph at lines 88--89
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 84--99
+[]$[]$ 
+ []
+
+[18 <./figures/time_discontinuity_scilab.png>]
+<./figures/solve_time_discontinuity_R.png, id=88, 566.115pt x 406.51875pt>
+File: ./figures/solve_time_discontinuity_R.png Graphic file (type png)
+<use ./figures/solve_time_discontinuity_R.png>
+Package pdftex.def Info: ./figures/solve_time_discontinuity_R.png  used on inpu
+t line 105.
+(pdftex.def)             Requested size: 241.49895pt x 173.41638pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[19 <./figures/time_discontinuity_matlab.png (PNG copy)>]
+<./figures/rk4_messing_up_with_event_R.png, id=93, 601.4972pt x 406.51875pt>
+File: ./figures/rk4_messing_up_with_event_R.png Graphic file (type png)
+<use ./figures/rk4_messing_up_with_event_R.png>
+Package pdftex.def Info: ./figures/rk4_messing_up_with_event_R.png  used on inp
+ut line 115.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+ [20 <./figures/solve_time_discontinuity_R.png> <./figures/rk4_messing_up_with_
+event_R.png>]
+<./figures/solve_time_discontinuity_py.png, id=99, 462.528pt x 346.896pt>
+File: ./figures/solve_time_discontinuity_py.png Graphic file (type png)
+<use ./figures/solve_time_discontinuity_py.png>
+Package pdftex.def Info: ./figures/solve_time_discontinuity_py.png  used on inp
+ut line 154.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[21]
+<./figures/solve_time_discontinuity_scilab.png, id=103, 612.2875pt x 461.725pt>
+
+File: ./figures/solve_time_discontinuity_scilab.png Graphic file (type png)
+<use ./figures/solve_time_discontinuity_scilab.png>
+Package pdftex.def Info: ./figures/solve_time_discontinuity_scilab.png  used on
+ input line 182.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[22 <./figures/solve_time_discontinuity_py.png>] [23 <./figures/solve_time_disc
+ontinuity_scilab.png>]
+<./figures/solve_time_discontinuity_matlab.png, id=112, 526.96875pt x 395.22656
+pt>
+File: ./figures/solve_time_discontinuity_matlab.png Graphic file (type png)
+<use ./figures/solve_time_discontinuity_matlab.png>
+Package pdftex.def Info: ./figures/solve_time_discontinuity_matlab.png  used on
+ input line 214.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+ [24 <./figures/solve_time_discontinuity_matlab.png (PNG copy)>]
+<./figures/tolerance_time_lsoda_no_event_R.png, id=116, 601.4972pt x 406.51875p
+t>
+File: ./figures/tolerance_time_lsoda_no_event_R.png Graphic file (type png)
+<use ./figures/tolerance_time_lsoda_no_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_time_lsoda_no_event_R.png  used on
+ input line 252.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_lsoda_with_event_R.png, id=117, 601.4972pt x 406.5187
+5pt>
+File: ./figures/tolerance_time_lsoda_with_event_R.png Graphic file (type png)
+<use ./figures/tolerance_time_lsoda_with_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_time_lsoda_with_event_R.png  used 
+on input line 259.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[25] [26 <./figures/tolerance_time_lsoda_no_event_R.png>]
+<./figures/tolerance_time_lsoda_no_event_py.png, id=126, 462.528pt x 346.896pt>
+
+File: ./figures/tolerance_time_lsoda_no_event_py.png Graphic file (type png)
+<use ./figures/tolerance_time_lsoda_no_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_time_lsoda_no_event_py.png  used o
+n input line 291.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_lsoda_with_event_py.png, id=127, 462.528pt x 346.896p
+t>
+File: ./figures/tolerance_time_lsoda_with_event_py.png Graphic file (type png)
+<use ./figures/tolerance_time_lsoda_with_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_time_lsoda_with_event_py.png  used
+ on input line 298.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[27 <./figures/tolerance_time_lsoda_with_event_R.png>]
+<./figures/tolerance_time_lsoda_no_event_sci.png, id=132, 612.2875pt x 461.725p
+t>
+File: ./figures/tolerance_time_lsoda_no_event_sci.png Graphic file (type png)
+<use ./figures/tolerance_time_lsoda_no_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_time_lsoda_no_event_sci.png  used 
+on input line 333.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_lsoda_with_event_sci.png, id=133, 612.2875pt x 461.72
+5pt>
+File: ./figures/tolerance_time_lsoda_with_event_sci.png Graphic file (type png)
+
+<use ./figures/tolerance_time_lsoda_with_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_time_lsoda_with_event_sci.png  use
+d on input line 340.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[28 <./figures/tolerance_time_lsoda_no_event_py.png>]
+<./figures/tolerance_time_rk45_no_event_R.png, id=138, 601.4972pt x 406.51875pt
+>
+File: ./figures/tolerance_time_rk45_no_event_R.png Graphic file (type png)
+<use ./figures/tolerance_time_rk45_no_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_no_event_R.png  used on 
+input line 374.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+ [29 <./figures/tolerance_time_lsoda_with_event_py.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_rk45_with_event_R.png, id=143, 601.4972pt x 406.51875
+pt>
+File: ./figures/tolerance_time_rk45_with_event_R.png Graphic file (type png)
+<use ./figures/tolerance_time_rk45_with_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_with_event_R.png  used o
+n input line 381.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[30 <./figures/tolerance_time_lsoda_no_event_sci.png>]
+<./figures/tolerance_time_rk45_further_no_event_R.png, id=148, 601.4972pt x 406
+.51875pt>
+File: ./figures/tolerance_time_rk45_further_no_event_R.png Graphic file (type p
+ng)
+<use ./figures/tolerance_time_rk45_further_no_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_further_no_event_R.png  
+used on input line 413.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_rk45_further_with_event_R.png, id=149, 601.4972pt x 4
+06.51875pt>
+File: ./figures/tolerance_time_rk45_further_with_event_R.png Graphic file (type
+ png)
+<use ./figures/tolerance_time_rk45_further_with_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_further_with_event_R.png
+  used on input line 420.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[31 <./figures/tolerance_time_lsoda_with_event_sci.png>] [32 <./figures/toleran
+ce_time_rk45_no_event_R.png>]
+<./figures/tolerance_time_rk45_no_event_py.png, id=159, 462.528pt x 346.896pt>
+File: ./figures/tolerance_time_rk45_no_event_py.png Graphic file (type png)
+<use ./figures/tolerance_time_rk45_no_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_no_event_py.png  used on
+ input line 456.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_rk45_with_event_py.png, id=160, 462.528pt x 346.896pt
+>
+File: ./figures/tolerance_time_rk45_with_event_py.png Graphic file (type png)
+<use ./figures/tolerance_time_rk45_with_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_with_event_py.png  used 
+on input line 463.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[33 <./figures/tolerance_time_rk45_with_event_R.png>]
+<./figures/tolerance_time_rk45_no_event_sci.png, id=165, 612.2875pt x 461.725pt
+>
+File: ./figures/tolerance_time_rk45_no_event_sci.png Graphic file (type png)
+<use ./figures/tolerance_time_rk45_no_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_no_event_sci.png  used o
+n input line 502.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+ [34 <./figures/tolerance_time_rk45_further_no_event_R.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_rk45_with_event_sci.png, id=170, 612.2875pt x 461.725
+pt>
+File: ./figures/tolerance_time_rk45_with_event_sci.png Graphic file (type png)
+<use ./figures/tolerance_time_rk45_with_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_with_event_sci.png  used
+ on input line 509.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[35 <./figures/tolerance_time_rk45_further_with_event_R.png>]
+<./figures/tolerance_time_rkf_further_no_event_sci.png, id=175, 612.2875pt x 46
+1.725pt>
+File: ./figures/tolerance_time_rkf_further_no_event_sci.png Graphic file (type 
+png)
+<use ./figures/tolerance_time_rkf_further_no_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_time_rkf_further_no_event_sci.png 
+ used on input line 539.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_rkf_further_with_event_sci.png, id=176, 612.2875pt x 
+461.725pt>
+File: ./figures/tolerance_time_rkf_further_with_event_sci.png Graphic file (typ
+e png)
+<use ./figures/tolerance_time_rkf_further_with_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_time_rkf_further_with_event_sci.pn
+g  used on input line 546.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[36 <./figures/tolerance_time_rk45_no_event_py.png>]
+<./figures/tolerance_time_rk45_no_event_matlab.png, id=181, 526.96875pt x 395.2
+2656pt>
+File: ./figures/tolerance_time_rk45_no_event_matlab.png Graphic file (type png)
+
+<use ./figures/tolerance_time_rk45_no_event_matlab.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_no_event_matlab.png  use
+d on input line 578.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_time_rk45_with_event_matlab.png, id=182, 526.96875pt x 395
+.22656pt>
+File: ./figures/tolerance_time_rk45_with_event_matlab.png Graphic file (type pn
+g)
+<use ./figures/tolerance_time_rk45_with_event_matlab.png>
+Package pdftex.def Info: ./figures/tolerance_time_rk45_with_event_matlab.png  u
+sed on input line 587.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [37 <./figures/tolerance_time_rk45_with_event_py.png>] [38 <./figures/toleran
+ce_time_rk45_no_event_sci.png>] [39 <./figures/tolerance_time_rk45_with_event_s
+ci.png> <./figures/tolerance_time_rkf_further_no_event_sci.png>] [40 <./figures
+/tolerance_time_rkf_further_with_event_sci.png> <./figures/tolerance_time_rk45_
+no_event_matlab.png (PNG copy)>] [41 <./figures/tolerance_time_rk45_with_event_
+matlab.png (PNG copy)>]
+\openout2 = `stateProblem.aux'.
+
+ (stateProblem.tex
+Overfull \hbox (15.0pt too wide) in paragraph at lines 14--38
+[]$[]$ 
+ []
+
+[42
+
+
+
+]
+<./figures/state_discontinuity_R.png, id=207, 566.115pt x 406.51875pt>
+File: ./figures/state_discontinuity_R.png Graphic file (type png)
+<use ./figures/state_discontinuity_R.png>
+Package pdftex.def Info: ./figures/state_discontinuity_R.png  used on input lin
+e 42.
+(pdftex.def)             Requested size: 241.49895pt x 173.41638pt.
+ [43 <./figures/state_discontinuity_R.png>]
+<./figures/state_discontinuity_radau_R.png, id=213, 566.115pt x 406.51875pt>
+File: ./figures/state_discontinuity_radau_R.png Graphic file (type png)
+<use ./figures/state_discontinuity_radau_R.png>
+Package pdftex.def Info: ./figures/state_discontinuity_radau_R.png  used on inp
+ut line 60.
+(pdftex.def)             Requested size: 241.49895pt x 173.41638pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_sharp_R.png, id=214, 601.4972pt x 406.51875pt>
+File: ./figures/state_discontinuity_sharp_R.png Graphic file (type png)
+<use ./figures/state_discontinuity_sharp_R.png>
+Package pdftex.def Info: ./figures/state_discontinuity_sharp_R.png  used on inp
+ut line 69.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[44]
+<./figures/state_discontinuity_sharp_radau_R.png, id=218, 601.4972pt x 406.5187
+5pt>
+File: ./figures/state_discontinuity_sharp_radau_R.png Graphic file (type png)
+<use ./figures/state_discontinuity_sharp_radau_R.png>
+Package pdftex.def Info: ./figures/state_discontinuity_sharp_radau_R.png  used 
+on input line 82.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_py.png, id=219, 462.528pt x 346.896pt>
+File: ./figures/state_discontinuity_py.png Graphic file (type png)
+<use ./figures/state_discontinuity_py.png>
+Package pdftex.def Info: ./figures/state_discontinuity_py.png  used on input li
+ne 92.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_radau_py.png, id=220, 462.528pt x 346.896pt>
+File: ./figures/state_discontinuity_radau_py.png Graphic file (type png)
+<use ./figures/state_discontinuity_radau_py.png>
+Package pdftex.def Info: ./figures/state_discontinuity_radau_py.png  used on in
+put line 106.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_sharp_py.png, id=221, 462.528pt x 346.896pt>
+File: ./figures/state_discontinuity_sharp_py.png Graphic file (type png)
+<use ./figures/state_discontinuity_sharp_py.png>
+Package pdftex.def Info: ./figures/state_discontinuity_sharp_py.png  used on in
+put line 115.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[45 <./figures/state_discontinuity_radau_R.png>]
+<./figures/state_discontinuity_sharp_radau_py.png, id=226, 462.528pt x 346.896p
+t>
+File: ./figures/state_discontinuity_sharp_radau_py.png Graphic file (type png)
+<use ./figures/state_discontinuity_sharp_radau_py.png>
+Package pdftex.def Info: ./figures/state_discontinuity_sharp_radau_py.png  used
+ on input line 136.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_scilab.png, id=227, 612.2875pt x 461.725pt>
+File: ./figures/state_discontinuity_scilab.png Graphic file (type png)
+<use ./figures/state_discontinuity_scilab.png>
+Package pdftex.def Info: ./figures/state_discontinuity_scilab.png  used on inpu
+t line 146.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+[46 <./figures/state_discontinuity_sharp_R.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_sharp_sci.png, id=232, 612.2875pt x 461.725pt>
+File: ./figures/state_discontinuity_sharp_sci.png Graphic file (type png)
+<use ./figures/state_discontinuity_sharp_sci.png>
+Package pdftex.def Info: ./figures/state_discontinuity_sharp_sci.png  used on i
+nput line 157.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_matlab.png, id=233, 526.96875pt x 395.22656pt>
+File: ./figures/state_discontinuity_matlab.png Graphic file (type png)
+<use ./figures/state_discontinuity_matlab.png>
+Package pdftex.def Info: ./figures/state_discontinuity_matlab.png  used on inpu
+t line 170.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+[47 <./figures/state_discontinuity_sharp_radau_R.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/state_discontinuity_sharp_matlab.png, id=238, 526.96875pt x 395.2265
+6pt>
+File: ./figures/state_discontinuity_sharp_matlab.png Graphic file (type png)
+<use ./figures/state_discontinuity_sharp_matlab.png>
+Package pdftex.def Info: ./figures/state_discontinuity_sharp_matlab.png  used o
+n input line 178.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: Reference `comparison_state_default_sharp_event' on page 48 unde
+fined on input line 188.
+
+<./figures/comparison_state_default_sharp_event.png, id=239, 462.528pt x 346.89
+6pt>
+File: ./figures/comparison_state_default_sharp_event.png Graphic file (type png
+)
+<use ./figures/comparison_state_default_sharp_event.png>
+Package pdftex.def Info: ./figures/comparison_state_default_sharp_event.png  us
+ed on input line 192.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[48 <./figures/state_discontinuity_py.png>] [49 <./figures/state_discontinuity_
+radau_py.png>] [50 <./figures/state_discontinuity_sharp_py.png>] [51 <./figures
+/state_discontinuity_sharp_radau_py.png>] [52 <./figures/state_discontinuity_sc
+ilab.png>]
+Overfull \hbox (15.0pt too wide) in paragraph at lines 240--281
+[]$[]$ 
+ []
+
+[53 <./figures/state_discontinuity_sharp_sci.png>]
+Overfull \vbox (108.12495pt too high) has occurred while \output is active []
+
+
+[54 <./figures/state_discontinuity_matlab.png (PNG copy)>]
+<./figures/solve_state_discontinuity_R.png, id=268, 601.4972pt x 406.51875pt>
+File: ./figures/solve_state_discontinuity_R.png Graphic file (type png)
+<use ./figures/solve_state_discontinuity_R.png>
+Package pdftex.def Info: ./figures/solve_state_discontinuity_R.png  used on inp
+ut line 287.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/solve_state_discontinuity_sharp_R.png, id=269, 601.4972pt x 406.5187
+5pt>
+File: ./figures/solve_state_discontinuity_sharp_R.png Graphic file (type png)
+<use ./figures/solve_state_discontinuity_sharp_R.png>
+Package pdftex.def Info: ./figures/solve_state_discontinuity_sharp_R.png  used 
+on input line 297.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (122.66747pt too wide) in paragraph at lines 310--317
+ [] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[55 <./figures/state_discontinuity_sharp_matlab.png (PNG copy)>]
+<./figures/solve_state_discontinuity_py.png, id=274, 462.528pt x 346.896pt>
+File: ./figures/solve_state_discontinuity_py.png Graphic file (type png)
+<use ./figures/solve_state_discontinuity_py.png>
+Package pdftex.def Info: ./figures/solve_state_discontinuity_py.png  used on in
+put line 329.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[56 <./figures/comparison_state_default_sharp_event.png>] [57 <./figures/solve_
+state_discontinuity_R.png>]
+<./figures/solve_state_discontinuity_scilab.png, id=283, 612.2875pt x 461.725pt
+>
+File: ./figures/solve_state_discontinuity_scilab.png Graphic file (type png)
+<use ./figures/solve_state_discontinuity_scilab.png>
+Package pdftex.def Info: ./figures/solve_state_discontinuity_scilab.png  used o
+n input line 363.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/solve_state_discontinuity_matlab.png, id=284, 526.96875pt x 395.2265
+6pt>
+File: ./figures/solve_state_discontinuity_matlab.png Graphic file (type png)
+<use ./figures/solve_state_discontinuity_matlab.png>
+Package pdftex.def Info: ./figures/solve_state_discontinuity_matlab.png  used o
+n input line 384.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[58 <./figures/solve_state_discontinuity_sharp_R.png>] [59 <./figures/solve_sta
+te_discontinuity_py.png>]
+<./figures/tolerance_state_lsoda_no_event_R.png, id=293, 601.4972pt x 406.51875
+pt>
+File: ./figures/tolerance_state_lsoda_no_event_R.png Graphic file (type png)
+<use ./figures/tolerance_state_lsoda_no_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_state_lsoda_no_event_R.png  used o
+n input line 418.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_state_lsoda_with_event_R.png, id=294, 601.4972pt x 406.518
+75pt>
+File: ./figures/tolerance_state_lsoda_with_event_R.png Graphic file (type png)
+<use ./figures/tolerance_state_lsoda_with_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_state_lsoda_with_event_R.png  used
+ on input line 425.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[60 <./figures/solve_state_discontinuity_scilab.png>] [61 <./figures/solve_stat
+e_discontinuity_matlab.png (PNG copy)>]
+<./figures/tolerance_state_lsoda_no_event_py.png, id=303, 462.528pt x 346.896pt
+>
+File: ./figures/tolerance_state_lsoda_no_event_py.png Graphic file (type png)
+<use ./figures/tolerance_state_lsoda_no_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_state_lsoda_no_event_py.png  used 
+on input line 462.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_state_lsoda_with_event_py.png, id=304, 462.528pt x 346.896
+pt>
+File: ./figures/tolerance_state_lsoda_with_event_py.png Graphic file (type png)
+
+<use ./figures/tolerance_state_lsoda_with_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_state_lsoda_with_event_py.png  use
+d on input line 469.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[62 <./figures/tolerance_state_lsoda_no_event_R.png>]
+<./figures/tolerance_state_lsoda_no_event_sci.png, id=309, 612.2875pt x 461.725
+pt>
+File: ./figures/tolerance_state_lsoda_no_event_sci.png Graphic file (type png)
+<use ./figures/tolerance_state_lsoda_no_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_state_lsoda_no_event_sci.png  used
+ on input line 503.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_state_lsoda_with_event_sci.png, id=310, 612.2875pt x 461.7
+25pt>
+File: ./figures/tolerance_state_lsoda_with_event_sci.png Graphic file (type png
+)
+<use ./figures/tolerance_state_lsoda_with_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_state_lsoda_with_event_sci.png  us
+ed on input line 510.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[63 <./figures/tolerance_state_lsoda_with_event_R.png>]
+<./figures/tolerance_state_rk45_no_event_R.png, id=315, 601.4972pt x 406.51875p
+t>
+File: ./figures/tolerance_state_rk45_no_event_R.png Graphic file (type png)
+<use ./figures/tolerance_state_rk45_no_event_R.png>
+Package pdftex.def Info: ./figures/tolerance_state_rk45_no_event_R.png  used on
+ input line 546.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[64 <./figures/tolerance_state_lsoda_no_event_py.png>]
+<./figures/tolerance_state_rk45_no_event_py.png, id=320, 462.528pt x 346.896pt>
+
+File: ./figures/tolerance_state_rk45_no_event_py.png Graphic file (type png)
+<use ./figures/tolerance_state_rk45_no_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_state_rk45_no_event_py.png  used o
+n input line 577.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_state_rk45_with_event_py.png, id=321, 462.528pt x 346.896p
+t>
+File: ./figures/tolerance_state_rk45_with_event_py.png Graphic file (type png)
+<use ./figures/tolerance_state_rk45_with_event_py.png>
+Package pdftex.def Info: ./figures/tolerance_state_rk45_with_event_py.png  used
+ on input line 584.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[65 <./figures/tolerance_state_lsoda_with_event_py.png>]
+<./figures/tolerance_state_rk45_no_event_sci.png, id=326, 612.2875pt x 461.725p
+t>
+File: ./figures/tolerance_state_rk45_no_event_sci.png Graphic file (type png)
+<use ./figures/tolerance_state_rk45_no_event_sci.png>
+Package pdftex.def Info: ./figures/tolerance_state_rk45_no_event_sci.png  used 
+on input line 618.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_state_rk45_no_event_matlab.png, id=327, 526.96875pt x 395.
+22656pt>
+File: ./figures/tolerance_state_rk45_no_event_matlab.png Graphic file (type png
+)
+<use ./figures/tolerance_state_rk45_no_event_matlab.png>
+Package pdftex.def Info: ./figures/tolerance_state_rk45_no_event_matlab.png  us
+ed on input line 644.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/tolerance_state_rk45_with_event_matlab.png, id=328, 526.96875pt x 39
+5.22656pt>
+File: ./figures/tolerance_state_rk45_with_event_matlab.png Graphic file (type p
+ng)
+<use ./figures/tolerance_state_rk45_with_event_matlab.png>
+Package pdftex.def Info: ./figures/tolerance_state_rk45_with_event_matlab.png  
+used on input line 653.
+(pdftex.def)             Requested size: 241.49895pt x 181.12495pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [66 <./figures/tolerance_state_lsoda_no_event_sci.png>] [67 <./figures/tolera
+nce_state_lsoda_with_event_sci.png>] [68 <./figures/tolerance_state_rk45_no_eve
+nt_R.png>] [69 <./figures/tolerance_state_rk45_no_event_py.png> <./figures/tole
+rance_state_rk45_with_event_py.png>] [70 <./figures/tolerance_state_rk45_no_eve
+nt_sci.png>] [71 <./figures/tolerance_state_rk45_no_event_matlab.png (PNG copy)
+> <./figures/tolerance_state_rk45_with_event_matlab.png (PNG copy)>] [72]
+\openout2 = `investigation.aux'.
+
+
+(investigation.tex
+<./figures/fortran_radau_tol_6.png, id=357, 612.2875pt x 461.725pt>
+File: ./figures/fortran_radau_tol_6.png Graphic file (type png)
+<use ./figures/fortran_radau_tol_6.png>
+Package pdftex.def Info: ./figures/fortran_radau_tol_6.png  used on input line 
+12.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+<./figures/fortran_radau_tol_12.png, id=358, 612.2875pt x 461.725pt>
+File: ./figures/fortran_radau_tol_12.png Graphic file (type png)
+<use ./figures/fortran_radau_tol_12.png>
+Package pdftex.def Info: ./figures/fortran_radau_tol_12.png  used on input line
+ 23.
+(pdftex.def)             Requested size: 241.49895pt x 182.11517pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [73
+
+
+
+ <./figures/fortran_radau_tol_6.png>] [74 <./figures/fortran_radau_tol_12.png>]
+\openout2 = `summary.aux'.
+
+ (summary.tex [75
+
+
+
+]) [76]
+\openout2 = `bibliography.aux'.
+
+ (bibliography.tex) [77
+
+
+
+]
+\openout2 = `ebolaPaper.aux'.
+
+ (ebolaPaper.tex
+Overfull \hbox (7.53949pt too wide) in paragraph at lines 1--1
+[]\OT1/cmr/bx/n/14.4 Appendix: Pa-ram-e-ter fit-ting in an SEIR Model 
+ []
+
+
+Overfull \hbox (9.0036pt too wide) in paragraph at lines 23--24
+[][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 11--33
+[]$[]$ 
+ []
+
+<./figures/original_figure_SEIR_paper.png, id=377, 469.755pt x 187.45032pt>
+File: ./figures/original_figure_SEIR_paper.png Graphic file (type png)
+<use ./figures/original_figure_SEIR_paper.png>
+Package pdftex.def Info: ./figures/original_figure_SEIR_paper.png  used on inpu
+t line 38.
+(pdftex.def)             Requested size: 345.0pt x 137.66705pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/my_fit_Gui.png, id=378, 601.4972pt x 406.51875pt>
+File: ./figures/my_fit_Gui.png Graphic file (type png)
+<use ./figures/my_fit_Gui.png>
+Package pdftex.def Info: ./figures/my_fit_Gui.png  used on input line 45.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/my_fit_SL.png, id=379, 601.4972pt x 406.51875pt>
+File: ./figures/my_fit_SL.png Graphic file (type png)
+<use ./figures/my_fit_SL.png>
+Package pdftex.def Info: ./figures/my_fit_SL.png  used on input line 52.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./figures/my_fit_Lib.png, id=380, 601.4972pt x 406.51875pt>
+File: ./figures/my_fit_Lib.png Graphic file (type png)
+<use ./figures/my_fit_Lib.png>
+Package pdftex.def Info: ./figures/my_fit_Lib.png  used on input line 59.
+(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) [78
+
+
+
+] [79 <./figures/original_figure_SEIR_paper.png> <./figures/my_fit_Gui.png> <./
+figures/my_fit_SL.png>] [80 <./figures/my_fit_Lib.png>] (trial.aux
+(introduction.aux) (timeProblem.aux) (stateProblem.aux) (investigation.aux)
+(summary.aux) (bibliography.aux) (ebolaPaper.aux))
+
+LaTeX Warning: There were undefined references.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 6686 strings out of 479334
+ 122353 string characters out of 2856609
+ 589887 words of memory out of 3000000
+ 23982 multiletter control sequences out of 15000+200000
+ 407328 words of font info for 42 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 68i,7n,79p,1232b,1531s stack positions out of 5000i,500n,10000p,200000b,50000s
+ <C:\Users\Agowun\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcr
+m1000.pk><C:/Users/Agowun/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb><C:/Users/Agowun/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmbx12.pfb><C:/Users/Agowun/AppData/Local/Programs/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Agowun/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Agowun/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Agowun/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Agow
+un/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/
+Users/Agowun/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7
+.pfb><C:/Users/Agowun/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmti10.pfb>
+Output written on trial.pdf (80 pages, 2094547 bytes).
+PDF statistics:
+ 433 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 346 words of extra memory for PDF output out of 10000 (max. 10000000)
+

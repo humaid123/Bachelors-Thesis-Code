@@ -1,13 +1,12 @@
-
-\section{Ebola Paper}
+\section{Appendix: Parameter fitting in an SEIR Model}
 \label{section:ebola_paper}
-In Chritian L. Althaus's paper, the epidemiologist uses data from the Ebola spread in three different West African countries to understand the impact of the implemented control measures. To do this, the researcher needs to estimate parameters like the basic and effective reproduction number of the virus.
+In [Chritian L. Althaus's paper reference], the epidemiologist uses data from the Ebola spread in three different West African countries to understand the impact of the implemented control measures. To do this, the researcher needed to estimate parameters like the basic and effective reproduction number of the virus.
 
-These parameters are estimated by doing a best fit optimization on the parameters applied to an SEIR model. The experiment is to use an ODE model with certain values of these parameters and calculate the error of these models at the real-life recorded data points. We run different ODE models by changing the parameters until we minimise these errors. The model with that minimum error is the 'best fit' model and the parameters that were used by this model are our estimates. These estimates are then used to understand the spread of the virus. 
+These parameters are estimated by doing a best fit optimization on the parameters applied to an SEIR model. The experiment is to use an ODE model with certain values of these parameters and calculate the error of these models based on real-life data. The model with the minimum error is the 'best fit' model and the corresponding parameters. These estimates are then used to understand the spread of the virus. 
 
-We note that the ODE model is run inside an optimisation algorithm and thus its efficiency is critical as the algorithm will need to build several ODE models with each different set of parameters.
+We note that the ODE model is run inside an optimization algorithm and thus its efficiency is critical as the algorithm will need to solve the ODE model with each different set of parameters.
 
-The following is the pseudo-code for our attempt at replicating the experiment:
+The following is the pseudo-code for our attempt at replicating the experiment reported in [Chritian L. Althaus's paper reference]:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -32,32 +31,33 @@ fit = optimise(par=parms, errorFunc=ssq)
 \end{lstlisting}
 \end{minipage}
 
-The figure that were reported in the paper is shown in Figure $\ref{fig:original_figure_SEIR_paper}$. Our figures are as shown in Figures $\ref{fig:my_fit_Gui}$, $\ref{fig:my_fit_SL}$ and $\ref{fig:my_fit_Lib}$
+The figure that was reported in [ref to althaus paper] is shown in Figure $\ref{fig:original_figure_SEIR_paper}$. Our results are as shown in Figures $\ref{fig:my_fit_Gui}$, $\ref{fig:my_fit_SL}$ and $\ref{fig:my_fit_Lib}$. We see good agreement between our results and those reported in [Ref to Althaus]
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=1\linewidth]{./figures/original_figure_SEIR_paper}
-	\caption{Original figure in Ebola paper}
-	\label{fig:original_figure_SEIR_paper}
+\centering
+\includegraphics[width=1\linewidth]{./figures/original_figure_SEIR_paper}
+\caption{Original figure in Ebola paper}
+\label{fig:original_figure_SEIR_paper}
 \end{figure}
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\linewidth]{./figures/my_fit_Gui}
-	\caption{Our Guinea Figure}
-	\label{fig:my_fit_Gui}
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/my_fit_Gui}
+\caption{Our Guinea Figure}
+\label{fig:my_fit_Gui}
 \end{figure}
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\linewidth]{./figures/my_fit_SL}
-	\caption{Our Sierra Leone Figure}
-	\label{fig:my_fit_SL}
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/my_fit_SL}
+\caption{Our Sierra Leone Figure}
+\label{fig:my_fit_SL}
 \end{figure}
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\linewidth]{./figures/my_fit_Lib}
-	\caption{Our Liberia Figure}
-	\label{fig:my_fit_Lib}
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/my_fit_Lib}
+\caption{Our Liberia Figure}
+\label{fig:my_fit_Lib}
 \end{figure}
+

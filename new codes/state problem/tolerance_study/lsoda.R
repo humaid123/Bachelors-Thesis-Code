@@ -8,9 +8,7 @@ library(plyr)
 
 tolerances <- c(1e-1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10, 1e-11)
 
-
 ## defining the required functions
-
 ### no event detection
 measures_implemented <- 0
 direction <- "up"
@@ -64,21 +62,9 @@ experiment_no_event <- function(atol, rtol) {
     .GlobalEnv$measures_implemented <- 0
     .GlobalEnv$direction <- "up"
 
-    sum_nfev <- 0
-    sum_nstep <- 0
-    sum_time <- 0
-    num_iter <- 10
-    out <- NULL
+    out <- ode(func=model_no_event, y=y0, times=tspan, parms=NULL, atol=atol, rtol=rtol)
+    diag <- diagnostics(out)
 
-    for (i in as.list(seq(from=1, to=num_iter, by=1))) {
-        t1 <- Sys.time()
-        out <- ode(func=model_no_event, y=y0, times=tspan, parms=NULL, atol=atol, rtol=rtol)
-        t2 <- Sys.time()
-        diag <- diagnostics(out)
-        sum_nfev <- sum_nfev + diag$istate[3]
-        sum_nstep <- sum_nstep + diag$istate[2]
-        sum_time <- sum_time + t2-t1
-    }
     colnames(out) <- c("time",
                         paste("S", abs(round(log10(atol))), sep="_"),
                         paste("E", abs(round(log10(atol))), sep="_"),
@@ -86,10 +72,54 @@ experiment_no_event <- function(atol, rtol) {
                         paste("R", abs(round(log10(atol))), sep="_")
 
     )
-    list(out=out, nfev=(sum_nfev/num_iter), nstep=(sum_nstep/num_iter), timeElapsed=(sum_time/num_iter))
+    list(out=out, nfev=( diag$istate[3]), nstep=(diag$istate[2]))
 }
 
-### with event functions
+### getting the data
+res <- experiment_no_event(1e-7, 1e-7)
+ans_no_event <- as.data.frame(res$out)
+efficiency_no_event <- c(1e-7, res$nfev, res$nstep)
+for (tolerance in tolerances) {
+    res <- experiment_no_event(tolerance, tolerance)
+    ans_no_event <- join(ans_no_event, as.data.frame(res$out),  by="time", type="left")
+    row <- c(tolerance, res$nfev, res$nstep)
+    efficiency_no_event <- rbind(efficiency_no_event, row)
+}
+
+### plotting the data
+tolerances <- c(1e-1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10)
+colors <- c("1e-01" = "green", 
+            "1e-02" = "blue", 
+            "1e-04" = "orange",
+            "1e-06" = "brown",
+            "1e-07" = "yellow",
+            "1e-08" = "red",
+            "1e-10" = "purple",
+            "1e-11" = "black")
+
+plot_no_event <- ggplot(ans_no_event, aes(x=time)) + 
+    geom_line(aes(y=E_1, color="1e-01"), size=1.2) + 
+    geom_line(aes(y=E_2, color="1e-02"), size=1.2) + 
+    geom_line(aes(y=E_4, color="1e-04"), size=1.2) +
+    geom_line(aes(y=E_6, color="1e-06"), size=1.2)     +   
+    geom_line(aes(y=E_7, color="1e-07"), size=1.2)     +   
+    geom_line(aes(y=E_8, color="1e-08"), size=1.2) +  
+    geom_line(aes(y=E_10, color="1e-10"), size=1.2) + 
+    geom_line(aes(y=E_11, color="1e-11"), size=1.2) + 
+    labs(x="time", y="E", color="legend") +
+    scale_color_manual(values=colors)
+
+
+#######################################################################
+
+#### experiment with event  ####
+
+library(deSolve)
+library(ggplot2)
+library(plyr)
+
+tolerances <- c(1e-1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10, 1e-11)
+
 model_no_measures <- function(t, state, parms) {
     S <- state[1]
     E <- state[2]
@@ -149,118 +179,72 @@ experiment_with_event <- function(atol, rtol) {
     y0 <- c(S0, E0, I0, R0)
     t0 <- 0
 
-    sum_time <- 0
-    sum_nfev <- 0
-    sum_nstep <- 0
-    num_iter <- 10
-
     res <- NULL
     out <- NULL
-    t1 <- NULL
-    t2 <- NULL
     diag <- NULL
+    sum_nfev <- 0
+    sum_nstep <- 0
 
-    for (i in as.list(seq(from=1, to=num_iter, by=1))) {
-        res <- matrix(nrow=0, ncol=5)
-        t_initial <- t0
-        y_initial <- y0
-        measures_implemented <- FALSE
-        while (t_initial < 180) {
-            tspan = seq(from=t_initial, to=180, by=1)
-            if (measures_implemented) {
-                t1 <- Sys.time()   
-                out <- ode(func=model_with_measures, y=y_initial, 
-                        times=tspan, parms=NULL, rootfun=root_10000, 
-                        atol=atol, rtol=rtol)
-                t2 <- Sys.time()      
-                diag <- diagnostics(out)
-                measures_implemented <- FALSE
-            } else {
-                t1 <- Sys.time()
-                out <- ode(func=model_no_measures, y=y_initial, 
-                       times=tspan, parms=NULL, rootfun=root_25000, 
-                       atol=atol, rtol=rtol)
-                t2 <- Sys.time()   
-                diag <- diagnostics(out)
-                measures_implemented <- TRUE
-            }
-            sum_time <- sum_time + (t2-t1)
-            sum_nfev <- sum_nfev + diag$istate[3]
-            sum_nstep <- sum_nstep + diag$istate[2]
-
-            t_change <- length(out[, 1])
-            t_initial <- round(out[t_change, 1])
-            y_initial <- out[t_change, ]
-            y_initial <- y_initial[!(names(y_initial) %in% c("time"))]
-            res <- rbind(res, out)
+    res <- matrix(nrow=0, ncol=5)
+    t_initial <- t0
+    y_initial <- y0
+    measures_implemented <- FALSE
+    # need to stop at 179.5 so that radau can get a non-zero tspan
+    while (t_initial < 179) {
+        tspan = seq(from=t_initial, to=180, by=1)
+        if (measures_implemented) {
+            out <- ode(func=model_with_measures, y=y_initial, 
+                    times=tspan, parms=NULL, rootfun=root_10000, 
+                    atol=atol, rtol=rtol)
+            diag <- diagnostics(out)
+            measures_implemented <- FALSE
+        } else {
+            out <- ode(func=model_no_measures, y=y_initial, 
+                   times=tspan, parms=NULL, rootfun=root_25000, 
+                   atol=atol, rtol=rtol)
+            diag <- diagnostics(out)
+            measures_implemented <- TRUE
         }
+
+        t_change <- length(out[, 1])
+        t_initial <- (out[t_change, 1])
+        y_initial <- out[t_change, ]
+        y_initial <- y_initial[!(names(y_initial) %in% c("time"))]
+
+        sum_nfev <- sum_nfev + diag$istate[3]
+        sum_nstep <- sum_nstep + diag$istate[2]
+        res <- rbind(res, out)
     }
 
     colnames(res) <- c("time", 
-                        paste("S", abs(round(log10(atol))), sep="_"),
-                        paste("E", abs(round(log10(atol))), sep="_"),
-                        paste("I", abs(round(log10(atol))), sep="_"),
-                        paste("R", abs(round(log10(atol))), sep="_")
-                      )
-    list(out=res, nfev=(sum_nfev/num_iter), timeElapsed=(sum_time/num_iter), nstep=(sum_nstep/num_iter))
+                    paste("S", abs(round(log10(atol))), sep="_"),
+                    paste("E", abs(round(log10(atol))), sep="_"),
+                    paste("I", abs(round(log10(atol))), sep="_"),
+                    paste("R", abs(round(log10(atol))), sep="_")
+                  )
+    list(out=res, nfev=(sum_nfev), nstep=(sum_nstep))
 }
 
 
-### getting the data
-res <- experiment_no_event(1e-7, 1e-7)
-ans_no_event <- as.data.frame(res$out)
-efficiency_no_event <- c(1e-7, res$nfev, res$timeElapsed, res$nstep)
-for (tolerance in tolerances) {
-    res <- experiment_no_event(tolerance, tolerance)
-    ans_no_event <- join(ans_no_event, as.data.frame(res$out),  by="time", type="left")
-    row <- c(tolerance, res$nfev, res$timeElapsed, res$nstep)
-    efficiency_no_event <- rbind(efficiency_no_event, row)
-}
-
+tolerances_string <- c("1e-7", "1e-1", "1e-2", "1e-4", "1e-6", "1e-8", "1e-10", "1e-11")
+colors <- c("green", "blue",  "orange", "brown", "yellow", "red", "purple", "black")
 res <- experiment_with_event(1e-7, 1e-7)
-ans_event <- as.data.frame(res$out)
-efficiency_event <- c(1e-7, res$nfev, res$timeElapsed, res$nstep)
+length <- c(nrow(res$out))
+i <- 1
+plot(res$out[, 1], res$out[, 3], type="l", col=colors[i], lwd=2)
+i <- i + 1
+efficiency_event <- c(1e-7, res$nfev, res$nstep)
 for (tolerance in tolerances) {
     res <- experiment_with_event(tolerance, tolerance)
-    ans_event <- join(ans_event, as.data.frame(res$out), by="time", type="left")
-    row <- c(tolerance, res$nfev, res$timeElapsed, res$nstep)
+    lines(res$out[, 1], res$out[, 3], col=colors[i], lwd=2)
+    i <- i + 1
+    row <- c(tolerance, res$nfev, res$nstep)
     efficiency_event <- rbind(efficiency_event, row)
 }
-
-### plotting the data
-tolerances <- c(1e-1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10)
-colors <- c("1e-01" = "green", 
-            "1e-02" = "blue", 
-            "1e-04" = "orange",
-            "1e-06" = "brown",
-            "1e-07" = "yellow",
-            "1e-08" = "red",
-            "1e-10" = "purple",
-            "1e-11" = "black")
-
-plot_no_event <- ggplot(ans_no_event, aes(x=time)) + 
-    geom_line(aes(y=E_1, color="1e-01"), size=1.2) + 
-    geom_line(aes(y=E_2, color="1e-02"), size=1.2) + 
-    geom_line(aes(y=E_4, color="1e-04"), size=1.2) +
-    geom_line(aes(y=E_6, color="1e-06"), size=1.2)     +   
-    geom_line(aes(y=E_7, color="1e-07"), size=1.2)     +   
-    geom_line(aes(y=E_8, color="1e-08"), size=1.2) +  
-    geom_line(aes(y=E_10, color="1e-10"), size=1.2) + 
-    geom_line(aes(y=E_11, color="1e-11"), size=1.2) + 
-    labs(x="time", y="E", color="legend") +
-    scale_color_manual(values=colors)
-
-plot_with_event <- ggplot(ans_event, aes(x=time)) + 
-    geom_line(aes(y=E_1, color="1e-01"), size=1.2) + 
-    geom_line(aes(y=E_2, color="1e-02"), size=1.2) + 
-    geom_line(aes(y=E_4, color="1e-04"), size=1.2) +
-    geom_line(aes(y=E_6, color="1e-06"), size=1.2)     +   
-    geom_line(aes(y=E_7, color="1e-07"), size=1.2)     +   
-    geom_line(aes(y=E_8, color="1e-08"), size=1.2) +  
-    geom_line(aes(y=E_10, color="1e-10"), size=1.2) + 
-    geom_line(aes(y=E_11, color="1e-11"), size=1.2) + 
-    labs(x="time", y="E", color="legend") +
-    scale_color_manual(values=colors)
+legend(-6, 25000, 
+   legend=tolerances_string,
+   col=colors, lty=1:2, cex=0.8,
+   title="Line types", text.font=4)
 
 # printing efficiency data
 efficiency_data <- cbind(efficiency_no_event, efficiency_event) # used to report efficiency
