@@ -1,0 +1,469 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.11.7)  10 NOV 2021 20:53
+entering extended mode
+**./main.tex
+(main.tex
+LaTeX2e <2021-06-01> patch level 1
+L3 programming layer <2021-08-27>
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
+Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2021/02/12 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count182
+\c@section=\count183
+\c@subsection=\count184
+\c@subsubsection=\count185
+\c@paragraph=\count186
+\c@subparagraph=\count187
+\c@figure=\count188
+\c@table=\count189
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks16
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.st
+y
+Package: graphicx 2020/12/05 v1.2c Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
+fg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen141
+\captionmargin@=\dimen142
+\captionwidth=\dimen143
+\caption@tempdima=\dimen144
+\caption@indent=\dimen145
+\caption@parindent=\dimen146
+\caption@hangindent=\dimen147
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count190
+\c@continuedfloat=\count191
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+\c@subfigure=\count192
+\c@subtable=\count193
+) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
+\lst@mode=\count194
+\lst@gtempboxa=\box50
+\lst@token=\toks18
+\lst@length=\count195
+\lst@currlwidth=\dimen148
+\lst@column=\count196
+\lst@pos=\count197
+\lst@lostspace=\dimen149
+\lst@width=\dimen150
+\lst@newlines=\count198
+\lst@lineno=\count199
+\lst@maxwidth=\dimen151
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+\c@lstnumber=\count266
+\lst@skipnumbers=\count267
+\lst@framebox=\box51
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
+File: listings.cfg 2020/03/24 1.8d listings configuration
+))
+Package: listings 2020/03/24 1.8d (Carsten Heinz)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count268
+\float@exts=\toks19
+\float@box=\box52
+\@float@everytoks=\toks20
+\@floatcapt=\box53
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\adjustbox.sty
+Package: adjustbox 2020/08/19 v1.3 Adjusting TeX boxes (trim, clip, ...)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/xkeyval\xkeyval.sty
+Package: xkeyval 2020/11/20 v2.8 package option processing (HA)
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkeyval.tex
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkvutils.tex
+\XKV@toks=\toks21
+\XKV@tempa@toks=\toks22
+)
+\XKV@depth=\count269
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\adjcalc.sty
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back
+-ends (calc, etex, pgfmath)
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\trimclip.sty
+Package: trimclip 2020/08/19 v1.2 Trim and clip general TeX material
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/collectbox\collectbox.s
+ty
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box54
+)
+\tc@llx=\dimen152
+\tc@lly=\dimen153
+\tc@urx=\dimen154
+\tc@ury=\dimen155
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\tc-pdftex.def
+File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen156
+\adjbox@Height=\dimen157
+\adjbox@Depth=\dimen158
+\adjbox@Totalheight=\dimen159
+\adjbox@pwidth=\dimen160
+\adjbox@pheight=\dimen161
+\adjbox@pdepth=\dimen162
+\adjbox@ptotalheight=\dimen163
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/ifoddpage\ifoddpage.sty
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count270
+) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/varwidth\varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box55
+\sift@deathcycles=\count271
+\@vwid@loff=\dimen164
+\@vwid@roff=\dimen165
+)) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/apacite\apacite.sty
+Package: apacite 2013/07/21 v6.03 APA citation
+\c@BibCnt=\count272
+\bibleftmargin=\skip49
+\bibindent=\skip50
+\bibparsep=\skip51
+\bibitemsep=\skip52
+\biblabelsep=\skip53
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def
+File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count273
+\l__pdf_internal_box=\box56
+) (main.aux
+
+LaTeX Warning: Label `tab:BACOLRI_time_tolerance' multiply defined.
+
+)
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
+LaTeX Font Info:    ... okay on input line 12.
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
+ii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count274
+\scratchdimen=\dimen166
+\scratchbox=\box57
+\nofMPsegments=\count275
+\nofMParguments=\count276
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count277
+\MPscratchDim=\dimen167
+\MPnumerator=\count278
+\makeMPintoPDFobject=\count279
+\everyMPtoPDFconversion=\toks24
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
+ase.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
+fg
+File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: End \AtBeginDocument code.
+\c@lstlisting=\count280
+\c@maskedRefs=\count281
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/apacite\english.apc
+File: english.apc 2013/07/21 v6.03 apacite language file
+LaTeX Info: Redefining \BPBI on input line 129.
+LaTeX Info: Redefining \BHBI on input line 130.
+)
+<./figures/PDE_thrashing.png, id=1, 462.528pt x 346.896pt>
+File: ./figures/PDE_thrashing.png Graphic file (type png)
+<use ./figures/PDE_thrashing.png>
+Package pdftex.def Info: ./figures/PDE_thrashing.png  used on input line 23.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 28.
+
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 28.
+
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+[1
+
+{C:/Users/huago/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./figures/PDE_t
+hrashing.png>] [2]
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+)
+LaTeX Font Info:    Trying to load font information for OML+cmr on input line 1
+10.
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/base\omlcmr.fd
+File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 110.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 105--116
+[]$[]$ 
+ []
+
+[3]
+<./figures/pde_time_disc_naive.png, id=23, 462.528pt x 346.896pt>
+File: ./figures/pde_time_disc_naive.png Graphic file (type png)
+<use ./figures/pde_time_disc_naive.png>
+Package pdftex.def Info: ./figures/pde_time_disc_naive.png  used on input line 
+123.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 140--162
+[]$[]$ 
+ []
+
+<./figures/pde_time_disc_disc_hand.png, id=24, 462.528pt x 346.896pt>
+File: ./figures/pde_time_disc_disc_hand.png Graphic file (type png)
+<use ./figures/pde_time_disc_disc_hand.png>
+Package pdftex.def Info: ./figures/pde_time_disc_disc_hand.png  used on input l
+ine 165.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[4 <./figures/pde_time_disc_naive.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[5 <./figures/pde_time_disc_disc_hand.png>]
+<./figures/pde_time_disc_bacoli_naive_tol.png, id=33, 462.528pt x 346.896pt>
+File: ./figures/pde_time_disc_bacoli_naive_tol.png Graphic file (type png)
+<use ./figures/pde_time_disc_bacoli_naive_tol.png>
+Package pdftex.def Info: ./figures/pde_time_disc_bacoli_naive_tol.png  used on 
+input line 193.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/pde_time_disc_bacoli_disc_hand_tol.png, id=34, 462.528pt x 346.896pt
+>
+File: ./figures/pde_time_disc_bacoli_disc_hand_tol.png Graphic file (type png)
+<use ./figures/pde_time_disc_bacoli_disc_hand_tol.png>
+Package pdftex.def Info: ./figures/pde_time_disc_bacoli_disc_hand_tol.png  used
+ on input line 200.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [6 <./figures/pde_time_disc_bacoli_naive_tol.png>]
+<./figures/pde_time_disc_bacolri_naive_tol.png, id=39, 462.528pt x 346.896pt>
+File: ./figures/pde_time_disc_bacolri_naive_tol.png Graphic file (type png)
+<use ./figures/pde_time_disc_bacolri_naive_tol.png>
+Package pdftex.def Info: ./figures/pde_time_disc_bacolri_naive_tol.png  used on
+ input line 225.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [7 <./figures/pde_time_disc_bacoli_disc_hand_tol.png>]
+<./figures/pde_time_disc_bacolri_disc_hand_tol.png, id=45, 462.528pt x 346.896p
+t>
+File: ./figures/pde_time_disc_bacolri_disc_hand_tol.png Graphic file (type png)
+
+<use ./figures/pde_time_disc_bacolri_disc_hand_tol.png>
+Package pdftex.def Info: ./figures/pde_time_disc_bacolri_disc_hand_tol.png  use
+d on input line 232.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[8 <./figures/pde_time_disc_bacolri_naive_tol.png> <./figures/pde_time_disc_bac
+olri_disc_hand_tol.png>] [9]
+Overfull \hbox (15.0pt too wide) in paragraph at lines 276--313
+[]$[]$ 
+ []
+
+[10]
+<./figures/pde_state_disc_naive_200.png, id=58, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_naive_200.png Graphic file (type png)
+<use ./figures/pde_state_disc_naive_200.png>
+Package pdftex.def Info: ./figures/pde_state_disc_naive_200.png  used on input 
+line 320.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/pde_state_disc_naive_400.png, id=59, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_naive_400.png Graphic file (type png)
+<use ./figures/pde_state_disc_naive_400.png>
+Package pdftex.def Info: ./figures/pde_state_disc_naive_400.png  used on input 
+line 327.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [11 <./figures/pde_state_disc_naive_200.png> <./figures/pde_state_disc_naive_4
+00.png>]
+<./figures/pde_state_disc_naive_1000.png, id=65, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_naive_1000.png Graphic file (type png)
+<use ./figures/pde_state_disc_naive_1000.png>
+Package pdftex.def Info: ./figures/pde_state_disc_naive_1000.png  used on input
+ line 339.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [12 <./figures/pde_state_disc_naive_1000.png>]
+Overfull \hbox (135.00488pt too wide) in paragraph at lines 385--386
+[][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (123.00476pt too wide) in paragraph at lines 387--389
+[][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (141.00494pt too wide) in paragraph at lines 390--391
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 353--401
+[]$[]$ 
+ []
+
+<./figures/pde_state_disc_event_tol_6.png, id=70, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_event_tol_6.png Graphic file (type png)
+<use ./figures/pde_state_disc_event_tol_6.png>
+Package pdftex.def Info: ./figures/pde_state_disc_event_tol_6.png  used on inpu
+t line 405.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[13] [14]
+<./figures/pde_state_disc_event_tol_9.png, id=79, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_event_tol_9.png Graphic file (type png)
+<use ./figures/pde_state_disc_event_tol_9.png>
+Package pdftex.def Info: ./figures/pde_state_disc_event_tol_9.png  used on inpu
+t line 414.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[15 <./figures/pde_state_disc_event_tol_6.png> <./figures/pde_state_disc_event_
+tol_9.png>]
+<./figures/pde_state_disc_tol_bacoli_400.png, id=85, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_tol_bacoli_400.png Graphic file (type png)
+<use ./figures/pde_state_disc_tol_bacoli_400.png>
+Package pdftex.def Info: ./figures/pde_state_disc_tol_bacoli_400.png  used on i
+nput line 445.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/pde_state_disc_tol_bacoli_1000.png, id=86, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_tol_bacoli_1000.png Graphic file (type png)
+<use ./figures/pde_state_disc_tol_bacoli_1000.png>
+Package pdftex.def Info: ./figures/pde_state_disc_tol_bacoli_1000.png  used on 
+input line 452.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [16 <./figures/pde_state_disc_tol_bacoli_400.png>]
+<./figures/pde_state_disc_tol_bacolri_400.png, id=91, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_tol_bacolri_400.png Graphic file (type png)
+<use ./figures/pde_state_disc_tol_bacolri_400.png>
+Package pdftex.def Info: ./figures/pde_state_disc_tol_bacolri_400.png  used on 
+input line 460.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/pde_state_disc_tol_bacolri_1000.png, id=92, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_tol_bacolri_1000.png Graphic file (type png)
+<use ./figures/pde_state_disc_tol_bacolri_1000.png>
+Package pdftex.def Info: ./figures/pde_state_disc_tol_bacolri_1000.png  used on
+ input line 467.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [17 <./figures/pde_state_disc_tol_bacoli_1000.png> <./figures/pde_state_disc_t
+ol_bacolri_400.png>]
+<./figures/pde_state_disc_tol_event.png, id=98, 462.528pt x 346.896pt>
+File: ./figures/pde_state_disc_tol_event.png Graphic file (type png)
+<use ./figures/pde_state_disc_tol_event.png>
+Package pdftex.def Info: ./figures/pde_state_disc_tol_event.png  used on input 
+line 475.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+Overfull \hbox (75.5008pt too wide) in paragraph at lines 486--494
+ [] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[18 <./figures/pde_state_disc_tol_bacolri_1000.png> <./figures/pde_state_disc_t
+ol_event.png>] [19] (main.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 6640 strings out of 478927
+ 107888 string characters out of 2852535
+ 608831 words of memory out of 3000000
+ 24429 multiletter control sequences out of 15000+600000
+ 407328 words of font info for 42 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 57i,10n,74p,649b,1541s stack positions out of 5000i,500n,10000p,200000b,80000s
+ <C:\Users\huago\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
+1000.pk><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmbx10.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmbx12.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmmi10.pfb><C:/Users/huago/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/huago/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/huago/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/huago/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/huag
+o/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/U
+sers/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.p
+fb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmti10.pfb>
+Output written on main.pdf (19 pages, 1334673 bytes).
+PDF statistics:
+ 155 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+
