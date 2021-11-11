@@ -1,0 +1,142 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Althaus%
+}{%
+Althaus%
+}{%
+{\protect \APACyear {2014}}%
+}]{%
+althaus2014estimating}
+\APACinsertmetastar {%
+althaus2014estimating}%
+\begin{APACrefauthors}%
+Althaus, C\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2014}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Estimating the reproduction number of Ebola virus (EBOV)
+  during the 2014 outbreak in West Africa} {Estimating the reproduction number
+  of ebola virus (ebov) during the 2014 outbreak in west africa}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{PLoS currents}{6}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Campbell%
+, Chancelier%
+\BCBL {}\ \BBA {} Nikoukhah%
+}{%
+Campbell%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+campbell2010modeling}
+\APACinsertmetastar {%
+campbell2010modeling}%
+\begin{APACrefauthors}%
+Campbell, S\BPBI L.%
+, Chancelier, J\BHBI P.%
+\BCBL {}\ \BBA {} Nikoukhah, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Modeling and Simulation in SCILAB} {Modeling and
+  simulation in scilab}.{\BBCQ}
+\newblock
+\BIn{} \APACrefbtitle {Modeling and Simulation in Scilab/Scicos with ScicosLab
+  4.4} {Modeling and simulation in scilab/scicos with scicoslab 4.4}\ (\BPGS\
+  73--106).
+\newblock
+\APACaddressPublisher{}{Springer}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Shampine%
+\ \BBA {} Reichelt%
+}{%
+Shampine%
+\ \BBA {} Reichelt%
+}{%
+{\protect \APACyear {1997}}%
+}]{%
+shampine1997matlab}
+\APACinsertmetastar {%
+shampine1997matlab}%
+\begin{APACrefauthors}%
+Shampine, L\BPBI F.%
+\BCBT {}\ \BBA {} Reichelt, M\BPBI W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1997}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {The matlab ode suite} {The matlab ode suite}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{SIAM journal on scientific computing}{18}{1}{1--22}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Soetaert%
+, Petzoldt%
+\BCBL {}\ \BBA {} Setzer%
+}{%
+Soetaert%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2010}}%
+}]{%
+soetaert2010solving}
+\APACinsertmetastar {%
+soetaert2010solving}%
+\begin{APACrefauthors}%
+Soetaert, K.%
+, Petzoldt, T.%
+\BCBL {}\ \BBA {} Setzer, R\BPBI W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2010}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Solving differential equations in R: package deSolve}
+  {Solving differential equations in r: package desolve}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Journal of statistical software}{33}{1}{1--25}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Virtanen%
+\ \protect \BOthers {.}}{%
+Virtanen%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2020}}%
+}]{%
+2020SciPy-NMeth}
+\APACinsertmetastar {%
+2020SciPy-NMeth}%
+\begin{APACrefauthors}%
+Virtanen, P.%
+, Gommers, R.%
+, Oliphant, T\BPBI E.%
+, Haberland, M.%
+, Reddy, T.%
+, Cournapeau, D.%
+\BDBL {}{SciPy 1.0 Contributors}%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {{{SciPy} 1.0: Fundamental Algorithms for Scientific
+  Computing in Python}} {{{SciPy} 1.0: Fundamental Algorithms for Scientific
+  Computing in Python}}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Nature Methods}{17}{}{261--272}.
+\newblock
+\begin{APACrefDOI} \doi{10.1038/s41592-019-0686-2} \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

@@ -1,12 +1,12 @@
 \section{Appendix: Parameter fitting in an SEIR Model}
 \label{section:ebola_paper}
-In [Chritian L. Althaus's paper reference], the epidemiologist uses data from the Ebola spread in three different West African countries to understand the impact of the implemented control measures. To do this, the researcher needed to estimate parameters like the basic and effective reproduction number of the virus.
+In \cite{althaus2014estimating}, the epidemiologist uses data from the Ebola spread in three different West African countries to understand the impact of the implemented control measures. To do this, the researcher needed to estimate parameters like the basic and effective reproduction number of the virus.
 
-These parameters are estimated by doing a best fit optimization on the parameters applied to an SEIR model. The experiment is to use an ODE model with certain values of these parameters and calculate the error of these models based on real-life data. The model with the minimum error is the 'best fit' model and the corresponding parameters. These estimates are then used to understand the spread of the virus. 
+These parameters are estimated by doing a best fit optimization on the parameters applied to an SEIR model. The experiment is to use an ODE model with certain values of these parameters and calculate the error of these models based on real-life data. The model with the minimum error is the `best fit' model and the corresponding parameters' values are the optimal choices for these parameters. These optimal parameters are then used to understand the spread of the virus. 
 
 We note that the ODE model is run inside an optimization algorithm and thus its efficiency is critical as the algorithm will need to solve the ODE model with each different set of parameters.
 
-The following is the pseudo-code for our attempt at replicating the experiment reported in [Chritian L. Althaus's paper reference]:
+The following is the pseudo-code for our attempt at replicating the experiment reported in \cite{althaus2014estimating}:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -19,19 +19,20 @@ function model(t, y, parms):
 function ssq(parms):
     // get the model
     out = ode(model, initial_value, times, parms)
-
-    // we calculate the error from the data points as such:
+    // calculate the error from the data points as such:
     ssq = abs(out.C - data.C) + abs(out.D - data.D)
     return ssq
 
 parms = c(beta=0.27, f=0.74, k=0.0023)
+// give error function and manipulatable parameters
+// to an optimisation algorithm
 fit = optimise(par=parms, errorFunc=ssq)
 
 // fit will contain the optimal parameter values...
 \end{lstlisting}
 \end{minipage}
 
-The figure that was reported in [ref to althaus paper] is shown in Figure $\ref{fig:original_figure_SEIR_paper}$. Our results are as shown in Figures $\ref{fig:my_fit_Gui}$, $\ref{fig:my_fit_SL}$ and $\ref{fig:my_fit_Lib}$. We see good agreement between our results and those reported in [Ref to Althaus]
+The figure that was reported in  \cite{althaus2014estimating} is shown in Figure $\ref{fig:original_figure_SEIR_paper}$. Our results are as shown in Figures $\ref{fig:my_fit_Gui}$, $\ref{fig:my_fit_SL}$ and $\ref{fig:my_fit_Lib}$. We see good agreement between our results and those reported in  \cite{althaus2014estimating}.
 
 \begin{figure}[h]
 \centering

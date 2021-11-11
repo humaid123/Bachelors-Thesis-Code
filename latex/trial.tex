@@ -4,8 +4,10 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{listings}
+\usepackage{float} %figure inside minipage
 \graphicspath{ {./images/} }
 \usepackage[export]{adjustbox}
+\usepackage{apacite}
 
 \begin{document}
 
@@ -14,7 +16,10 @@
 \include{stateProblem}
 \include{investigation}
 \include{summary}
-\include{bibliography}
+
+\bibliographystyle{ieeetran}
+\bibliography{bibliography}
+\appendix
 \include{ebolaPaper}
 
 \end{document}

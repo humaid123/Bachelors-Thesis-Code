@@ -1,28 +1,28 @@
-
 \section{Summary, Conclusions, and Future Work}
 \label{section:summary}
 \subsection{Summary and Conclusions}
-Our starting assumption for both models is a reasonable implementation that might typically be employed by a computational scientist. This includes fixed-step size solvers as well as implementations based on the introduction of if-else statements into the functions that define the ODE systems. 
+In this report, we consider the numerical solution of two typical Covid-19 models based on a standard SEIR model. The models include discontinuities associated with interventions introduced to slow down the spread of the virus. We were particularly interested in investigating the performance of several standard software packages available in computational platforms.
+
 We reported on the stability and discontinuity issues associated with SEIR models. We showed how stability affects our solutions even if there is a small change in the initial values. We showed how discontinuities reduce the efficiency of the solvers and presented a straightforward way to detect that the problem at hand is discontinuous.
 
-We then used ODE software packages in R, Python, and Scilab to model two Covid-19 problems, one with a time-dependent discontinuity and one with a state-dependent discontinuity.
+We then used ODE software packages in R, Python, Scilab, and Matlab to model two Covid-19 problems, one with a time-dependent discontinuity and one with a state-dependent discontinuity. Our starting assumption for both models is that they represent reasonable implementations that might typically be employed by an epidemiologist. This includes fixed-step size solvers as well as implementations based on the introduction of if-else statements into the functions that define the ODE systems. 
 
-For the time-dependent discontinuity problem, we have shown that error-controlled ODE solvers can step over one discontinuity with sufficiently sharp tolerances while fixed step-size solvers cannot. We have shown that although error-controlled solvers can solve the problem, the use of discontinuity handling in the form of cold starts leads to more efficient solutions that allow us to use coarser tolerances. 
+For the time-dependent discontinuity problem, we have shown that error-control ODE solvers can step over the one discontinuity that is present with sufficiently sharp tolerances while fixed step-size solvers cannot. We have shown that although error-controlled solvers can solve the problem, the use of discontinuity handling in the form of cold starts leads to more efficient solutions that allow us to use coarser tolerances. We thus recommend that fixed step-size solvers be avoided. We also recommend that if the time of a discontinuity is known, cold starts at these times should be employed as they result in more accurate, more efficient solutions that can be obtained at coarser tolerances.
 
-For the state-dependent discontinuity problem, we have shown that even error control solvers cannot successfully step over multiple discontinuities. We have shown that if the discontinuity is state-dependent, we cannot straightforwardly implement the model using the model function $f(t, y)$. We then introduced event detection and showed how it can be used to model state-dependent discontinuity problems by encoding the thresholds as events and applying cold starts. Using event detection provides an efficient and accurate way to solve such problems.
+For the state-dependent discontinuity problem, we have shown that even error control solvers cannot successfully step over multiple state-dependent discontinuities. We then introduced event detection and showed how it can be used to model state-dependent discontinuity problems by encoding the intervention imposition and relaxation thresholds as events and applying cold starts. We have concluded that using event detection provides an efficient and accurate way to solve such problems.
 
-From the usage of the different packages, we also found a certain inconsistency. We note that R and Scilab do not use the interpolation capabilities for the solver by default. We would advise software implementers to use the capabilities of the solver's interpolation. Using the method of forcing the solver to integrate exactly to given output points reduces the efficiency of the algorithm. The algorithm is no longer allowed to take as big a step as it should.
-We also recommend against using fixed step-size solvers.
+From the usage of the different packages, we also found a certain inconsistency. We noted that R and Scilab do not use the interpolation capabilities for some of their solvers by default. We would advise software implementers to take advantage of the capabilities of the solvers to use interpolation. Using the method of forcing the solver to integrate exactly to given output points reduces the efficiency of the solver. The solver is no longer allowed to take as big a step as it should.
 
-We recommend using some form of discontinuity handling rather than introducing an if-statement into the right-hand side function that defines the ODE.
+We recommend using some form of discontinuity handling rather than introducing an if-statement into the right-hand side function that defines the ODE wherever applicable.
 
-When a researcher has a problem that has a time-dependent discontinuity that occurs at a known time, they should use the form of discontinuity handling presented in this report. Using cold starts allows the researcher to integrate continuous subintervals of the problem in separate calls leading, to efficient and accurate solutions.
+When a researcher has a problem that has a time-dependent discontinuity that occurs at a known time, they should use the form of discontinuity handling presented in this report. Using cold starts allows the researcher to integrate continuous subintervals of the problem in separate calls leading to efficient and accurate solutions.
 
 When a researcher has a problem that has a state-dependent discontinuity, they should map out the thresholds at which these discontinuities occur and look to use event detection with these thresholds as events. They can then cold start at each event and integrate continuous subintervals of the problem in separate calls to the solvers. This leads to efficiency and accuracy that is not possible using a naive treatment. 
 
 \subsection{Future Work}
 \label{subsection:future_work}
-In Section $\ref{subsection:naive_state_problem}$, we see that `Radau' exhibits unusual behavior when solving the state-dependent problem. Further analysis needs to be done on the algorithm itself as two different implementations of the algorithm gave similarly poor quality solutions.
+In Section $\ref{subsection:naive_state_problem}$, we see that `Radau' exhibits an unusual behavior when solving the state-dependent problem. Further analysis needs to be done on the algorithm itself as two different implementations of the algorithm in R and Python and the Fortran code itself gave similarly poor quality solutions.
 
-We also propose to do the same discontinuity analysis on Covid-19 PDE models to see how error-controlled and non-error-controlled PDE solvers differ. We can also use BACOLIKR or other root-finding capable software to analyze how they improve the solutions to discontinuous PDE problems.
+We also propose to do the same discontinuity analysis on Covid-19 PDE models to see how error-controlled and non-error-controlled PDE solvers differ.
+
 
