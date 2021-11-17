@@ -34,9 +34,6 @@ We will show, as was the case in the ODE problem, that thrashing around a discon
 \paragraph{The BACOL family of PDE solvers}
 The BACOL family of PDE solvers solve 1D PDEs using B-spline collocation. BACOLI uses DASSL as its DAE solver (which is based on a family of multi-step methods known as the Backward Differentiation Formulas (BDF)) while BACOLRI uses RADAU5 as its DAE solver (which is based on 5th order implicit Runge-Kutta methods). Both have global error control. BACOLIKR is an improvement over BACOLI which uses DASKR instead of DASSL as the DAE solver, allowing it to detect events.
 
-\paragraph{Other Solvers}
-[Look for EPDCOL, KARDOS, an euler method and ]
-
 
 \subsubsection{Problem Definition}
 In this paper, the PDE model which we will try to solve is an extension of the SEIR model for epidemiological studies that uses one more spatial variable (x) and not just time. Similar PDE models have been used before 8888 reference to PDE Cholera papers 8888 and either use the spread in location or the age as the additional spatial variable.
@@ -45,9 +42,8 @@ The SEIR model was developed by Andrew Fraser 88888 Reference 88888 but some coe
 
 The model is as follows:
 \begin{equation}
-S(x, t)_t = D_S(x)S(x, t)_{xx} + \mu N - \mu S(x, t) - \frac{\beta}{N}S(x, t) I(x, t)
+S(x, t)_t = D_S(x)S(x, t)_{xx} + \mu N - \mu S(x, t) - \frac{\beta}{N}S(x, t)I(x, t)
 \end{equation}
-
 \begin{equation}
 E(x, t)_t = D_E(x)E(x, t)_{xx} + \frac{\beta}{N}S(x, t)I(x, t) - \alpha E(x, t) - \mu E(x, t)
 \end{equation}
@@ -62,13 +58,10 @@ R(x, t)_t = D_R(x)R(x, t)_{xx} + \gamma I(x, t) - \mu R(x, t)
 
 The spatial domain is $-5 \leq x \leq 5$ and the temporal domain is $0 \leq t \leq 70$ for the time-dependent discontinuity problem but we will use $0 \leq t \leq 200$ for the space-dependent discontinuity problem as we attempt a long-term forecast.
 
-We use $\frac{0.01}{365}$ as the value of the parameter $\mu$, the birth rate, 0.06 for the value of the recovery rate, $\gamma$, 0.125 as the incubation rate. $\alpha$ and we will vary the transmission rate $\beta$ between 0.9 and 0.005 based on whether measures are implemented or not in the model. The population size, N, is 10.
+$\mu$, the birth rate, is set to $\frac{0.01}{365}$ and we use 0.06 for the value of the recovery rate, $\gamma$, 0.125 as the incubation rate, $\alpha$, and we will vary the transmission rate, $\beta$, between 0.9 and 0.035 based on whether measures are implemented or not in the model. The population size, N, is $37*10^{6}$.
 
 The model also uses diffusion functions $D_S(x)$, $D_E(x)$, $D_I(x)$ and $D_R(x)$ as follows:
 
-888888888888888888
-It is using $sqrt(x^2)$... can I just change it to abs!!! NEED TO CHECK THIS
-888888888888888888
 
 \begin{equation}
 D_S(x) = D_E(x) = D_R(x) = (maxD_s - minD_s)e^{-10(\sqrt{x^{2}} - 1)^2)} + minD_s
@@ -77,22 +70,23 @@ D_S(x) = D_E(x) = D_R(x) = (maxD_s - minD_s)e^{-10(\sqrt{x^{2}} - 1)^2)} + minD_
 D_I(x) = D_E(x)/10
 \end{equation}
 
-The parameters $maxD_s$ and $minD_s$ are 0.1 and 0.05.
+The parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01.
 
 The initial values are functions of the spatial domain as such
 
 \begin{equation}
-S(x, 0) = 1 - I(x, 0)
+S(x, 0) = N - I(x, 0)
 \end{equation}
 \begin{equation}
-I(x, 0) = 2e^{-10(x+1)^2}
+I(x, 0) = 100e^{-x^2}
 \end{equation}
 \begin{equation}
 E(x, 0) = R(x, 0) = 0
 \end{equation}
 
-This gives us a complete PDE problem definition to which we will add discontinuities as follows. In the time-dependent discontinuity problem, we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.005 and integrate until t=70. This change in the parameter introduces a discontinuity.
-In the state-dependent discontinuity problem, we integrate with the value of $\beta$ at 0.9 while the integral value of the solution of the E-component is less than 5. When it reaches 5, we integrate with the value of $\beta$ at 0.005 until the integral reaches 1 where we change the value pf $\beta$ back to 0.9. We repeat this process until we reach t=200.
+This gives us a complete PDE problem definition to which we will add discontinuities as follows. In the time-dependent discontinuity problem, we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.035 and integrate until t=70. This change in the parameter introduces a discontinuity.
+
+In the state-dependent discontinuity problem, we integrate with the value of $\beta$ at 0.9 while the integral value of the solution of the E-component is less than 30000. When it reaches 30000, we integrate with the value of $\beta$ at 0.005 until the integral reaches 1 where we change the value pf $\beta$ back to 0.9. We repeat this process until we reach t=200.
 
 \subsection{Time Dependent Discontinuity}
 In this section, we will add a time dependent discontinuity and report on the thrashing experienced by the solvers. We note that this section is in essence an application of what we demonstrated in Section 8888 reference to ODE time dependent 8888 in that time dependent discontinuities are introduced by simply changing a parameter value, as this is essentially changing the model function being integrated and that time-dependent discontinuities have an easy solution by integrating the solution with two calls, one before the discontinuity and one after. This gives the solver two continuous segments to integrate.
@@ -175,8 +169,8 @@ As expected, Figure 888 Refer to above figure 888, the solvers were able to all 
 \begin{center}
 \begin{tabular}{ c c c } 
 method  & no disc. handling & with disc. handling \\ 
-BACOLI  & 236715     &   162675     \\
-BACOLRI & 238480     &   205540    \\
+BACOLI  & 416, 560    &    283, 210     \\
+BACOLRI & 392, 125     &   358, 765    \\
 \end{tabular}
 \end{center}
 \end{table} 
@@ -208,12 +202,12 @@ In this section, we do a tolerance study on the time dependent problem. We look 
 \begin{center}
 \begin{tabular}{ c c c } 
 tolerance  & BACOLI naive & BACOLI with disc handling\\ 
-1e-1       & 44730        &   46410     \\
-1e-3       & 58950        &   51750    \\
-1e-5       & 129305       &   101025    \\
-1e-7       & 371210       &   294770    \\
-1e-9       & 1100095      &   773040    \\
-1e-11      & 3120140      &   2337900    \\
+1e-1       & 34, 890        &   34, 890     \\
+1e-3       & 67, 340        &   65, 390   \\
+1e-5       & 231, 055       &   176, 325    \\
+1e-7       & 693, 995       &   510, 495    \\
+1e-9       & 1, 992, 810      &   1, 598, 780    \\
+1e-11      & 6, 201, 085      &   4, 851, 455   \\
 \end{tabular}
 \end{center}
 \end{table}
@@ -240,12 +234,12 @@ tolerance  & BACOLI naive & BACOLI with disc handling\\
 \begin{center}
 \begin{tabular}{ c c c } 
 tolerance  & BACOLRI naive & BACOLRI with disc handling\\ 
-1e-1       & 82595        &   81020     \\
-1e-3       & 88220        &   85475    \\
-1e-5       & 166150       &   156540    \\
-1e-7       & 353875       &   331095    \\
-1e-9       & 818395       &   771685    \\
-1e-11      & 2189820      &   2165290    \\
+1e-1       & 89, 650        &   85, 750     \\
+1e-3       & 127, 340       &   122, 980   \\
+1e-5       & 262, 525       &   248, 435    \\
+1e-7       & 571, 895       &   553, 400    \\
+1e-9       & 1, 391, 485     &   1, 394, 070    \\
+1e-11      & 4, 291, 015     &   4, 583, 210   \\
 \end{tabular}
 \end{center}
 \end{table}
@@ -424,14 +418,14 @@ From Figure 8888 8888, we can see that with event detection, it is only a matter
 \begin{center}
 \begin{tabular}{ c c } 
 method                  & nfev \\ 
-BACOLI 200 steps        & 784230    \\
-BACOLI 400 steps        & 813555    \\
-BACOLI 1000 steps       & 874605    \\
-BACOLRI 200 steps       & 612100    \\
-BACOLRI 400 steps       & 1075835    \\
-BACOLRI 1000 steps      & 3354275    \\
-BACOLIKR tol $10^{-6}$  & 1067420    \\
-BACOLIKR tol $10^{-9}$  & 4996210    \\
+BACOLI 200 steps        &  989, 510    \\
+BACOLI 400 steps        & 1, 177, 810    \\
+BACOLI 1000 steps       & 1, 309, 410    \\
+BACOLRI 200 steps       & 1, 284, 690    \\
+BACOLRI 400 steps       & 2, 494, 585   \\
+BACOLRI 1000 steps      & 6, 166, 925    \\
+BACOLIKR tol $10^{-6}$  & 1, 937, 730    \\
+BACOLIKR tol $10^{-9}$  & 7, 915, 085    \\
 \end{tabular}
 \end{center}
 \end{table} 
@@ -484,12 +478,13 @@ We also perform a tolerance study at 400 and at 1000 to show how the solutions c
 \label{tab:BACOLRI_time_tolerance}
 \begin{center}
 \begin{tabular}{ c c c c c c } 
-tolerance  & BACOLIKR  & BACOLI 400   & BACOLI 1000 & BACOLRI 400 & BACOLRI 1000\\ 
-1e-3       & 333700    &   330750     & 340650      & 638120      & 1582760   \\
-1e-5       & 801530    &   524595     & 599425      & 1018550     & 2520970  \\
-1e-7       & 2091040   &   1331390    & 1358950     & 1509400     & 4266070 \\
-1e-9       & 4996210   &   3967825    & 4176470     & 3148635     & 7223550 \\
-1e-11      & 13031060  &   10687490   & 10565330    & 7467960     & 14833180  \\
+tolerance  & BACOLIKR     & BACOLI 400     & BACOLI 1000  & BACOLRI 400  & BACOLRI 1000\\ 
+1e-1       & 137, 300     &   111, 510     & 107, 550     & 699, 800     & 1, 749, 600  \\
+1e-3       & 376, 855     &   272, 025     & 281, 970     & 918, 090     & 2, 275, 480  \\
+1e-5       & 1, 052, 920  &   779, 785     & 890, 025     & 1, 782, 095  & 4, 233, 560 \\
+1e-7       & 3, 217, 450  &   2, 090, 995  & 2, 343, 995  & 3, 378, 235  & 8, 302, 450 \\
+1e-9       & 7, 915, 085  &   5, 741, 100  & 6, 289, 375  & 7, 869, 095  & 16, 127, 415 \\
+1e-11      & 21, 256, 400 &   16, 462, 255 & 16, 221, 465 & 14, 979, 065 & 29, 184, 775  \\
 \end{tabular}
 \end{center}
 \end{table}
