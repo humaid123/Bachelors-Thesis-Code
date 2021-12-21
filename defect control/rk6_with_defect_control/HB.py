@@ -39,14 +39,16 @@ class HB:
         y_i, f_i,
         y_i_plus_1, f_i_plus_1 
     ):
-
-
         h_i = x_i_plus_1 - x_i
         h_i_minus_1 = x_i - x_i_minus_1
         
         self.alpha = h_i_minus_1 / h_i
         self.h_i = h_i
         self.x_i = x_i
+
+        # we also store x_i_minus_1 and x_i_plus_1 so that we can build the final interpolant
+        self.x_i_plus_1 = x_i_plus_1
+        self.x_i_minus_1 = x_i_minus_1
 
         self.y_i_minus_1 = y_i_minus_1 
         self.f_i_minus_1 = f_i_minus_1
