@@ -94,7 +94,7 @@ for n_step in [10, 100, 1000, 10000]:
         plt.plot(x_axis, plot_vals, label=f"x_{str(x_i_minus_1)}_{str(x_i_plus_1)}")
     plt.title("plot of defects")
     plt.xlabel("step scaled between 0 and 2")
-    plt.ylabel('defect')
+    plt.ylabel('global defect')
     # plt.legend()
     plt.show()
 
