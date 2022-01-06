@@ -1,6 +1,4 @@
-
-# from rk6 import rk_defect_control
-from rk6 import rk_defect_control
+from rk6_constant_alpha import rk_defect_control_static_alpha
 from math import exp, floor
 import matplotlib.pyplot as plt
 
@@ -14,7 +12,8 @@ def create_t_eval(start, end, num_points = 100):
         )
     return res
 
-t_span_3 = [0, 10]
+# t_span_3 = [0, 10]
+t_span_3 = [0, 1]
 y0_3 = [1]
 
 def model3(t, y):
@@ -30,17 +29,16 @@ actual_solutions = solution3(t_eval)
 #for tol in [1e-3, 1e-6, 1e-9, 1e-12]:
 # I cannot do 1e-6 defect control itself.....
 # I think we need to try another technique
-# for tol in [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
-for tol in [1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
+for tol in [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]:
     # res, sol, first_deriv, derivs = rk_defect_control(model3, t_span_3, y0_3[0], tol)
-    res, sol, first_deriv, derivs = rk_defect_control(model3, t_span_3, y0_3[0], tol)
+    res, sol, first_deriv, derivs = rk_defect_control_static_alpha(model3, t_span_3, y0_3[0], tol, solution3)
     computed_solutions = [sol(x) for x in t_eval]
     
     plt.figure()
     plt.plot(t_eval, actual_solutions, label="actual solution")
     plt.plot(t_eval, computed_solutions, label="computed solution")
-    #for (x, y) in res:
-    #    plt.axvline(x=x)
+    for (x, y) in res:
+        plt.axvline(x=x)
     plt.title(f"solutions for tol={tol}")
     plt.legend()
     plt.show()
@@ -70,7 +68,7 @@ for tol in [1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
     # defect graphs
     # we only pick 10 of the derivs
     pick_every = (len(derivs) // 5) + 1
-    print("number of successful steps =", len(derivs))
+    print("number of steps =", len(derivs))
     # print("pick every", pick_every)
     plotted_derivs = []
     for i in range(0, len(derivs), pick_every):
@@ -89,7 +87,7 @@ for tol in [1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
             y = solution3([pt])[0]
             f_eval  = model3(pt, y)[0]
             hb_prime_eval = hb.prime(pt)
-            defects.append( abs(hb_prime_eval - f_eval) )
+            defects.append(hb_prime_eval - f_eval)
         maximum_defect = max(defects)
         minimum_defect = min(defects)
         plot_vals = [(defect - minimum_defect) / (maximum_defect - minimum_defect) for defect in defects]
@@ -104,8 +102,3 @@ for tol in [1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
     plt.ylabel('defect')
     plt.legend()
     plt.show()
-
-print("H CANNOT GET TOO SMALL OR WE LOSE ALL THE ADVANTAGES we wanted....")
-print("it seems we stop getting any more accurated for 1e-3 or smaller step sizes....")
-
-print("THE SOLVER IS BEING FORCED TO TAKE REALLY SMALL STEPS => this is making everything really slow.... => does not matter if we are using only 10 function evaluation per step if we need to take a 1000 steps where we could just take 20....")

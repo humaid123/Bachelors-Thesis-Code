@@ -54,12 +54,16 @@ def create_continuous_sol_from_interpolants(interps):
     def sol(x) -> float:
         """ solution as taken between x_i_minus_1 and x_i """
         for hb in interps:
-            if (hb.x_i_minus_1 <= x <= hb.x_i):
+            # if (hb.x_i_minus_1 <= x <= hb.x_i):
+            if (hb.x_i <= x <= hb.x_i_plus_1):
                 return hb.eval(x)
-        last_hb = interps[-1]
-        if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-            return last_hb.eval(x)
+        # last_hb = interps[-1]
+        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
+        #     return last_hb.eval(x)
         
+        first_hb = interps[0]
+        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
+            return first_hb.eval(x)
         print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_1} <= x <= {interps[-1].x_i_plus_1}")
         return -1
 
@@ -92,11 +96,16 @@ def create_continuous_first_derivatives_from_interpolants(interps):
     def sol(x) -> float:
         """ derivatives as taken between x_i_minus_1 and x_i """
         for hb in interps:
-            if (hb.x_i_minus_1 <= x <= hb.x_i):
+            # if (hb.x_i_minus_1 <= x <= hb.x_i):
+            if (hb.x_i <= x <= hb.x_i_plus_1):
                 return hb.prime(x)
-        last_hb = interps[-1]
-        if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-            return last_hb.prime(x)
+        # last_hb = interps[-1]
+        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
+        #     return last_hb.prime(x)
+
+        first_hb = interps[0]
+        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
+            return first_hb.prime(x)
         
         print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_1} <= x <= {interps[-1].x_i_plus_1}")
         return -1
@@ -195,8 +204,7 @@ def rk_error_control(fun, t_span, y0, tol):
         # for now: 
         #       if the error on the step is less than the tolerance, we accept, else we reject and half the step size to retake the step
         #       if the error satisfied tol/10 as well, we double the step size for the next step
-    xn = t_span[0]
-    xend = t_span[1]
+    xn, xend = t_span
 
     yn = y0
     f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
@@ -216,10 +224,8 @@ def rk_error_control(fun, t_span, y0, tol):
             yn = yn_plus_1
             res.append( (xn, yn) )
 
-            # we note that the pair I got from Jim Verner does not seem to follow k[-1] = f(xn_plus_1, yn_plus_1)
             # so for now, I do an additional function evaluation
             f_start = fun(xn, yn)[0]
-            # print(k[-1] - f_start)
             fn_s.append(f_start)
 
             if error < (tol / 10):
@@ -239,8 +245,10 @@ def rk_error_control(fun, t_span, y0, tol):
 # start of defect control solver
 
 def first_step(fun, xn, yn, f_start, tol):
-    # we can uncomment the following to do error control on the first step => THIS IS TOO SLOW AND OFTEN CRASHES THE SOLVER as h becomes too small
-    
+    """
+    For the first step, we take a step using a stronger tolerance.
+    We use this stronger tolerance to also decide on the initial h value.
+    """
     h = sqrt(tol)
     stricter_tol = tol / 100
     error = float('inf')
@@ -255,30 +263,13 @@ def first_step(fun, xn, yn, f_start, tol):
             # accept the step, by moving the x and the y
             xn = xn + h
             yn = yn_plus_1_higher_order
-
-            if error < stricter_tol:
-                h *= 2
+            h *= 2
         else:
             h /= 2
-    
 
-    """ 
-    # no error control on the first step
-    h = 1e-3 # sqrt(tol) * 10
-    # we don't do any error control on the first step anymore
-    (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
-    # accept the step, by moving the x and the y
-    xn = xn + h
-    yn = yn_plus_1_higher_order
-    """
-
-    # we note that the pair I got from Jim Verner does not seem to follow k[-1] = f(xn_plus_1, yn_plus_1)
-    # so for now, I do an additional function evaluation
     f_start = fun(xn, yn)[0]
-    # print(k[-1] - f_start)
-    
-    # print( "first step", (xn, yn, f_start, h) )
-    print("first step", h, sqrt(tol))
+
+    # print("first step", h, sqrt(tol))
     return (xn, yn, f_start, h)
 
 def rk_defect_control(fun, t_span, y0, tol):
@@ -304,6 +295,8 @@ def rk_defect_control(fun, t_span, y0, tol):
     res.append( (xn, yn) )
     fn_s.append(f_start)
 
+    n_steps = 0
+
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
@@ -313,8 +306,10 @@ def rk_defect_control(fun, t_span, y0, tol):
 
         f_i = fn_s[-1]
         f_i_minus_1 = fn_s[-2]
-        f_i_plus_1 = fun(xn, yn)[0]
-        # print("test k[-1]", k[-1] - f_i_plus_1)
+        # MY OLD MISTAKE => this is x_i, y_i NOT x_i_plus_1, y_i_plus_1 => f_i_plus_1 = fun(xn, yn)[0]
+        f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
+
+        print(h)
 
         this_interp = HB(
             x_i_minus_1, x_i, x_i_plus_1,
@@ -323,6 +318,9 @@ def rk_defect_control(fun, t_span, y0, tol):
             y_i_plus_1, f_i_plus_1 
         )
 
+        n_steps += 1
+
+        """
         # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
         if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
         if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
@@ -331,6 +329,8 @@ def rk_defect_control(fun, t_span, y0, tol):
         if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
         if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
         if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
+        """
+
 
         # defect control on [x_i to x_i_plus_1]
         h_i = x_i_plus_1 - x_i
@@ -344,9 +344,6 @@ def rk_defect_control(fun, t_span, y0, tol):
             this_interp.prime(x_sample_2) - fun( x_sample_2, this_interp.eval(x_sample_2) )[0]
         )
         max_defect = max(defect_sample_1, defect_sample_2)
-
-        # print("h", h, initial_h)
-        # print("max_defect", max_defect, max_defect < tol)
 
         if max_defect < tol:
             # accept the step, by moving the x and the y
@@ -364,251 +361,7 @@ def rk_defect_control(fun, t_span, y0, tol):
         else:
             h /= 2
 
-    return (
-        res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
-        create_defect_samplings(res, fn_s)
-    )
-
-# ============================================================================================================
-# here we have a solver that does defect control ONLY after the error has been satisfied
-# we thus sometimes save some function evaluations when doing the defect control
-
-def rk_error_and_defect_control(fun, t_span, y0, tol):
-    # theory:
-        # we take step by step from the start in t_span[0] to the end in t_span[1]
-        # each step is a rk_step as per one_step(), the size of the step, h depends on how the step taken satisfied the tolerance
-        # for now: 
-        #       if the error on the step is less than the tolerance, we accept, else we reject and half the step size to retake the step
-        #       if the error satisfied tol/10 as well, we double the step size for the next step
-    xn = t_span[0]
-    xend = t_span[1]
-
-    yn = y0
-    f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
-    
-    res = [(xn, yn)]
-    fn_s = [f_start]
-    interps = []
-
-    # we do strict error control on the first step
-    # we update all the values of xn, yn, fstart based on what happened on the first step
-    (xn, yn, f_start, h) = first_step(fun, xn, yn, f_start, tol)
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
-
-    # from my experiments we can see that the solver is too strict
-    # we relax the tolerance a little bit to allow faster execution
-    # tol *= 5
-    
-
-    while xn < xend:
-        (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
-
-        error = abs(yn_plus_1_higher_order - yn_plus_1)
-        if (error > tol):
-            print("error not satisfied, so we reject and don't even do dfect control")
-            h /= 2
-            continue
-
-        x_i, y_i = res[-1]
-        x_i_minus_1, y_i_minus_1 = res[-2]
-        x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
-
-        f_i = fn_s[-1]
-        f_i_minus_1 = fn_s[-2]
-        f_i_plus_1 = fun(xn, yn)[0]
-        # print("test k[-1]", k[-1] - f_i_plus_1)
-
-        this_interp = HB(
-            x_i_minus_1, x_i, x_i_plus_1,
-            y_i_minus_1, f_i_minus_1,
-            y_i, f_i,
-            y_i_plus_1, f_i_plus_1 
-        )
-
-        """
-        # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
-        if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
-        if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
-        if (abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))   > 1e-12: print("wrong y_i_plus_1",  abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))
-
-        if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
-        if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
-        if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
-        """
-
-        # defect control on [x_i to x_i_plus_1]
-        h_i = x_i_plus_1 - x_i
-        x_sample_1 = x_i + 0.4 * h_i
-        defect_sample_1 = abs( 
-            this_interp.prime(x_sample_1) - fun( x_sample_1, this_interp.eval(x_sample_1) )[0] 
-        )
-
-        x_sample_2 = x_i + 0.8 * h_i
-        defect_sample_2 = abs(
-            this_interp.prime(x_sample_2) - fun( x_sample_2, this_interp.eval(x_sample_2) )[0]
-        )
-        max_defect = max(defect_sample_1, defect_sample_2)
-        
-        # print("h", h, initial_h)
-        # print("max_defect", max_defect, max_defect < tol)
-
-        # print( "num succesful steps taken so far = ", len(interps) + 1 )
-        # print( "x_i_minus_1", x_i_minus_1, "h",h)
-
-        if max_defect < tol:
-            # accept the step, by moving the x and the y
-            xn = x_i_plus_1
-            yn = y_i_plus_1
-            res.append( (xn, yn) )
-
-            f_start = f_i_plus_1
-            fn_s.append(f_start)
-
-
-            interps.append(this_interp)
-            if max_defect < (tol / 1.5):
-                h *= 3
-            
-            """
-            The code below seems to WORSEN the situation not improve it
-            # THROUGHOUT MY EXPERIMENTS, we have seen that an alpha closer to 1
-            # and a h value close to 1e-2 lead to better result.
-            # I try to force it to take bigger steps if it is taking similar sized steps
-            if len(interps) >= 2:
-                if (interps[-2].alpha == 1) and (interps[-1].alpha == 1) and (h < 1e-2):
-                    # from what we know from the perfect convergence experiment
-                    # when alpha is 1, the v-shaped graph's v is around 1e-2, 1e-3
-                    # so there is a chance that if we keep decreasing, the step => the solver starts getting INNACURATE instead
-                    # of more accurate...
-                    # print("making it take a bigger step")
-                    h *= 3
-            """
-            
-        else:
-            h /= 2
-
-    return (
-        res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
-        create_defect_samplings(res, fn_s)
-    )
-
-# the above solver DOES NOT IMPROVE THE SITUATION BY A LOT ....
-
-
-# =============================================================================================================================
-# DEFECT CONTROL with STATIC ALPHA
-
-# VERY IMPORTANT
-# we use the first step method outlined in the original DEFECT CONTROL CODE
-# VERY IMPORTANT
-
-def rk_defect_control_static_alpha(fun, t_span, y0, tol):
-    # theory:
-        # we take step by step from the start in t_span[0] to the end in t_span[1]
-        # each step is a rk_step as per one_step(), the size of the step, h depends on how the step taken satisfied the tolerance
-        # for now: 
-        #       if the error on the step is less than the tolerance, we accept, else we reject and half the step size to retake the step
-        #       if the error satisfied tol/10 as well, we double the step size for the next step
-    xn = t_span[0]
-    xend = t_span[1]
-
-    yn = y0
-    f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
-    
-    res = [(xn, yn)]
-    fn_s = [f_start]
-    interps = []
-
-    # we do strict error control on the first step
-    # we update all the values of xn, yn, fstart based on what happened on the first step
-    (xn, yn, f_start, h) = first_step(fun, xn, yn, f_start, tol)
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
-
-    index = 1
-    while xn < xend:
-        (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
-
-        x_i, y_i = res[-1]
-        x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
-
-        f_i = fn_s[-1]
-        f_i_plus_1 = fun(xn, yn)[0]
-        # print("test k[-1]", k[-1] - f_i_plus_1)
-
-        # getting x_i_minus_1 based on the previous interpolant so that alpha stays at 1
-        (x_i_minus_1, y_i_minus_1, f_i_minus_1) = None, None, None
-        if (len(interps) >= 1):
-            # there is one interpolant already
-            x_i_minus_1 = x_i - h
-            y_i_minus_1 = interps[-1].eval(x_i_minus_1)
-            f_i_minus_1 = interps[-1].prime(x_i_minus_1)
-            print("x_i", x_i, "h", h)
-            print("x_i_minus_1", x_i_minus_1)
-            print("y_i_minus_1", y_i_minus_1)
-            print("res[-2]", res[-2])
-            print("f_i_minus_1", f_i_minus_1, "fn_s[-2]", fn_s[-2])
-        else:
-            # we unfortunately need to let alpha go crazy for the second step
-            # in the second step, alpha is not 1 and we might get into some problems
-            x_i_minus_1, y_i_minus_1 = res[-2] 
-            f_i_minus_1 = fn_s[-2]
-
-        # print(index, h)
-        this_interp = HB(
-            x_i_minus_1, x_i, x_i_plus_1,
-            y_i_minus_1, f_i_minus_1,
-            y_i, f_i,
-            y_i_plus_1, f_i_plus_1 
-        )
-
-        # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
-        if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
-        if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
-        if (abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))   > 1e-12: print("wrong y_i_plus_1",  abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))
-
-        if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
-        if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
-        if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
-
-        # defect control on [x_i to x_i_plus_1]
-        h_i = x_i_plus_1 - x_i
-        x_sample_1 = x_i + 0.4 * h_i
-        defect_sample_1 = abs( 
-            this_interp.prime(x_sample_1) - fun( x_sample_1, this_interp.eval(x_sample_1) )[0] 
-        )
-
-        x_sample_2 = x_i + 0.8 * h_i
-        defect_sample_2 = abs(
-            this_interp.prime(x_sample_2) - fun( x_sample_2, this_interp.eval(x_sample_2) )[0]
-        )
-        max_defect = max(defect_sample_1, defect_sample_2)
-
-        # print("h", h, initial_h)
-        # print("max_defect", max_defect, max_defect < tol)
-
-        if max_defect < tol:
-            # accept the step, by moving the x and the y
-            xn = x_i_plus_1
-            yn = y_i_plus_1
-            res.append( (xn, yn) )
-
-            f_start = f_i_plus_1
-            fn_s.append(f_start)
-
-            index += 1
-
-            interps.append(this_interp)
-            if max_defect < (tol / 2):
-                h *= 2
-        else:
-            h /= 2
-
+    print("number of steps", n_steps)
     return (
         res, 
         create_continuous_sol_from_interpolants(interps),

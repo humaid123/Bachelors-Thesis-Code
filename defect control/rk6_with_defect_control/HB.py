@@ -44,9 +44,8 @@ class HB:
         
         self.alpha = h_i_minus_1 / h_i
 
-        if (self.alpha != 1):
-            print("alpha not 1", self.alpha)
-        # print("alpha", self.alpha)
+        # if (self.alpha != 1):
+        #     print("alpha not 1", self.alpha)
 
         self.h_i = h_i
         self.x_i = x_i
