@@ -14,12 +14,20 @@
 \section{Discontinuity in the PDE case}
 \subsection{Introduction}
 \label{subsection:pde_intro}
-In this chapter, we explore the effects of discontinuities on a 1D PDE (partial differential equation) model. We will use an epidemiological model to which we will add a time-dependent discontinuity and then a state-dependent discontinuity and will report on the accuracy and efficiency of the BACOLIKR PDE solvers.
+In this chapter, we present a similar investigation of solutions to problems with discontinuities in the partial differential equation (PDE) case. To that effect, we will use a 1D PDE epidemiological model similar to those often used in research in that area. 
 
-We note that PDE models are often used in epidemiological studies but are very rarely solved with state of the art solvers. In this chapter we will use BACOLIKR, see a description of the solvers used in Section $\ref{subsection:pde_software}$, which is error-controlled and has event detection.
+Again, it is vital that numerical errors associated with the solvers are neglible compared to the modeling errors so that epidemiologist con perform conclusive errors. However, in the PDE case, we often find that rudimentary solvers (often a variation that reduce to using the Euler method) are used. As in the ODE case, it would be very suprising that these solvers are able to reach an accurate solution. To that effect, we spend Section $\ref{subsection:pde_software}$ on introducing BACOLIKR and explaining its importance for the accurate solving of PDE problems. To our knowledge, it is also the only PDE solver capable of event detection which as, shown in the previous chapter, becomes vital for accurate solutions of state-dependent discontinuity problems.
 
-As was the case with the IVODE solvers in the previous chapter, PDE solvers also thrash when they encounter a discontinuity, See Figure $\ref{fig:thrashing_pde}$. As is the case with the IVODE solvers, the PDE solvers use methods whose underlying mathematical theories require that the model being solved as well as some of its partial derivatives are continuous. Discontinuities imply that the PDE solvers are not guaranteed to converge but as we have shown in the IVODE case, error-control still allows error-control to give accurate solutions at the cost of 'thrashing', repeated time step-size resizing until the error-estimates calculated by the solvers satisfy the user-provided tolerance.  
+In Section $\ref{subsection:pde_thrashing}$, we reintroduce thrashing for the PDE case, in Section $\ref{subsection:pde_software}$, we provide the BACOLIKR description and in Section $\ref{subsection:pde_problem_def}$, we give a description of the epidemiological model used.
 
+We provide a treatment of the time-dependent discontinuity problem with and without discontinuity handling in Section $\ref{subsection:pde_time_intro}$ and a treatment of the state-dependent discontinuity problem with and without event detection in Section $\ref{subsection:pde_state_intro}$.
+
+\subsubsection{Thrashing in PDE models}
+\label{subsection:pde_thrashing}
+As was the case with ODE solvers, PDE solvers are also based on mathematical theories that guarantee convergence (a good solution) only when the solution and some of its higher derivatives are continuous. No rigorous mathematical theories guarantee that a PDE solver can solve a discontinuous problems but through experiments, it is known that $\emph{error-control}$ allows solvers to integrate through discontinuities. They do so by repeatedly reducing the step-size until the error of the new step satisfies the user-provided tolerance. Only then is the step accepted.
+
+Thus, when a PDE solver is asked to integrate through a discontinuity, it thrashes. It repeatedly reduces the step-size at that discontinuity until the step-size is small enough to integrate through it. This is observed as a spike in the number of function evaluations at a discontinuity. Figure $\ref{fig:thrashing_pde}$ shows such a phenomenon. A problem with a discontinuity placed at t=30 is solved and we plot the cumulative number of function evaluation at each time interval that the solver, BACOLIKR takes. (We can clearly see the spike at t=30. )
+ 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_thrashing}
@@ -27,23 +35,42 @@ As was the case with the IVODE solvers in the previous chapter, PDE solvers also
 \label{fig:thrashing_pde}
 \end{figure}
 
-We will show, as was the case in the IVODE problem, that PDE solvers with error-control can integrate through one time-dependent discontinuity but that discontinuity handling lead to more efficient solutions and that event detection is required to integrate state-dependent discontinuity problem with the best accuracy-efficiency trade-offs.
+In this chapter, we will show that PDE solvers with error-control, like BACOLIKR,  can integrate through one time-dependent discontinuity but that discontinuity handling lead to more efficient solutions as was the case with time-dependent dicontinuous ODE problems (See Section $\ref{subsection:pde_time_intro}$). We will also show that state-dependent discontinuity problems cannot be solved without event detection and that even with event detection, the user will have to be satisfied with an accuracy-efficiency trade-off (See Section $\ref{subsection:pde_state_intro}$).
 
-\subsubsection{Software used}
+\subsubsection{BACOLIKR, error-control event detection PDE solver}
 \label{subsection:pde_software}
-\paragraph{BACOLIKR}
-BACOLIKR implements a spline collocation method at Gaussian points, with a B-spline basis, for the spatial discretization. The time integration is performed using a modification of the popular DAE solver with root-finding capabilities, DASKR [Need a reference]. 
+BACOLIKR is a member of the BACOL family of PDE solvers 8888 need reference 8888. Its underlying principle is the same a BACOL in that it solves PDE problems with a spline collocation method using the B-spline bases. 
 
-It does error control by computing a second, higher order, global solution. A high quality spatial error estimate is obtained after each successful time step. The spatial error is controlled by a sophisticated new mesh selection algorithm based on an equi-distribution principle.
+The collocation process is applied on the spatial dimension to approximate the PDE system with a time-dependent larger ODE system. Using this ODE system and the provided boundary conditions, BACOLIKR produces a time-dependent system of Differential-Algebraic Equations (DAE) which it solves with the DAE solver, DASKR (a modification of DASSL with root-finding) 888 need a reference 888. DASSL provides adaptive time-stepping and adaptive method order selection (chooses an appropriate BDF method). BACOLIKR also provides control over the spatial error throug adaptive refinement of the spatial mesh. 
 
+ 
+Being an error-control solver, BACOLIKR tries to satisfy a user provided tolerance in the most efficient way possible and by using a root-finding DAE solver like DASKR, BACOLIKR can also perform event-detection and thus can be used for cold starts around discontinuities. We emphasize these two qualities of BACOLIKR as they guarantee accuracy and efficiency that other implementations of PDE solvers, especially rudimentary ones, very rarely grant.
 
 \subsubsection{Problem Definition}
 \label{subsection:pde_problem_def}
-In this paper, the PDE model we will try to solve is an extension of the SEIR model for epidemiological studies that uses one more spatial variable, x, and time. Similar PDE models have been used before 8888 reference to PDE Cholera papers 8888 and either use the spread in location or the age as the additional spatial variable.
+In this paper, the PDE model we will try to solve is an extension of the SEIR model for epidemiological PDE studies that uses a spatial variable, x, and a time variable, t. Similar PDE models have been used before 8888 reference to PDE Cholera papers 8888 and either use the spread in geographical location or the spread across age groups as the additional spatial variable.
 
-The SEIR model was developed by Andrew Fraser 88888 Reference 88888 but some coefficients were changed.
+A PDE problem is fully described using a system of partial differential equations of the form:
+\begin{equation}
+u_t(x, t) = f(x, t, u(x,t), u_x(x,t), u_{xx}(x,t))
+\end{equation} 
+over a spatial domain ${a \leq x \leq b}$ and an initial time ${t_0}$. 
 
-The model is as follows:
+It requires a set of initial conditions of the form:
+\begin{equation}
+u(x, t) = u_0(x)
+\end{equation}
+for x in the spatial domain, ${a \leq x \leq b}$.
+
+It also requires boundary conditions of the form:
+\begin{equation}
+b_L(t, u(a,t), u_x(a,t)) = 0, b_R(t, u(b,t), u_x(b,t)) = 0 
+\end{equation} 
+for every time, $t \geq t_0$ .
+
+To that effect, we define an SEIR model based on the one developed by Andrew Fraser 88888 Reference 88888 as follows:
+
+The system of PDEs is:
 \begin{equation}
 S(x, t)_t = D_S(x)S(x, t)_{xx} + \mu N - \mu S(x, t) - \frac{\beta}{N}S(x, t)I(x, t)
 \end{equation}
@@ -61,18 +88,16 @@ R(x, t)_t = D_R(x)R(x, t)_{xx} + \gamma I(x, t) - \mu R(x, t)
 
 The spatial domain is $-5 \leq x \leq 5$ and the temporal domain is $0 \leq t \leq 70$ for the time-dependent discontinuity problem but we will use $0 \leq t \leq 200$ for the space-dependent discontinuity problem as we attempt a long-term forecast.
 
-The parameters are as such: $\mu$, the birth rate, is set to $\frac{0.01}{365}$. $\gamma$, the recovery rate is 0.06, $\alpha$, the incubation rate is 0.125 and we will vary the transmission rate, $\beta$, between 0.035 and 0.9 based on whether measures are implemented or not in the model. The population size, N, is $37*10^{6}$.
+The parameters for the SEIR are as such: $\mu$, the birth rate, is set to $\frac{0.01}{365}$. $\gamma$, the recovery rate is 0.06, $\alpha$, the incubation rate is 0.125 and we will vary the transmission rate, $\beta$, between 0.035 and 0.9 based on whether measures, such as social distancing and others, are implemented or not in the model. The population size, N, is $37*10^{6}$.
 
-The model also uses diffusion functions $D_S(x)$, $D_E(x)$, $D_I(x)$ and $D_R(x)$ as follows:
-
+The model also uses diffusion functions $D_S(x)$, $D_E(x)$, $D_I(x)$ and $D_R(x)$ to start the infection at a specific point in the spatial domain and spread it over time. These are as follows:
 \begin{equation}
 D_S(x) = D_E(x) = D_R(x) = (maxD_s - minD_s)e^{-10(\sqrt{x^{2}} - 1)^2)} + minD_s
 \end{equation} 
 \begin{equation}
 D_I(x) = D_E(x)/10
 \end{equation}
-
-The parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01 respectively. 
+The diffusivity parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01 respectively. 
 
 \begin{figure}[H]
 \centering
@@ -81,7 +106,7 @@ The parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01 respectively.
 \label{fig:pde_D_s}
 \end{figure}
 
-The initial values are functions of the spatial domain as such:
+The set of initial conditions are defined over the spatial domain as such:
 \begin{equation}
 S(x, 0) = N - I(x, 0)
 \end{equation}
@@ -99,11 +124,12 @@ E(x, 0) = R(x, 0) = 0
 \label{fig:pde_I_0}
 \end{figure}
 
-This gives us a complete PDE problem definition to which we will add discontinuities as follows. 
+We will use the default boundary conditions 888888888888888888 I did not understand what BACOLIKR is doing for the initial conditions here 888888888888888888
 
-In the time-dependent discontinuity problem, we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.035 and integrate until t=70. This change in the parameter introduces a discontinuity.
+The above gives us a complete PDE problem definition. To this problem we will add discontinuities as follows: 
+In the time-dependent discontinuity problem, we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.035 and integrate until t=70. This change in the parameter introduces a discontinuity. This simulates a scenario where 30 days into a disease, measures are introduced to slow its spread.
 
-In the state-dependent discontinuity problem, we start the integration with the value of $\beta$ at 0.9 until the integral value of the E-component of the solution at a specific time-step is 30000. When it reaches 30000, we change the value of $\beta$ to 0.035 until the integral reaches 10000. We then integrate with a value $\beta$ of 0.9. We repeat this process until t=200.
+In the state-dependent discontinuity problem, we start the integration with the value of $\beta$ at 0.9 until the integral value of the E-component of the solution over the spatial domain at a specific time-step is 30000. When that integral value reaches 30000, we change the value of $\beta$ to 0.035 until the integral value of the E-component over the spatial domain reaches 10000. We then integrate with a value $\beta$ of 0.9. We repeat this process until t=200. This process simulates a series of introducing and relaxing measures, such as social distancing, based on the total number of exposed individuals across the whole region.
 
 \subsection{Time Dependent Discontinuity}
 \label{subsection:pde_time_intro}
@@ -201,12 +227,12 @@ In this section, we do a tolerance study on the time dependent problem. We look 
 \begin{center}
 \begin{tabular}{ c c c  } 
 tolerance & BACOLIKR naive nfev & BACOLIKR disc hand nfev \\ 
-1e-1      &   40, 800     &   55, 400   \\
-1e-3      &   79, 220     &  76, 750    \\
-1e-5      &  206, 980     &  208, 870    \\
-1e-7      &  733, 210     &  543, 850     \\
-1e-9      & 1, 904, 080     & 1, 653, 830   \\
-1e-11     & 7, 140, 875     & 4, 979, 555   \\
+1e-1      &   40, 800           &   55, 400   \\
+1e-3      &   79, 220           &  76, 750    \\
+1e-5      &  206, 980           &  208, 870    \\
+1e-7      &  733, 210           &  543, 850     \\
+1e-9      & 1, 904, 080         & 1, 653, 830   \\
+1e-11     & 7, 140, 875         & 4, 979, 555   \\
 \end{tabular}
 \end{center}
 \end{table} 
@@ -308,7 +334,7 @@ As was the case in the IVODE case, event detection is also present in some PDE s
  
 BACOLIKR is an improvement to the BACOLI solver which has root finding capabilities. Instead of using DASSL as its DAE solver, it uses DASKR which can detect roots as its solves a DAE system. We use BACOLIKR to demonstrate that using a PDE SOLVER with root-finding capabilities allows us to not define a time grid and thus allows us to integrate with the best accuracy-efficiency trade-off.  
 
-We define two pairs of root and model functions. One pair is to be used when integrating when there are no measures in place. The model function will have the variable $\beta$ at a value of 0.9 and the root function will do the integration of the spatial domain at the current time step and will return if it is closed to the maximum threshold. 5. The second pair will have the model function with $\beta$ at a value of 0.005 and the root function looking for a root at 1. The pseudo-code for this approach is as follows:
+We define two pairs of root and model functions. One pair is to be used when integrating when there are no measures in place. The model function will have the variable $\beta$ at a value of 0.9 and the root function will do the integration of the spatial domain at the current time step and will return if it is closed to the maximum threshold. 5. The second pair will have the model function with $\beta$ at a value of 0.035 and the root function looking for a root at 1. The pseudo-code for this approach is as follows:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -387,11 +413,13 @@ method                    & nfev \\
 BACOLIKR naive 200 steps  & 1, 018, 455    \\
 BACOLIKR naive 400 steps  & 1, 184, 880    \\
 BACOLIKR naive 1000 steps & 1, 280, 080    \\
-BACOLIKR tol $10^{-6}$    & 1, 937, 730    \\
-BACOLIKR tol $10^{-9}$    & 7, 915, 085    \\
+BACOLIKR $10^{-6}$ tol.   & 1, 937, 730    \\
+BACOLIKR $10^{-9}$ tol.   & 7, 915, 085    \\
 \end{tabular}
 \end{center}
-\end{table} 
+\end{table}
+
+Table $\ref{tab:pde_state_nfev}$ starts showing the pattern for the PDE state discontinuity. The problem is a trade-off between efficiency and accuracy even with root-finding. Improving the accuracy comes at the price of efficiency. We note that without event detection, the solutions even with 1000 time steps are still inaccurate. The solutions never oscillate correctly between 10, 000 and 30, 000. However, even with event detection, the tolerance needs to be high enough to get accurate solutions.
 
 \subsubsection{State problem tolerance study}
 \label{subsubsection:pde_state_tol_study}
@@ -412,9 +440,9 @@ We also perform a tolerance study at 400 and at 1000 to show how the solutions c
 \label{fig:pde_state_disc_tol_bacolikr_naive_1000}
 \end{figure}
 
-Figures $\ref{fig:pde_state_disc_tol_bacolri_400}$ and $\ref{fig:pde_state_disc_tol_bacolri_1000}$ shows that all solutions given by BACOLRI align with each others despite the tolerance. We see this phenomenon in both the 400 and 1000 time steps plots except that the 1000 time steps plot is closer to the accurate solution. We can conclude that in the BACOLRI case, the solution is entirely dependent on the number of time steps and that the tolerance is not the limiting factor driving us towards inaccurate solutions. A finer time grid will detect the integral values crossing the threshold earlier and will provide a better solution. However, as we will see below such a solution is inefficient and event detection should be prioritized. 
+Figures $\ref{fig:pde_state_disc_tol_bacolikr_naive_400}$ and $\ref{fig:pde_state_disc_tol_bacolikr_naive_1000}$ show that the solutions are not aligned and the roots are not detected exactly at 30000 in the case without event detection. We note that the problem is mostly in the exponentially increasing direction due to the instability. Having a higher time step slightly improves the situation but we will see that with event detection improves the accuracy to a greater degree.
 
-\paragraph{BACOLIKR with event}
+\paragraph{BACOLIKR with event detection}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_event}
@@ -422,23 +450,26 @@ Figures $\ref{fig:pde_state_disc_tol_bacolri_400}$ and $\ref{fig:pde_state_disc_
 \label{fig:pde_state_disc_tol_event}
 \end{figure}
 
-\paragraph{number of function evaluations}
+With event detection, the solution oscillate correctly for all tolerances except at $10^{-1}$. The other solutions are only slightly misaligned but this can be explainined with the tolerance at the roots. Depending on the tolerance, the root is detected at a different time step and thus different tolerances will lead to initiating the next steps of the integral with a different $\beta$ value and thus the solutions are not aligned. 
 
+\paragraph{Efficiency of the solvers}
 \begin{table}[h]
 \caption {State dependent discontinuity model tolerance study} 
 \label{tab:pde_state_tol_study}
 \begin{center}
 \begin{tabular}{ c c c c } 
 tolerance  & BACOLIKR  with event & BACOLIKR naive 400 & BACOLIKR naive 1000 \\ 
-1e-1       & 137, 300             & 104, 700             & 101, 250  \\
-1e-3       & 376, 855             & 239, 445             & 290, 600  \\
-1e-5       & 1, 052, 920          & 736, 360             & 848, 080\\
-1e-7       & 3, 217, 450          & 2, 032, 330            & 2, 217, 610 \\
-1e-9       & 7, 915, 085          & 5, 236, 500            & 6, 040, 485\\
-1e-11      & 21, 256, 400        & 16, 845, 765            & 16, 402, 140  \\
+1e-1       & 137, 300             & 104, 700           & 101, 250  \\
+1e-3       & 376, 855             & 239, 445           & 290, 600  \\
+1e-5       & 1, 052, 920          & 736, 360           & 848, 080\\
+1e-7       & 3, 217, 450          & 2, 032, 330        & 2, 217, 610 \\
+1e-9       & 7, 915, 085          & 5, 236, 500        & 6, 040, 485\\
+1e-11      & 21, 256, 400         & 16, 845, 765       & 16, 402, 140  \\
 \end{tabular}
 \end{center}
 \end{table}
+
+Table $\ref{tab:pde_state_tol_study}$ shows that we are forced to sacrifice efficiency for accuracy in this problem. We note that all naive solutions highly depend on the time stepping and thus should not be trusted for accurate solutions. For the solutions using event detection, the accuracy problem is at the roots where the models are to be changed. Depending on the tolerance, the root is detected at a different location as the root-finding algorithm returns the location of the root based on the tolerance. Thus different tolerances will lead to changing the models at slightly different positions. During the exponential increase phase, we can miss the location of the root by far enough that the solutions are not aligned.
 
 \subsection{Discussions}
 \label{subsection:pde_discussions}
