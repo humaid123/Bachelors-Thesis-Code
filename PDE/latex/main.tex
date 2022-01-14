@@ -127,19 +127,23 @@ E(x, 0) = R(x, 0) = 0
 We will use the default boundary conditions 888888888888888888 I did not understand what BACOLIKR is doing for the initial conditions here 888888888888888888
 
 The above gives us a complete PDE problem definition. To this problem we will add discontinuities as follows: 
-In the time-dependent discontinuity problem, we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.035 and integrate until t=70. This change in the parameter introduces a discontinuity. This simulates a scenario where 30 days into a disease, measures are introduced to slow its spread.
+In the time-dependent discontinuity problem (Section $\ref{subsection:pde_time_intro}$), we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.035 and integrate until t=70. This change in the parameter introduces a discontinuity. This simulates a scenario where 30 days into a disease, measures are introduced to slow its spread.
 
-In the state-dependent discontinuity problem, we start the integration with the value of $\beta$ at 0.9 until the integral value of the E-component of the solution over the spatial domain at a specific time-step is 30000. When that integral value reaches 30000, we change the value of $\beta$ to 0.035 until the integral value of the E-component over the spatial domain reaches 10000. We then integrate with a value $\beta$ of 0.9. We repeat this process until t=200. This process simulates a series of introducing and relaxing measures, such as social distancing, based on the total number of exposed individuals across the whole region.
+In the state-dependent discontinuity problem (Section $\ref{subsection:pde_state_intro}$),, we start the integration with the value of $\beta$ at 0.9 until the integral value of the E-component of the solution over the spatial domain at a specific time-step is 30000. When that integral value reaches 30000, we change the value of $\beta$ to 0.035 until the integral value of the E-component over the spatial domain reaches 10000. We then integrate with a value $\beta$ of 0.9. We repeat this process until t=200. This process simulates a series of introducing and relaxing measures, such as social distancing, based on the total number of exposed individuals across the whole region.
 
 \subsection{Time Dependent Discontinuity}
 \label{subsection:pde_time_intro}
-In this section, we will add a time dependent discontinuity and report on the thrashing experienced by the solvers. We note that this section is in essence an application of what we demonstrated in Section 8888 reference to ODE time dependent 8888 in that time dependent discontinuities are introduced by simply changing a parameter value, as this is essentially changing the model function being integrated and that time-dependent discontinuities have an easy solution by integrating the solution with two calls, one before the discontinuity and one after. This gives the solver two continuous segments to integrate.
+In this section, we investigate the thrashing experienced by BACOLIKR on the SEIR model with a time-dependent discontinuity. 
 
-In this PDE case, the value of $\beta$ will be 0.9 from t=0 to t=30 and the value of $\beta$ will be changed to 0.035 from t=30 to the end of the integration.
+The time dependent dicontinuity is introduced by changing the value of SEIR modeling parameter, $\beta$ from 0.9 to 0.035 at t=30.
+
+We note that this section demonstrates that the PDE sing time-dependent discontnuity is akin to the ODE time-dependent discontinuity problem. We will show that accurate solutions can be found without the use of discontinuity handling (to eye-level accuracy) but that the use of a cold start drastically improves the efficiency.
 
 \subsubsection{Naive treatment of the time-dependent discontinuity PDE model}
 \label{subsubsection:pde_time_naive}
-In the naive treatment for this kind of discontinuity is to place the the change in the parameter in the right hand side function as an if-statement. The pseudo-code for this approach is as follows:
+The naive treatment for time-dependent discontinuities is to use if-statements in the right-hand side function itself using the time argument.
+
+For our model, we use the time argument to say that the integration starts with a value of $\beta$ at 0.9 and that from t=30 onwards, the value for $\beta$ is 0.035. The pseudo-code for this approach is as follows:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -149,11 +153,12 @@ function model_with_if(t, x, u, ux, uxx)
     if t >= 30:
         beta = 0.035
     // ...
+    return (dSdt, dEdt, dIdt, dRdt)
 
 \end{lstlisting}
 \end{minipage}
 
-This change in the parameter $\beta$ at t=30 introduces a discontinuity as the model function is different. As shown in Section 8888 Refer to section on discontinuity 8888, as the assumptions of continuity of the function and its derivatives no longer hold, the Taylor Series proof of its convergence is no longer valid. However as we have shown in Section 8888 Refer to naive ODE time problem 8888, error-control solver can reduce the step-size extensively to cross one discontinuity.
+This change in the $\beta$ parameter introduces a discontinuity in the model, which leads to thrashing as discussed in Section $\ref{subsection:pde_thrashing}$ as the assumptions of continuity of the function and its derivatives no longer hold. However as we have shown in Section 8888 Refer to naive ODE time problem 8888 for the ODE case, error-control PDE solvers can also reduce the step-size extensively to integrate through one discontinuity. (See Figure $\ref{fig:pde_time_disc_naive}$.)
 
 
 \begin{figure}[H]
@@ -163,11 +168,15 @@ This change in the parameter $\beta$ at t=30 introduces a discontinuity as the m
 \label{fig:pde_time_disc_naive}
 \end{figure}
 
-From Figure $\ref{fig:pde_time_disc_naive}$, we can see that to eye-level accuracy, the results are accurate. We will now show how a cold start can keep the same level of accuracy while using less function evaluations and thus be more efficient.
+From Figure $\ref{fig:pde_time_disc_naive}$, we can see that to eye-level accuracy, the results are accurate. We will now show how a cold start can give the same level of accuracy while using less function evaluations and thus being more efficient.
 
 \subsubsection{Discontinuity handling to solve the time-dependent PDE model}
 \label{subsubsection:pde_time_disc_hand}
-Though the error-controlled solvers were able to get accurate solutions, we now solve the same problem using discontinuity handling. Modern solvers like BACOLIKR allows users to set flags to allow it to do a cold start. Thus we integrate the problem with one call from t=0 to t=30 with the model function using 0.9 as the $\beta$ parameter. We then set up a cold start and integrate from t=30 to the end of the time interval with another call to the solver. The pseudo-code is as follows
+In this section, we discuss the use of discontinuity handling through cold starts as it pertains to PDE problems. Though the error-controlled solver, BACOLIKR, were able to get accurate solutions, we will show that cold starts allow it to be more efficient.
+
+We re-iterate that a solver is said to perform a cold start when it restarts the integration by using the last previously obtained solution as the initial value for the next step. The solver must clear all its data structures, start with a new spatial mesh, start with a new initial step-size and start with the default order. This way the solver does not allow any results from previous steps to interfere with the next step. Modern PDE solvers like BACOLIKR have several flags that a user can set along the integration to perform cold starts. We will use this flag to improve the efficiency of our solutions.
+
+The idea is to integrate up to the discontinuity, cold start at the discontinuity and integrate past the discontinuity with the new model. In our case, we integrate the problem with one call from t=0 to t=30 with the model function using 0.9 as the $\beta$ parameter. We then set up a cold start and integrate from t=30 to the end of the time interval with another call to the solver. The pseudo-code for this approach is as follows
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -180,7 +189,9 @@ function model_after(t, x, u, ux, uxx):
     // ...
     beta = 0.035
     // ...
- 
+
+solution = pde_solver.init(...)
+
 tspan_before = [0, 30]
 pde_solver(solution, model_before, tspan_before)
 
@@ -199,14 +210,15 @@ pde_solver(solution, model_after, tspan_after)
 \label{fig:pde_time_disc_disc_hand}
 \end{figure}
 
-As expected, Figure $\ref{fig:pde_time_disc_disc_hand}$, the solvers were able to all accurately solve the problem. However, Table $\ref{tab:pde_time_nfev}$ shows how the discontinuity handling allows us to use significantly lower numbers of function evaluations.
-
-We note that without the cold start, the solver used 417505 function evaluations. With a cold start the solver uses 359755 function evaluations. We can see that the cold start improved efficiency.
+As expected, Figure $\ref{fig:pde_time_disc_disc_hand}$ shows that BACOLIKR with the cold start was able to provide a solution with the same eye-level accuracy as it did without the cold start.
+We now note that the use of a cold start required the solver to make 359, 755 function evaluations whereas the solver without this cold start required 417505 function evaluations. We were thus able to make 50000 less function evaluations which gives around a $14\%$ gain in efficiency.
 
 \subsubsection{PDE Time-dependent discontinuity problem tolerance study}
 \label{subsubsection:pde_time_tol}
-In this section, we do a tolerance study on the time dependent problem. We look at how coarse we can reduce the tolerance to still have accurate solution to see if the discontinuity handling allows us to use coarser tolerance as it did in the IVODE case.
 
+As is the case with ODE research, a researcher might want to coarsen the tolerance of the solver if they need to run the solver in a loop or through an optimisation algorithm (See Appendix 8888 point to Althaus Ebola paper 8888). So we now perform a tolerance study on this time-dependent discontinuity problem to see whether the discontinuity handling allows us to use coarser tolerances as it did in the ODE case. We will also solve the problem at sharper tolerances to show how the use of discontinuity handling drastically improves the efficiency.
+
+Figures $\ref{fig:pde_time_disc_bacolikr_naive_tol}$ shows the accuracy of the solutions without discontinuity handling at the different tolerances while Figure $\ref{fig:pde_time_disc_bacolikr_disc_hand_tol}$ shows the solutions with discontinuity handling at the different tolerances.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_time_disc_bacolikr_naive_tol}
@@ -220,6 +232,8 @@ In this section, we do a tolerance study on the time dependent problem. We look 
 \caption{Time dependent discontinuity tolerance study with BACOLIKR using discontinuity handlng}
 \label{fig:pde_time_disc_bacolikr_disc_hand_tol}
 \end{figure}
+
+We note that both in the case with discontinuity handling and the case without it, the solutions at $10^{-1}$ are inaccurate. We note that surprisingly, the solution at $10^[-3]$ is more accurate without discontinuity handling than with. We explain this fact by noting that the step-size at $10^{-3}$ was much smaller than required in the case with discontinuity handling than in the case without. Thus though the solution is more accurate, the solver is being inefficient as it could satisfy this tolerance with a much smaller step-size. This can be see in Table $\ref{tab:pde_time_nfev}$ where we can see that it is doing around 2500 more function evaluations than required. As for all the tolerances sharper than $10^{-3}$, the solutions are all eye-level accurate.
 
 \begin{table}[h]
 \caption {PDE time discontinuity tolerance study} 
@@ -235,9 +249,9 @@ tolerance & BACOLIKR naive nfev & BACOLIKR disc hand nfev \\
 1e-11     & 7, 140, 875         & 4, 979, 555   \\
 \end{tabular}
 \end{center}
-\end{table} 
+\end{table}
 
-
+Table $\ref{tab:pde_time_nfev}$ shows how more efficient the use of discontinuity handling is. We note that the lower count of the number of function evaluation for the case without discontinuity handling at a tolerance of $10^{-1}$ can be ignore as the solutions at this tolerance at very inaccurate. We then note that for any sharper tolerance, the use of discontinuity handling is a gain in efficiency and that at very sharp tolerance such as $10^{-11}$, the solver does around 2 million less function evaluations with a cold start than without (around a $30\%$ gain in efficiency). 
 
 \subsection{State Dependent Discontinuity}
 \label{subsection:pde_state_intro}
