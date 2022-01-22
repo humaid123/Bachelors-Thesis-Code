@@ -61,15 +61,23 @@ rk4_tstep_5 <- ode(func=model, y=y0, times=tspan,  parms=NULL, method="rk4")
 tspan <- seq(from=0, to=95, by=7)
 rk4_tstep_7 <- ode(func=model, y=y0, times=tspan,  parms=NULL, method="rk4")
 
-plot(rk4_tstep_2[, 1], rk4_tstep_2[, 4], type="l", col="black", lwd=2)
+plot(rk4_tstep_2[, 1], rk4_tstep_2[, 4], type="l", col="black", lwd=2,
+    xlab="time", 
+    ylab="I(t)", 
+    cex.lab = 1.5,
+    cex.axis = 1.5,
+    cex.main = 1.5,
+    cex.sub = 1.5
+)
 lines(rk4_tstep_5[, 1], rk4_tstep_5[, 4], col="orange", lwd=2)
 lines(rk4_tstep_7[, 1], rk4_tstep_7[, 4], col="green", lwd=2)
 lines(rk4_tstep_1[, 1], rk4_tstep_1[, 4], col="blue", lwd=2)
 lines(lsoda[, 1], lsoda[, 4], type="l", col="red", lwd=2)
 legend(1, 30000, 
-       legend=c("step=2", "step=5", "step=7", "step=1", "lsoda"),
-       col=   c("black", "orange", "blue", "red"), lty=1:2, cex=0.8,
-       title="Line types", text.font=4)
+       legend=c("space=2", "space=5", "space=7", "space=1", "lsoda"),
+       col=   c("black", "orange", "green", "blue", "red"), lty=1, lwd=2,
+       title="legend", 
+       cex=1.1, text.font=4)
 
 
 
@@ -154,12 +162,20 @@ rk4_tstep_5 <- experiment("rk4", 5)
 
 rk4_tstep_7 <- experiment("rk4", 7)
 
-plot(rk4_tstep_2[, 1], rk4_tstep_2[, 4], type="l", col="black", lwd=2)
+plot(rk4_tstep_2[, 1], rk4_tstep_2[, 4], type="l", col="black", lwd=2,
+    xlab="time", 
+    ylab="I(t)", 
+    cex.lab = 1.5,
+    cex.axis = 1.5,
+    cex.main = 1.5,
+    cex.sub = 1.5
+)
 lines(rk4_tstep_5[, 1], rk4_tstep_5[, 4], col="orange", lwd=2)
 lines(rk4_tstep_7[, 1], rk4_tstep_7[, 4], col="green", lwd=2)
 lines(rk4_tstep_1[, 1], rk4_tstep_1[, 4], col="blue", lwd=2)
 lines(lsoda[, 1], lsoda[, 4], type="l", col="red", lwd=2)
 legend(1, 25000, 
-       legend=c("step=2", "step=5", "step=7", "step=1", "lsoda"),
-       col=   c("black", "orange", "blue", "red"), lty=1:2, cex=0.8,
-       title="Line types", text.font=4)
+       legend=c("space=2", "space=5", "space=7", "space=1", "lsoda"),
+       col=   c("black", "orange", "green", "blue", "red"), lty=1, lwd=2,
+       title="legend", 
+       cex=1.1, text.font=4)

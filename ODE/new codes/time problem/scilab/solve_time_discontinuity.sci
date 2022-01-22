@@ -101,5 +101,8 @@ count_adams = nfev;
 xset("thickness",2);
 A = [I_lsoda; I_stiff; I_rkf; I_rk; I_adams]';
 plot2d(tspan, A, [1, 2, 3, 4, 5])
-h1=legend(["lsoda", "stiff", "rkf", "rk", "adams"])
+legends(["lsoda", "stiff", "rkf", "rk", "adams"], [1, 2, 3, 4, 5],font_size=4);
+xlabel("time", "fontsize", 4)
+ylabel("I(t)", "fontsize", 4)
+
 A = [count_lsoda; count_stiff; count_rkf; count_rk; count_adams]

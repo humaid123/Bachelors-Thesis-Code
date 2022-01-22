@@ -80,6 +80,7 @@ plt.plot(times_rk45, res_rk45[2])
 plt.plot(times_dop853, res_dop853[2])
 plt.plot(times_rk23, res_rk23[2])
 plt.xlabel('time')
+plt.ylabel("I(t)")
 plt.legend(['bdf', 'lsoda', 'radau', 'rk45', 'dop853', 'rk23'], shadow=True)
 plt.show()
 

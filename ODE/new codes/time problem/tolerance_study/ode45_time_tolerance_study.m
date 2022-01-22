@@ -33,6 +33,8 @@ for i = 2:length(tolerances)
 end
 hold off;
 legend("1e-1", "1e-2", "1e-3", "1e-4", "1e-5", "1e-6", "1e-7");
+xlabel("time");
+ylabel("I(t)");
 A = [tolerances; nfevs];
 transpose(A)
 
@@ -77,6 +79,9 @@ for i = 2:length(tolerances)
 end
 hold off;
 legend("1e-1", "1e-2", "1e-3", "1e-4", "1e-5", "1e-6", "1e-7");
+xlabel("time");
+ylabel("I(t)");
+
 A = [tolerances; nfevs];
 transpose(A)
 

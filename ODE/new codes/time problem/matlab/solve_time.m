@@ -12,23 +12,25 @@ S0 = N - (E0 + I0 + R0);
 y0_before = [S0; E0; I0; R0];
 
 nfev = 0;
-[t_ode45_before,y_ode45_before] = ode45(@(t, y) f_before(t, y),tspan_before,y0_before);
+[t_ode45_before,y_ode45_before] = ode45(@f_before,tspan_before,y0_before);
 y0_after = y_ode45_before(end, :);
-[t_ode45_after,y_ode45_after] = ode45(@(t, y) f_after(t, y),tspan_after,y0_after);
+[t_ode45_after,y_ode45_after] = ode45(@f_after,tspan_after,y0_after);
 t_ode45 = vertcat(t_ode45_before, t_ode45_after);
 y_ode45 = vertcat(y_ode45_before, y_ode45_after);
 count_ode45 = nfev;
 
 nfev = 0;
-[t_ode15s_before,y_ode15s_before] = ode15s(@(t, y) f_before(t, y),tspan_before,y0_before);
+[t_ode15s_before,y_ode15s_before] = ode15s(@f_before,tspan_before,y0_before);
 y0_after = y_ode15s_before(end, :);
-[t_ode15s_after,y_ode15s_after] = ode15s(@(t, y) f_after(t, y),tspan_after,y0_after);
+[t_ode15s_after,y_ode15s_after] = ode15s(@f_after,tspan_after,y0_after);
 t_ode15s = vertcat(t_ode15s_before, t_ode15s_after);
 y_ode15s = vertcat(y_ode15s_before, y_ode15s_after);
 count_ode15s = nfev;
 
 plot(t_ode45, y_ode45(:, 3), t_ode15s, y_ode15s(:, 3), 'lineWidth', 1.5);
 legend("ode45", "ode15s");
+xlabel("time");
+ylabel("I(t)");
 count_ode45
 count_ode15s
 

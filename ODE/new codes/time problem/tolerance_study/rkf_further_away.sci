@@ -91,6 +91,8 @@ for i = 1:length(tolerances)
     A = [atol, nfev]
 end
 legend(tolerances_string);
+xlabel("time", "fontsize", 4);
+ylabel("I(t)", "fontsize", 4);
 
 scf(1);
 t0_before = 0;
@@ -118,3 +120,5 @@ for i = 1:length(tolerances)
     A = [atol, nfev]
 end
 legend(tolerances_string);
+xlabel("time", "fontsize", 4);
+ylabel("I(t)", "fontsize", 4);

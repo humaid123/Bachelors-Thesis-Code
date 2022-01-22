@@ -10,11 +10,11 @@ S0 = N - (E0 + I0 + R0);
 y0 = [S0; E0; I0; R0];
 
 nfev = 0;
-[t_ode45,y_ode45] = ode45(@(t, y) f_with_if(t, y),tspan,y0);
+[t_ode45,y_ode45] = ode45(@f_with_if,tspan,y0);
 count_ode45 = nfev;
 
 nfev = 0;
-[t_ode15s,y_ode15s] = ode15s(@(t, y) f_with_if(t, y),tspan,y0);
+[t_ode15s,y_ode15s] = ode15s(@f_with_if,tspan,y0);
 count_ode15s = nfev;
 
 % setting the tolerance
@@ -23,6 +23,8 @@ count_ode15s = nfev;
 
 plot(t_ode45, y_ode45(:, 3), t_ode15s, y_ode15s(:, 3), 'lineWidth', 1.5);
 legend("ode45", "ode15s");
+xlabel("time");
+ylabel("I(t)");
 count_ode45
 count_ode15s
 

@@ -154,6 +154,7 @@ for tolerance in tolerances:
     solution = ans_no_event[name][1]
     plt.plot(times, solution[2])
 plt.xlabel('time')
+plt.ylabel('I(t)')
 plt.legend(tolerances, shadow=True)
 plt.show()
 
@@ -164,6 +165,7 @@ for tolerance in tolerances:
     solution = ans_with_event[name][1]
     plt.plot(times, solution[2])
 plt.xlabel('time')
+plt.ylabel('I(t)')
 plt.legend(tolerances, shadow=True)
 plt.show()
 

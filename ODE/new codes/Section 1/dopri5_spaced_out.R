@@ -72,7 +72,14 @@ count <- c("tstep_7", as.integer(res$istate[3]), nfev)
 m <- rbind(m, count)
 
 
-plot(tstep_7[, 1], tstep_7[, 4], type="l", col="black", xlab="time", ylab="E(t)", lwd=2)
+plot(tstep_7[, 1], tstep_7[, 4], type="l", col="black", lwd=2, 
+    xlab="time", 
+    ylab="I(t)", 
+    cex.lab = 1.5,
+    cex.axis = 1.5,
+    cex.main = 1.5,
+    cex.sub = 1.5
+)
 lines(tstep_5[, 1], tstep_5[, 4], type="l", col="brown", lwd=2)
 lines(tstep_3[, 1], tstep_3[, 4], col="orange", lwd=2)
 lines(tstep_1[, 1], tstep_1[, 4], col="blue", lwd=2)
@@ -80,7 +87,7 @@ lines(lsoda[, 1], lsoda[, 4], type="l", col="red", lwd=2)
 legend(1, 30000, 
        legend=c("space=7", "space=5", "space=3", "space=1", "ANS"),
        col=   c("black", "brown", "orange", "blue", "red"), lty=1, lwd=2,
-       title="Legend", text.font=4)
+       title="Legend", text.font=4, cex=1.1)
 m
 
 # Notes on plot() in R

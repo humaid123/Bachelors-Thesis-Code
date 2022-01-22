@@ -196,8 +196,9 @@ plot_no_event <- ggplot(ans_no_event, aes(x=time)) +
     geom_line(aes(y=I_5, color="1e-05"), size=1.2) +  
     geom_line(aes(y=I_6, color="1e-06"), size=1.2) + 
     geom_line(aes(y=I_7, color="1e-07"), size=1.2)  + 
-    labs(x="time", y="I", color="legend") +
-    scale_color_manual(values=colors)
+    labs(x="time", y="I(t)", color="legend") +
+    scale_color_manual(values=colors) + 
+    theme(text = element_text(size = 20)) 
 
 plot_with_event <- ggplot(ans_event, aes(x=time)) + 
     geom_line(aes(y=I_1, color="1e-01"), size=1.2) + 
@@ -207,8 +208,9 @@ plot_with_event <- ggplot(ans_event, aes(x=time)) +
     geom_line(aes(y=I_5, color="1e-05"), size=1.2) +  
     geom_line(aes(y=I_6, color="1e-06"), size=1.2) + 
     geom_line(aes(y=I_7, color="1e-07"), size=1.2)  + 
-    labs(x="time", y="I", color="legend") +
-    scale_color_manual(values=colors)
+    labs(x="time", y="I(t)", color="legend") +
+    scale_color_manual(values=colors) + 
+    theme(text = element_text(size = 20)) 
 
 # printing efficiency data
 efficiency_data <- cbind(efficiency_no_event, efficiency_event) # used to report efficiency

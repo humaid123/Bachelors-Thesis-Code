@@ -143,7 +143,8 @@ p <- ggplot(final, aes(x=time)) +
     geom_line(aes(y=I_radau, color="radau"), size=1.2) +  # on top of lsoda
     geom_line(aes(y=I_bdf, color="bdf"), size=1.2)     +  # on top of lsoda
     geom_line(aes(y=I_adams, color="adams"), size=1.2) +  # on top of lsoda
-    labs(x="time", y="(%)", color="legend") +
-    scale_color_manual(values=colors)
+    labs(x="time", y="I(t)", color="legend") +
+    scale_color_manual(values=colors)  + 
+    theme(text = element_text(size = 20)) 
 p
 m

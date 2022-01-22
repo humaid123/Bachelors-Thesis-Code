@@ -89,7 +89,7 @@ for E0 in E0s:
     times = unstable[name][0]
     solution = unstable[name][1]
     plt.plot(times, solution[2])
-plt.ylabel("E(t)")
+plt.ylabel("I(t)")
 plt.xlabel('time')
 plt.legend(E0s, shadow=True)
 plt.show()
@@ -100,7 +100,7 @@ for E0 in E0s:
     times = regain_stability[name][0]
     solution = regain_stability[name][1]
     plt.plot(times, solution[2])
-plt.ylabel("E(t)")
+plt.ylabel("I(t)")
 plt.xlabel('time')
 plt.legend(E0s, shadow=True)
 plt.show()
