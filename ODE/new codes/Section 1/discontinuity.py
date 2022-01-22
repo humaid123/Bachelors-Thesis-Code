@@ -49,14 +49,16 @@ def discontinuity_with(method, i):
     plt.figure(i)
     plt.axvline(x=27, c="red")
     plt.plot(times_nfev, cumulative_nfev)
-    plt.legend(["line at 27", f"{method} v/s discontinuity"])
+    plt.legend(["line at 27", f"cumulative nfev"])
+    plt.xlabel("time")
+    plt.ylabel("cumulative number of function evaluations")
     plt.show()
     return
 
 
 discontinuity_with('LSODA', 0)
-#discontinuity_with('DOP853', 1)
+discontinuity_with('DOP853', 1)
 #discontinuity_with('RK45', 2)
 #discontinuity_with('BDF', 3)
-discontinuity_with('Radau', 4)
+# discontinuity_with('Radau', 4)
 #discontinuity_with('RK23', 5)

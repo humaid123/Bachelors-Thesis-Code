@@ -381,7 +381,7 @@ In this section, we use the R version of DOPRI5, which is the `ode45' method of 
 
 From Figures $\ref{fig:tolerance_time_rk45_no_event_R}$ and $\ref{fig:tolerance_time_rk45_with_event_R}$, we see that the addition of discontinuity handling lets us use a coarser tolerance and still get a reasonably accurate answer. Without discontinuity handling, we had to use $10^{-4}$ for both the absolute and relative tolerance but with discontinuity handling, we can use $10^{-1}$. 
 
-However, as we will see in the Python version of DOPRI5, the results from Figures $\ref{fig:tolerance_time_rk45_no_event_R}$ and $\ref{fig:tolerance_time_rk45_with_event_R}$ are suspicious and stem from the fact that R is not using interpolation to produce the results. It is using an algorithm for step selection that depends on the selected output points and which affects efficiency and accuracy, as discussed in Section $\ref{subsection:solution_output_points_impl}$. 
+However, as we will see in the Python version of DOPRI5, the results from Figures $\ref{fig:tolerance_time_rk45_no_event_R}$ and $\ref{fig:tolerance_time_rk45_with_event_R}$ are suspicious and stem from the fact that R is not using a proper interpolation scheme to produce the results. It is using an algorithm for interpolation that depends on the selected output points and which affects efficiency and accuracy, as discussed in Section $\ref{subsection:solution_output_points_impl}$. 
 
 \begin{table}[H]
 \caption {R DOPRI5 Time Discontinuity tolerance study} \label{tab:tolerance_time_discontinuity_rk45_R} 
@@ -401,7 +401,7 @@ tolerance & no discontinuity handling & with discontinuity handling\\
 
 Table $\ref{tab:tolerance_time_discontinuity_rk45_R}$ also confirms our suspicions since, at coarser tolerances, $10^{-1}$ to $10^{-3}$, the number of function evaluations does not change at all. This indicates that something else, not the tolerance nor the discontinuity, is the limiting factor for the number of function evaluations and that this other factor leads to a need for around 572 or 574 function evaluations.
 
-We suspect that the R DOPRI5 version is not using interpolation or some other dense output technique to produce its solutions and that it is integrating using the output points to determine the step-size. That is, even though DOPRI5 is an algorithm that does not have a fixed step-size, R is forcing it to step from one output point to the next, and thus our set of output points is the limiting factor. We therefore will do the following experiment where we specify a smaller set of output points with the points further spaced out from each other.
+We suspect that the R DOPRI5 version is not using interpolation or some other dense output technique to produce its solutions and that it is integrating using the output points to determine the step-size. We therefore will do the following experiment where we specify a smaller set of output points with the points further spaced out from each other.
 
 \begin{figure}[H]
 \centering
@@ -437,7 +437,7 @@ tolerance & no discontinuity handling & with discontinuity handling \\
 \end{center}
 \end{table}
 
-Our analysis of Table $\ref{tab:tolerance_time_discontinuity_rk45_further_R}$ begins by noting that the set of output points is no longer a limiting factor. We can see the number of function evaluations change with the tolerance now and this indicates that the tolerance is controlling the step-size. This confirms our suspicions that the R implementation of DOPRI5 is not using a dense output mode or some form of interpolation. Instead, it takes steps to and stops at every required output point. This is an inefficient way of obtaining solution values at specified output points. 
+Our analysis of Table $\ref{tab:tolerance_time_discontinuity_rk45_further_R}$ begins by noting that the set of output points is no longer a limiting factor. We can see the number of function evaluations change with the tolerance now and this indicates that the tolerance is controlling the step-size. This confirms our suspicions that the R implementation of DOPRI5 is not using a proper interpolation scheme. Instead, it is allowing the vector of desired output points which its interface uses dictate the efficiency of the solver.
 
 Regarding the accuracy of the solver as we coarsen the tolerance we can see from Figures $\ref{fig:tolerance_time_rk45_further_no_event_R}$ and $\ref{fig:tolerance_time_rk45_further_with_event_R}$ that even at a tolerance of $10^{-1}$, the solver with the discontinuity handling is still able to produce reasonably accurate solutions whereas it requires a tolerance of $10^{-3}$ for the solver without the discontinuity handling.
 

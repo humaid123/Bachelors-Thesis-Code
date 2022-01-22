@@ -1,22 +1,24 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.11.7)  7 NOV 2021 17:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.21)  21 JAN 2022 20:58
 entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
 **./trial.tex
 (trial.tex
-LaTeX2e <2021-06-01> patch level 1
-L3 programming layer <2021-08-27>
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2021-11-22>
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
-Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
+Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
-File: size10.clo 2021/02/12 v1.4n Standard LaTeX file (size option)
+File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 )
-\c@part=\count182
-\c@section=\count183
-\c@subsection=\count184
-\c@subsubsection=\count185
-\c@paragraph=\count186
-\c@subparagraph=\count187
-\c@figure=\count188
-\c@table=\count189
+\c@part=\count183
+\c@section=\count184
+\c@subsection=\count185
+\c@subsubsection=\count186
+\c@paragraph=\count187
+\c@subparagraph=\count188
+\c@figure=\count189
+\c@table=\count190
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
@@ -34,7 +36,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 )) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.st
 y
-Package: graphicx 2020/12/05 v1.2c Enhanced LaTeX Graphics (DPC,SPQR)
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
@@ -44,7 +46,7 @@ Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
-Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
 fg
@@ -70,31 +72,31 @@ Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
 \caption@hangindent=\dimen147
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count190
-\c@continuedfloat=\count191
+\c@caption@flags=\count191
+\c@continuedfloat=\count192
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
 Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
-\c@subfigure=\count192
-\c@subtable=\count193
+\c@subfigure=\count193
+\c@subtable=\count194
 ) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.sty
-\lst@mode=\count194
+\lst@mode=\count195
 \lst@gtempboxa=\box50
 \lst@token=\toks18
-\lst@length=\count195
+\lst@length=\count196
 \lst@currlwidth=\dimen148
-\lst@column=\count196
-\lst@pos=\count197
+\lst@column=\count197
+\lst@pos=\count198
 \lst@lostspace=\dimen149
 \lst@width=\dimen150
-\lst@newlines=\count198
-\lst@lineno=\count199
+\lst@newlines=\count199
+\lst@lineno=\count266
 \lst@maxwidth=\dimen151
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
 File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
-\c@lstnumber=\count266
-\lst@skipnumbers=\count267
+\c@lstnumber=\count267
+\lst@skipnumbers=\count268
 \lst@framebox=\box51
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/listings\listings.cfg
@@ -103,7 +105,7 @@ File: listings.cfg 2020/03/24 1.8d listings configuration
 Package: listings 2020/03/24 1.8d (Carsten Heinz)
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count268
+\c@float@type=\count269
 \float@exts=\toks19
 \float@box=\box52
 \@float@everytoks=\toks20
@@ -119,7 +121,7 @@ Package: xkeyval 2020/11/20 v2.8 package option processing (HA)
 \XKV@toks=\toks21
 \XKV@tempa@toks=\toks22
 )
-\XKV@depth=\count269
+\XKV@depth=\count270
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/adjustbox\adjcalc.sty
@@ -154,16 +156,16 @@ File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/ifoddpage\ifoddpage.sty
 Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
-\c@checkoddpage=\count270
+\c@checkoddpage=\count271
 ) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/varwidth\varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box55
-\sift@deathcycles=\count271
+\sift@deathcycles=\count272
 \@vwid@loff=\dimen164
 \@vwid@roff=\dimen165
 )) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/apacite\apacite.sty
 Package: apacite 2013/07/21 v6.03 APA citation
-\c@BibCnt=\count272
+\c@BibCnt=\count273
 \bibleftmargin=\skip49
 \bibindent=\skip50
 \bibparsep=\skip51
@@ -172,8 +174,8 @@ Package: apacite 2013/07/21 v6.03 APA citation
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
-File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count273
+File: l3backend-pdftex.def 2021-12-14 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count274
 \l__pdf_internal_box=\box56
 ) (trial.aux (introduction.aux) (timeProblem.aux) (stateProblem.aux)
 (investigation.aux) (summary.aux) (ebolaPaper.aux))
@@ -197,16 +199,16 @@ LaTeX Font Info:    ... okay on input line 12.
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count274
+\scratchcounter=\count275
 \scratchdimen=\dimen166
 \scratchbox=\box57
-\nofMPsegments=\count275
-\nofMParguments=\count276
+\nofMPsegments=\count276
+\nofMParguments=\count277
 \everyMPshowfont=\toks23
-\MPscratchCnt=\count277
+\MPscratchCnt=\count278
 \MPscratchDim=\dimen167
-\MPnumerator=\count278
-\makeMPintoPDFobject=\count279
+\MPnumerator=\count279
+\makeMPintoPDFobject=\count280
 \everyMPtoPDFconversion=\toks24
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
@@ -223,8 +225,8 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count280
-\c@maskedRefs=\count281
+\c@lstlisting=\count281
+\c@maskedRefs=\count282
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/apacite\english.apc
 File: english.apc 2013/07/21 v6.03 apacite language file
@@ -248,64 +250,49 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [1
 
 
-{C:/Users/huago/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-Overfull \hbox (68.40614pt too wide) in paragraph at lines 23--27
-\OT1/cmr/m/n/10 SEIR mod-els to which we add dis-con-ti-nu-ities. VI ==========
-================
- []
-
-
-Overfull \hbox (129.47928pt too wide) in paragraph at lines 23--27
-\OT1/cmr/m/n/10 (Ref-er-ence Christina Chris-tara. I DONT HAVE ONE!!!!) =======
-======================
- []
-
-[2] [3]
-Overfull \hbox (0.38834pt too wide) in paragraph at lines 61--62
-[]\OT1/cmr/m/n/10 The other pa-ram-e-ters are as-sumed to al-ways be con-stant 
-with N = 37,741,000
- []
-
-<./figures/unstability_of_exponential_growth.png, id=18, 462.528pt x 346.896pt>
-
+{C:/Users/huago/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2]
+[3]
+<./figures/unstability_of_exponential_growth.png, id=18, 485.6544pt x 377.2494p
+t>
 File: ./figures/unstability_of_exponential_growth.png Graphic file (type png)
 <use ./figures/unstability_of_exponential_growth.png>
 Package pdftex.def Info: ./figures/unstability_of_exponential_growth.png  used 
-on input line 75.
-(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
-[4]
-<./figures/regain_stability_after_measures.png, id=23, 462.528pt x 346.896pt>
+on input line 72.
+(pdftex.def)             Requested size: 241.49895pt x 187.59384pt.
+ [4]
+<./figures/regain_stability_after_measures.png, id=23, 516.0078pt x 379.4175pt>
+
 File: ./figures/regain_stability_after_measures.png Graphic file (type png)
 <use ./figures/regain_stability_after_measures.png>
 Package pdftex.def Info: ./figures/regain_stability_after_measures.png  used on
- input line 86.
-(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ input line 83.
+(pdftex.def)             Requested size: 241.49895pt x 177.57361pt.
  [5 <./figures/unstability_of_exponential_growth.png>] [6 <./figures/regain_sta
 bility_after_measures.png>] [7]
-Overfull \hbox (1.50066pt too wide) in paragraph at lines 128--129
+Overfull \hbox (1.50066pt too wide) in paragraph at lines 125--126
 []\OT1/cmr/m/n/10 `ode45' calls an im-ple-men-ta-tion of Dormand-Prince (4)5 (D
 O-PRI5) Runge-
  []
 
 [8] [9] [10] [11]
-<./figures/R_ode45_spacing_experiment.png, id=51, 601.4972pt x 406.51875pt>
+<./figures/R_ode45_spacing_experiment.png, id=51, 725.71124pt x 406.51875pt>
 File: ./figures/R_ode45_spacing_experiment.png Graphic file (type png)
 <use ./figures/R_ode45_spacing_experiment.png>
 Package pdftex.def Info: ./figures/R_ode45_spacing_experiment.png  used on inpu
-t line 228.
-(pdftex.def)             Requested size: 241.49895pt x 163.2187pt.
+t line 227.
+(pdftex.def)             Requested size: 241.49895pt x 135.28053pt.
  [12 <./figures/R_ode45_spacing_experiment.png>] [13]
 <./figures/lsoda_vs_discontinuity.png, id=60, 462.528pt x 346.896pt>
 File: ./figures/lsoda_vs_discontinuity.png Graphic file (type png)
 <use ./figures/lsoda_vs_discontinuity.png>
 Package pdftex.def Info: ./figures/lsoda_vs_discontinuity.png  used on input li
-ne 264.
+ne 263.
 (pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
 <./figures/dop853_vs_discontinuity.png, id=61, 462.528pt x 346.896pt>
 File: ./figures/dop853_vs_discontinuity.png Graphic file (type png)
 <use ./figures/dop853_vs_discontinuity.png>
 Package pdftex.def Info: ./figures/dop853_vs_discontinuity.png  used on input l
-ine 271.
+ine 270.
 (pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
 
 
@@ -973,13 +960,13 @@ figures/my_fit_SL.png>] [84 <./figures/my_fit_Lib.png>] (trial.aux
 (introduction.aux) (timeProblem.aux) (stateProblem.aux) (investigation.aux)
 (summary.aux) (ebolaPaper.aux)) ) 
 Here is how much of TeX's memory you used:
- 7456 strings out of 478927
- 142754 string characters out of 2852535
- 610673 words of memory out of 3000000
- 25148 multiletter control sequences out of 15000+600000
+ 7760 strings out of 478659
+ 153222 string characters out of 2845920
+ 612720 words of memory out of 3000000
+ 25699 multiletter control sequences out of 15000+600000
  407328 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,8n,79p,1263b,1537s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,8n,79p,1153b,1537s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\huago\AppData\Local\MiKTeX\fonts/pk
 /ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/huago/AppData/Local/Programs/M
 iKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/huago/AppData/Local/P
@@ -992,7 +979,7 @@ fb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
 onts/cm/cmsy10.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/pu
 blic/amsfonts/cm/cmsy7.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/
 type1/public/amsfonts/cm/cmti10.pfb>
-Output written on trial.pdf (84 pages, 2111197 bytes).
+Output written on trial.pdf (84 pages, 2123381 bytes).
 PDF statistics:
  453 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
