@@ -106,8 +106,9 @@ plot_no_event <- ggplot(ans_no_event, aes(x=time)) +
     geom_line(aes(y=E_8, color="1e-08"), size=1.2) +  
     geom_line(aes(y=E_10, color="1e-10"), size=1.2) + 
     geom_line(aes(y=E_11, color="1e-11"), size=1.2) + 
-    labs(x="time", y="E", color="legend") +
-    scale_color_manual(values=colors)
+    labs(x="time", y="E(t)", color="legend") +
+    scale_color_manual(values=colors) + 
+    theme(text = element_text(size = 20))
 
 
 #######################################################################
@@ -231,7 +232,14 @@ colors <- c("green", "blue",  "orange", "brown", "yellow", "red", "purple", "bla
 res <- experiment_with_event(1e-7, 1e-7)
 length <- c(nrow(res$out))
 i <- 1
-plot(res$out[, 1], res$out[, 3], type="l", col=colors[i], lwd=2)
+plot(res$out[, 1], res$out[, 3], type="l", col=colors[i], lwd=2, 
+    xlab="time", 
+    ylab="E(t)", 
+    cex.lab = 1.5,
+    cex.axis = 1.5,
+    cex.main = 1.5,
+    cex.sub = 1.5
+)
 i <- i + 1
 efficiency_event <- c(1e-7, res$nfev, res$nstep)
 for (tolerance in tolerances) {
@@ -243,8 +251,8 @@ for (tolerance in tolerances) {
 }
 legend(-6, 25000, 
    legend=tolerances_string,
-   col=colors, lty=1:2, cex=0.8,
-   title="Line types", text.font=4)
+   col=colors, lty=1, lwd=2,
+       title="Legend", text.font=4, cex=1.1)
 
 # printing efficiency data
 efficiency_data <- cbind(efficiency_no_event, efficiency_event) # used to report efficiency

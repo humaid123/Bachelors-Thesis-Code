@@ -1,8 +1,8 @@
 \section{Appendix: Parameter fitting in an SEIR Model}
 \label{section:ebola_paper}
-In \cite{althaus2014estimating}, the epidemiologist uses data from the Ebola spread in three different West African countries to understand the impact of the implemented control measures. To do this, the researcher needed to estimate parameters like the basic and effective reproduction number of the virus.
+In \cite{althaus2014estimating}, the researcher uses data from the Ebola spread in three different West African countries to understand the impact of the implemented control measures. To do this, the researcher needed to estimate parameters like the basic and effective reproduction number of the virus.
 
-These parameters are estimated by doing a best fit optimization on the parameters applied to an SEIR model. The experiment is to use an ODE model with certain values of these parameters and calculate the error of these models based on real-life data. The model with the minimum error is the `best fit' model and the corresponding parameters' values are the optimal choices for these parameters. These optimal parameters are then used to understand the spread of the virus. 
+These parameters are estimated by doing a best fit optimization on the parameters present in an SEIR model. The experiment is to use an ODE model with certain values of these parameters and calculate the error of these models based on real-life data. The model with the minimum error is the `best fit' model and the corresponding parameters' values are the optimal choices for these parameters. These optimal parameters are then used to understand the spread of the virus. The idea is to optimally choose the parameters in the SEIR model so that the numerical solution of the model gives the best fit to the available data.
 
 We note that the ODE model is run inside an optimization algorithm and thus its efficiency is critical as the algorithm will need to solve the ODE model with each different set of parameters.
 

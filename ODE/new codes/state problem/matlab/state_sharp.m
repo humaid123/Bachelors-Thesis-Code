@@ -18,17 +18,19 @@ options = odeset('RelTol', 1e-12, 'AbsTol', 1e-12);
 measures_implemented = 0;
 direction = up;
 nfev = 0;
-[t_ode45, y_ode45] = ode45(@(t, y) f_with_if(t, y), tspan, y0, options);
+[t_ode45, y_ode45] = ode45(@f_with_if, tspan, y0, options);
 count_ode45 = nfev;
 
 measures_implemented = 0;
 direction = up;
 nfev = 0;
-[t_ode15s,y_ode15s] = ode15s(@(t, y) f_with_if(t, y), tspan, y0, options);
+[t_ode15s,y_ode15s] = ode15s(@f_with_if, tspan, y0, options);
 count_ode15s = nfev;
 
 plot(t_ode45, y_ode45(:, 2), t_ode15s, y_ode15s(:, 2), 'lineWidth', 1.5);
 legend("ode45", "ode15s");
+xlabel("time");
+ylabel("E(t)");
 count_ode45
 count_ode15s
 

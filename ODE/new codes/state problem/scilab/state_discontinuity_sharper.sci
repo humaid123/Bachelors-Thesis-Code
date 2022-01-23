@@ -90,7 +90,11 @@ count_adams = nfev
 
 xset("thickness",2);
 A = [E_lsoda; E_stiff; E_rk; E_adams]';
-plot2d(tspan, A, [1, 2, 3, 4, 5]);
-h1=legend(["lsoda", "stiff", "rk", "adams"]);
+plot2d(tspan, A, [1, 2, 3, 4]);
+# h1=legend(["lsoda", "stiff", "rk", "adams"]);
+legends(["lsoda", "stiff", "rk", "adams"], [1, 2, 3, 4], font_size=4);
+xlabel("time", "fontsize", 4)
+ylabel("E(t)", "fontsize", 4)
+
 [count_lsoda; count_stiff; count_rk; count_adams]
 // rkf CANNOT BE USED

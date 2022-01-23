@@ -1805,7 +1805,12 @@ radau_tol_12 = [0.0000000000000000, 37740896.000000000, 103.00000000000000, 1.00
 
 scf(0)
 plot(radau_tol_6(:, 1), radau_tol_6(:, 3), "color", "red")
+legends(["Radau at 1e-6"], [1], font_size=4);
+xlabel("time", "fontsize", 4)
+ylabel("E(t)", "fontsize", 4)
 
 scf(1)
 plot(radau_tol_12(:, 1), radau_tol_12(:, 3), "color", "red")
-
+legends(["Radau at 1e-12"], [1], font_size=4);
+xlabel("time", "fontsize", 4)
+ylabel("E(t)", "fontsize", 4)

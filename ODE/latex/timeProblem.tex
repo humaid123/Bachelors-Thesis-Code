@@ -2,7 +2,7 @@
 \label{section:time_problem}
 In the time-dependent discontinuity problem, we change the value of the parameter $\beta$ from 0.9 to 0.005 at t=27. This introduces a discontinuity into the problem. We will show that this leads to inaccuracies in the solutions computed by the solvers, especially the fixed-step solvers. We then introduce a form of discontinuity handling, using what are known as cold starts, to show how to obtain an efficient approach for solving time-dependent discontinuity problems.
 
-\subsection{Naive treatment of Covid-19 time discontinuity models}
+\subsection{Naive solution of the Time dependent discontinuity model}
 \label{subsection:naive_time_problem}
 A naive implementation of the problem is to use an if-statement inside the right-hand side function, $f(t, y)$, to implement the change in $\beta$ as measures are implemented. An if-statement makes the function f(t, y) and its derivatives discontinuous. This introduces issues as outlined in Section $\ref{subsection:effect_of_discontinuity}$.
 
@@ -126,7 +126,7 @@ Thus our recommendation to avoid fixed step size solvers still holds since users
 We also note again, that all the error-controlled solvers perform well. We will see, from the efficiency data, that using cold starts is more efficient. Using cold starts, the error control solvers do not have to step over a discontinuity and we will not have the rise in the number of function evaluations as we discussed in $\ref{subsection:effect_of_discontinuity}$. Table $\ref{tab:time_discontinuity_R}$ shows that discontinuity handling reduces the number of function evaluations. 
 
 \begin{table}[H]
-\caption {R Efficiency data for the Time-dependent Discontinuity problem} 
+\caption {R Efficiency data for the time-dependent discontinuity problem - number of function evaluations} 
 \label{tab:time_discontinuity_R}
 \begin{center}
 \begin{tabular}{ c c c } 
@@ -161,7 +161,7 @@ In Section $\ref{subsection:time_tolerance_study}$, we will see that this discon
 The Python solvers did not have significant accuracy issues even without discontinuity handling. This is because all the available methods use error control and the default tolerances are sharp enough. From Figure $\ref{fig:solve_time_discontinuity_py}$, we can see that the Python solvers again give sufficiently accurate results. Furthermore, the slight blurring at the peak has disappeared indicating that there is an even better agreement among the solvers. The addition of discontinuity handling also significantly reduces the number of function evaluations. This can be seen in Table $\ref{tab:time_discontinuity_Py}$.
 
 \begin{table}[H]
-\caption {Python Efficiency data for the Time-dependent Discontinuity problem} 
+\caption {Python Efficiency data for the time-dependent discontinuity problem - number of function evaluations} 
 \label{tab:time_discontinuity_Py} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -192,7 +192,7 @@ We can see from Figure $\ref{fig:solve_time_discontinuity_scilab}$ that all the 
 The addition of discontinuity handling also significantly reduces the number of function evaluations as seen in Table $\ref{tab:time_discontinuity_scilab}$.
 
 \begin{table}[H]
-\caption {Scilab Efficiency data for the Time-dependent Discontinuity problem} 
+\caption {Scilab Efficiency data for the time-dependent discontinuity problem - number of function evaluations} 
 \label{tab:time_discontinuity_scilab} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -225,7 +225,7 @@ From Figure $\ref{fig:solve_time_discontinuity_matlab}$ we can see that both sol
 We also show in Table $\ref{tab:time_discontinuity_matlab}$ that discontinuity handling allows the solvers to use fewer function evaluations.
 
 \begin{table}[H]
-\caption {Matlab Efficiency data for the Time-dependent Discontinuity problem} 
+\caption {Matlab Efficiency data for the time-dependent discontinuity problem - number of function evaluations} 
 \label{tab:time_discontinuity_matlab} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -267,7 +267,7 @@ In this section, we run the R LSODA solver with multiple tolerances with and wit
 From Figures $\ref{fig:tolerance_time_lsoda_no_event_R}$ and $\ref{fig:tolerance_time_lsoda_with_event_R}$, we can see that the addition of discontinuity handling allows the solver to use coarser tolerances and still get a reasonable result; we need a tolerance at least as sharp as $10^{-3}$ without discontinuity handling but can use a tolerance as coarse as $10^{-2}$ with it. This supports the observation that the use of discontinuity handling when solving a discontinuous problem is advantageous. Also, using coarser tolerances leads to better efficiency, as we will see in Table $\ref{tab:tolerance_time_discontinuity_lsoda_R}$. 
 
 \begin{table}[H]
-\caption {R LSODA time-dependent discontinuity tolerance study} \label{tab:tolerance_time_discontinuity_lsoda_R} 
+\caption {R LSODA time-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_time_discontinuity_lsoda_R} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no discontinuity handling & with discontinuity handling \\ 
@@ -306,7 +306,7 @@ In this section, we run the Python version of the LSODA solver with multiple tol
 From Figures $\ref{fig:tolerance_time_lsoda_with_event_py}$ and $\ref{fig:tolerance_time_lsoda_no_event_py}$, we see that with the use of the discontinuity handling, a tolerance of $10^{-2}$ is enough to get a reasonably accurate result whereas a tolerance of $10^{-3}$ is needed otherwise. Also, the use of coarser tolerances leads to better efficiency. (See Table $\ref{tab:tolerance_time_discontinuity_lsoda_py}$.)
 
 \begin{table}[H]
-\caption {Python LSODA time-dependent discontinuity tolerance study} \label{tab:tolerance_time_discontinuity_lsoda_py} 
+\caption {Python LSODA time-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_time_discontinuity_lsoda_py} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no discontinuity handling & with discontinuity handling \\ 
@@ -346,7 +346,7 @@ From Figures $\ref{fig:tolerance_time_lsoda_no_event_sci}$ and $\ref{fig:toleran
 It is interesting to see how inacurate the solution without discontinuity handling is at a tolerance of $10^{-1}$. We also note that this behavior is different from the R and the Python version LSODA but this may be due to the way Scilab handles the tolerances.
 
 \begin{table}[H]
-\caption {Scilab LSODA time-dependent discontinuity tolerance study} 
+\caption {Scilab LSODA time-dependent discontinuity model tolerance study - number of function evaluations} 
 \label{tab:tolerance_time_discontinuity_lsoda_scilab} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -386,7 +386,7 @@ From Figures $\ref{fig:tolerance_time_rk45_no_event_R}$ and $\ref{fig:tolerance_
 However, as we will see in the Python version of DOPRI5, the results from Figures $\ref{fig:tolerance_time_rk45_no_event_R}$ and $\ref{fig:tolerance_time_rk45_with_event_R}$ are suspicious and stem from the fact that R is not using a proper interpolation scheme to produce the results. It is using an algorithm for interpolation that depends on the selected output points and which affects efficiency and accuracy, as discussed in Section $\ref{subsection:solution_output_points_impl}$. 
 
 \begin{table}[H]
-\caption {R DOPRI5 Time Discontinuity tolerance study} \label{tab:tolerance_time_discontinuity_rk45_R} 
+\caption {R DOPRI5 time-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_time_discontinuity_rk45_R} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no discontinuity handling & with discontinuity handling\\ 
@@ -424,7 +424,7 @@ From Figures $\ref{fig:tolerance_time_rk45_further_no_event_R}$ and $\ref{fig:to
 Using these two figures, we also see that discontinuity handling is allowing us to use coarser tolerances. We can use even a tolerance of $10^{-1}$ with discontinuity handling while getting a reasonably accurate result, whereas, without discontinuity handling, we need to use a tolerance of $10^{-3}$ or sharper to get a reasonably accurate answer.
 
 \begin{table}[H]
-\caption {R DOPRI5 Time Discontinuity tolerance study with spaced output points} \label{tab:tolerance_time_discontinuity_rk45_further_R} 
+\caption {R DOPRI5 time-dependent discontinuity model tolerance study with spaced output points - number of function evaluations} \label{tab:tolerance_time_discontinuity_rk45_further_R} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no discontinuity handling & with discontinuity handling \\ 
@@ -468,7 +468,7 @@ We then compare the Python version of DOPRI5 with and without discontinuity hand
 
 
 \begin{table}[H]
-\caption {Python DOPRI5 Time Discontinuity tolerance study} \label{tab:tolerance_time_discontinuity_rk45_py} 
+\caption {Python DOPRI5 time-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_time_discontinuity_rk45_py} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no discontinuity handling & with discontinuity handling \\ 
@@ -513,7 +513,7 @@ We see from Figure $\ref{fig:tolerance_time_rk45_no_event_sci}$ that using $10^{
 Figure $\ref{fig:tolerance_time_rk45_with_event_sci}$ is also interesting as it seems to indicate that a tolerance of $10^{-1}$ is enough to get the correct solution with discontinuity handling. This is surprising but consistent with our observations for the R and Python Runge-Kutta pairs.
 
 \begin{table}[H]
-\caption {Scilab RKF45 Time Discontinuity tolerance study} 
+\caption {Scilab RKF45 time-dependent discontinuity model tolerance study - number of function evaluations} 
 \label{tab:tolerance_time_discontinuity_rk45_scilab} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -546,7 +546,7 @@ We can see from Table $\ref{tab:tolerance_time_discontinuity_rk45_scilab}$ that 
 Figures $\ref{fig:tolerance_time_rkf_further_no_event_sci}$ and $\ref{fig:tolerance_time_rkf_further_with_event_sci}$ show a clear indication regarding why discontinuity handling is important. We can see that without it, we need a tolerance of $10^{-3}$ to get reasonably accurate results but with the discontinuity handling, we can use a tolerance of $10^{-1}$. The impact on the number of function evaluations, shown in Table $\ref{tab:tolerance_time_discontinuity_rk45_spaced_out_scilab}$, is clear.
 
 \begin{table}[H]
-\caption {Scilab RKF45 Spaced Out Time Discontinuity tolerance study} 
+\caption {Scilab RKF45 spaced Out time-dependent discontinuity model tolerance study - number of function evaluations} 
 \label{tab:tolerance_time_discontinuity_rk45_spaced_out_scilab} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -565,7 +565,7 @@ tolerance & no discontinuity handling & with discontinuity handling\\
 Table $\ref{tab:tolerance_time_discontinuity_rk45_spaced_out_scilab}$ shows how the number of function evaluations with discontinuity handling is smaller. We also note that at coarse tolerances, the number of function evaluations is similar but that at those tolerances, the code without discontinuity handling is not obtaining reasonably accurate results. We can thus conclude that using discontinuity handling lets us use coarser tolerances and leads to a smaller number of function evaluations while improving accuracy.
 
 
-\subparagraph{Time dependent discontinuity model tolerance study on the Matlab version of DOPRI5}
+\subparagraph{Time-dependent discontinuity model tolerance study on the Matlab version of DOPRI5}
 We perform the same experiment using $ode45$ in Matlab. We set both the absolute and relative tolerance to various values and examine how the solvers perform. We remember that using the default tolerance, $ode45$ did not give a reasonably accurate solution. We also recall that $ode45$ did not have a smaller default tolerance than $ode15s$. In this section, we show that with a sharper tolerance, $ode45$ is also capable of solving the problem without discontinuity handling but we will see that it is more efficient with discontinuity handling. Discontinuity handling will, again, allow us to use coarser tolerances and still obtain reasonably accurate solutions.
 
 \begin{figure}[H]
@@ -587,7 +587,7 @@ We first note from Figure $\ref{fig:tolerance_time_rk45_no_event_matlab}$ that a
 From Figures $\ref{fig:tolerance_time_rk45_no_event_matlab}$ and $\ref{fig:tolerance_time_rk45_with_event_matlab}$ we see that discontinuity handling allows us to use coarser tolerances while still getting a reasonably accurate solution. We note that we could use a tolerance of $10^{-1}$ with discontinuity handling but we had to use a tolerance of $10^{-3}$ to get a reasonably accurate solution. We will also see that discontinuity handling allows the solver to use fewer function evaluations in Table $\ref{tab:tolerance_time_discontinuity_rk45_matlab}$.
 
 \begin{table}[H]
-\caption {Matlab's DOPRI5 Time Discontinuity tolerance study} 
+\caption {Matlab DOPRI5 time-dependent discontinuity model tolerance study - number of function evaluations} 
 \label{tab:tolerance_time_discontinuity_rk45_matlab} 
 \begin{center}
 \begin{tabular}{ c c c }

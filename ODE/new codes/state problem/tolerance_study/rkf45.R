@@ -123,8 +123,9 @@ plot_no_event <- ggplot(ans_no_event, aes(x=time)) +
     geom_line(aes(y=E_8, color="1e-08"), size=1.2) +  
     geom_line(aes(y=E_10, color="1e-10"), size=1.2) + 
     geom_line(aes(y=E_11, color="1e-11"), size=1.2) + 
-    labs(x="time", y="E", color="legend") +
-    scale_color_manual(values=colors)
+    labs(x="time", y="E(t)", color="legend") +
+    scale_color_manual(values=colors) + 
+    theme(text = element_text(size = 20))
 
 efficiency_no_event
 

@@ -1,6 +1,6 @@
 library(deSolve)
 library(ggplot2)
-library("plyr")
+library(plyr)
 
 model_no_measures <- function(t, state, parms) {
     S <- state[1]
@@ -133,11 +133,18 @@ m <- rbind(
 )
 m
 
-plot(lsoda_res[, 1], lsoda_res[, 3], type="l", col="black", lwd=2)
+plot(lsoda_res[, 1], lsoda_res[, 3], type="l", col="black", lwd=2, 
+    xlab="time", 
+    ylab="E(t)", 
+    cex.lab = 1.5,
+    cex.axis = 1.5,
+    cex.main = 1.5,
+    cex.sub = 1.5
+)
 lines(radau_res[, 1], radau_res[, 3], col="orange", lwd=2)
 lines(adams_res[, 1], adams_res[, 3], col="green", lwd=2)
 lines(bdf_res[, 1], bdf_res[, 3], col="blue", lwd=2)
 legend(-6, 25000, 
        legend=c("lsoda", "radau", "adams", "bdf"),
-       col=   c("black", "orange", "blue", "red"), lty=1:2, cex=0.8,
-       title="Line types", text.font=4)
+       col=   c("black", "orange", "green", "blue"), lty=1, lwd=2,
+       title="Legend", text.font=4, cex=1.1)

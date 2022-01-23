@@ -188,8 +188,8 @@ for tolerance in tolerances_plot_without_event:
     name = "no_event_" + str(abs(log10(tolerance)))
     times = ans_no_event[name][0]
     solution = ans_no_event[name][1]
-    print(times, solution)
     plt.plot(times, solution[1])
+plt.ylabel("E(t)")
 plt.xlabel('time')
 plt.legend(tolerances_plot_without_event, shadow=True)
 plt.show()
@@ -199,12 +199,12 @@ plt.figure(2)
 name = "no_event_" + str(abs(log10(1e-1)))
 times = ans_no_event[name][0]
 solution = ans_no_event[name][1]
-print(times, solution)
 # need to extract non-broken steps
 times = times[:149]
 solution = solution[1][:149]
 plt.plot(times, solution)
 plt.xlabel('time')
+plt.ylabel("E(t)")
 plt.legend(tolerances, shadow=True)
 plt.show()
 
@@ -217,6 +217,7 @@ for tolerance in tolerances:
     solution = ans_with_event[name][1]
     plt.plot(times, solution[1])
 plt.xlabel('time')
+plt.ylabel("E(t)")
 plt.legend(tolerances, shadow=True)
 plt.show()
 

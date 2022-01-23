@@ -21,11 +21,11 @@ while t_initial < t_final
     tspan = [t_initial t_final];
     if (measures_implemented == 0)
         opts = odeset('Events', @g_25000);
-        [t,y,te,ye,ie] = ode45(@(t, y) f_no_measures(t, y),tspan,y_initial,opts);
+        [t,y,te,ye,ie] = ode45(@f_no_measures,tspan,y_initial,opts);
         measures_implemented = 1;
     else 
         opts = odeset('Events', @g_10000);
-        [t,y,te,ye,ie] = ode45(@(t, y) f_measures(t, y),tspan,y_initial,opts);
+        [t,y,te,ye,ie] = ode45(@f_measures,tspan,y_initial,opts);
         measures_implemented = 0;
     end 
     y_initial = y(end, :);
@@ -48,11 +48,11 @@ while t_initial < t_final
     tspan = [t_initial t_final];
     if (measures_implemented == 0)
         opts = odeset('Events', @g_25000);
-        [t,y,te,ye,ie] = ode15s(@(t, y) f_no_measures(t, y),tspan,y_initial,opts);
+        [t,y,te,ye,ie] = ode15s(@f_no_measures,tspan,y_initial,opts);
         measures_implemented = 1;
     else 
         opts = odeset('Events', @g_10000);
-        [t,y,te,ye,ie] = ode15s(@(t, y) f_measures(t, y),tspan,y_initial,opts);
+        [t,y,te,ye,ie] = ode15s(@f_measures,tspan,y_initial,opts);
         measures_implemented = 0;
     end 
     y_initial = y(end, :);
@@ -67,6 +67,8 @@ nfev_ode15s = nfev;
 
 plot(t_ode45, y_ode45(:, 2), t_ode15s, y_ode15s(:, 2), 'lineWidth', 1.5);
 legend("ode45", "ode15s");
+xlabel("time");
+ylabel("E(t)");
 nfev_ode45
 nfev_ode15s
 

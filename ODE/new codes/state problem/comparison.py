@@ -146,6 +146,7 @@ def experiment_with_event(atol, rtol):
 plt.plot(times_default, res_default[1])
 plt.plot(times_sharp, res_sharp[1])
 plt.plot(times_solved, res_solved[1])
+plt.ylabel("E(t)")
 plt.xlabel('time')
 plt.legend(['default', 'sharpest', 'solved'], shadow=True)
 plt.show()

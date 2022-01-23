@@ -21,7 +21,7 @@ measures_implemented = 0;
 direction = up;
 nfev = 0;
 options = odeset('RelTol', tolerance, 'AbsTol', tolerance);
-[t,y] = ode45(@(t, y) f_with_if(t, y),tspan,y0, options);
+[t,y] = ode45(@f_with_if,tspan,y0, options);
 plot(t, y(:, 2), 'lineWidth', 1.5);
 hold on;
 nfevs = [nfev];
@@ -32,13 +32,15 @@ for i = 2:length(tolerances)
     direction = up;
     nfev = 0;
     options = odeset('RelTol', tolerance, 'AbsTol', tolerance);
-    [t,y] = ode45(@(t, y) f_with_if(t, y), tspan, y0, options);
+    [t,y] = ode45(@f_with_if, tspan, y0, options);
     plot(t, y(:, 2), 'lineWidth', 1.5);
     hold on;
     nfevs(i) = nfev;
 end
 hold off;
 legend("1e-1", "1e-2", "1e-4", "1e-6", "1e-7", "1e-9", "1e-10", "1e-11");
+xlabel("time");
+ylabel("E(t)");
 A = [tolerances; nfevs];
 transpose(A)
 
@@ -59,11 +61,11 @@ while t_initial < t_final
     tspan = [t_initial t_final];
     if (measures_implemented == 0)
         opts = odeset('Events', @g_25000, 'RelTol', tolerance, 'AbsTol', tolerance);
-        [t,y,te,ye,ie] = ode45(@(t, y) f_no_measures(t, y), tspan, y_initial, opts);
+        [t,y,te,ye,ie] = ode45(@f_no_measures, tspan, y_initial, opts);
         measures_implemented = 1;
     else 
         opts = odeset('Events', @g_10000, 'RelTol', tolerance, 'AbsTol', tolerance);
-        [t,y,te,ye,ie] = ode45(@(t, y) f_measures(t, y), tspan, y_initial, opts);
+        [t,y,te,ye,ie] = ode45(@f_measures, tspan, y_initial, opts);
         measures_implemented = 0;
     end 
     y_initial = y(end, :);
@@ -89,11 +91,11 @@ for i = 2:length(tolerances)
         tspan = [t_initial t_final];
         if (measures_implemented == 0)
             opts = odeset('Events', @g_25000, 'RelTol', tolerance, 'AbsTol', tolerance);
-            [t,y,te,ye,ie] = ode45(@(t, y) f_no_measures(t, y), tspan, y_initial, opts);
+            [t,y,te,ye,ie] = ode45(@f_no_measures, tspan, y_initial, opts);
             measures_implemented = 1;
         else 
             opts = odeset('Events', @g_10000, 'RelTol', tolerance, 'AbsTol', tolerance);
-            [t,y,te,ye,ie] = ode45(@(t, y) f_measures(t, y), tspan, y_initial, opts);
+            [t,y,te,ye,ie] = ode45(@f_measures, tspan, y_initial, opts);
             measures_implemented = 0;
         end 
         y_initial = y(end, :);
@@ -107,6 +109,8 @@ for i = 2:length(tolerances)
 end
 hold off;
 legend("1e-1", "1e-2", "1e-4", "1e-6", "1e-7", "1e-9", "1e-10", "1e-11");
+xlabel("time");
+ylabel("E(t)");
 A = [tolerances; nfevs];
 transpose(A)
 

@@ -82,11 +82,15 @@ while t_initial < t_final
     y_initial = y(t_change, :)';
     res = cat(1, res, y);
 end
-
-xset("thickness",2);
 E = res(:, 2);
 t_span = (0:t_final);
+
+
+xset("thickness",2);
 plot(t_span, E);
+legends(["root"], [1], font_size=4);
+xlabel("time", "fontsize", 4)
+ylabel("E(t)", "fontsize", 4)
 
 nfev
 

@@ -186,6 +186,7 @@ for tolerance in tolerances:
     times = ans_no_event[name][0]
     solution = ans_no_event[name][1]
     plt.plot(times, solution[1])
+plt.ylabel("E(t)")
 plt.xlabel('time')
 plt.legend(tolerances, shadow=True)
 plt.show()
@@ -196,6 +197,7 @@ for tolerance in tolerances:
     times = ans_with_event[name][0]
     solution = ans_with_event[name][1]
     plt.plot(times, solution[1])
+plt.ylabel("E(t)")
 plt.xlabel('time')
 plt.legend(tolerances, shadow=True)
 plt.show()

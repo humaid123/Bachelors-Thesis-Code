@@ -74,3 +74,5 @@ for i = 1:length(tolerances)
     A = [atol, nfev]
 end
 legend(tolerances_string);
+xlabel("time", "fontsize", 4);
+ylabel("E(t)", "fontsize", 4);

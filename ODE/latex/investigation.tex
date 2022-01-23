@@ -14,9 +14,7 @@ We first try the Fortran solver at a tolerance of $10^{-6}$ which is the default
 \label{fig:fortran_radau_tol_6}
 \end{figure}
 
-From Figure $\ref{fig:fortran_radau_tol_6}$, we again see the unusual behaviour. We also note that it behaves exactly as in R.
-
-We then repeat the process with a tolerance of $10^{-12}$. In Figure $\ref{fig:fortran_radau_tol_12}$, we can see that the computed solution now follows the correct pattern, although it is still not the correct solution that we described in $\ref{subsection:state_with_event_detection}$.
+From Figure $\ref{fig:fortran_radau_tol_6}$, we again see the unusual behaviour. We also note that it behaves exactly as in R. We then repeat the process with a tolerance of $10^{-12}$. In Figure $\ref{fig:fortran_radau_tol_12}$, we can see that the computed solution now follows the correct pattern, although it is still not as accurate as the solution that we described in Section $\ref{subsection:state_with_event_detection}$.
 
 \begin{figure}[h]
 \centering
@@ -25,4 +23,4 @@ We then repeat the process with a tolerance of $10^{-12}$. In Figure $\ref{fig:f
 \label{fig:fortran_radau_tol_12}
 \end{figure}
 
-From this investigation of the Fortran source code, we can conclude that the issue is not in the interface from R to the Fortran solver or the Python implementation. We also added `print' statements during our investigation to see if the parameter $\beta$ was set to 0.005 which it was. So the problem seems to be with the `Radau' algorithm itself.
+From this investigation of the Fortran source code, we can conclude that the issue is not in the interface from R to the Fortran solver or the Python implementation. We also added `print' statements during our investigation to confirm that the parameter $\beta$ was set to 0.005 when appropriate. So the issue seems to be with the `Radau' algorithm itself. Further detailed investigation of the `Radau' algorithm will be required in order to determine the source of this issue.
