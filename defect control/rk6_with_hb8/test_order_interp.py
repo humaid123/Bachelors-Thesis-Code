@@ -1,7 +1,7 @@
 from math import exp, log10
 import matplotlib.pyplot as plt
 
-from HB import HB
+from HB8 import HB
 
 def model(t, y):
     return [(1/4)*y*(1-y/20)]
@@ -14,23 +14,30 @@ y0 = [1]
 log_max_error_at_each_h = []
 log_hs = []
 
-the_hs = [1e1, 1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]
+alpha = 1
+beta = 1
+
+the_hs = [1e2, 1e1, 1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]
 for h in the_hs:
     max_all_errors_at_this_h = float("-inf")
     for x_i in [0, 0.1, 1, 2, 5, 4.633, 10]:
-        x_i_plus_1 = x_i + h
+        x_i_plus_1 = x_i + beta * h
         x_i_minus_1 = x_i - h
+        x_i_minus_2 = x_i - h - alpha * h
 
         y_i         = solution([ x_i ])[0]
         y_i_plus_1  = solution([ x_i_plus_1 ])[0]
         y_i_minus_1 = solution([ x_i_minus_1 ])[0]
+        y_i_minus_2 = solution([ x_i_minus_2 ])[0]
 
         f_i         = model(x_i        , y_i)[0]
         f_i_plus_1  = model(x_i_plus_1 , y_i_plus_1)[0]
         f_i_minus_1 = model(x_i_minus_1, y_i_minus_1)[0]
+        f_i_minus_2 = model(x_i_minus_2, y_i_minus_2)[0]
 
         this_hb = HB(
-            x_i_minus_1, x_i, x_i_plus_1,
+            x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+            y_i_minus_2, f_i_minus_2,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
             y_i_plus_1, f_i_plus_1

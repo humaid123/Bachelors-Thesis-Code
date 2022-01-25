@@ -1,4 +1,6 @@
-from AAA_rk6_constant_alpha import rk_defect_control_static_alpha
+
+# from rk6 import rk_defect_control
+from rk8 import rk_defect_control_perfect_first_step
 from math import exp, floor
 import matplotlib.pyplot as plt
 
@@ -13,21 +15,16 @@ def create_t_eval(start, end, num_points = 100):
     return res
 
 t_span_3 = [0, 10]
-# t_span_3 = [0, 1]
 y0_3 = [1]
-
 def model3(t, y):
     return [(1/4)*y*(1 - y/20)]
-
 def solution3(t):
     return [20 / ( 1 + 19 * exp(-x/4) ) for x in t]
 
 t_span_2 = [0, 10]
 y0_2 = [1]
-
 def model2(t, y):
     return [-2*t*y**2]
-
 def solution2(t):
     return [1/(1+x**2) for x in t]
 
@@ -36,16 +33,16 @@ def experiment(model, solution, y0, t_span):
     t_eval = create_t_eval(t_span[0], t_span[1])
     actual_solutions = solution(t_eval)
 
-    tols = [1e-8, 1e-9, 1e-10]
+    tols = [1e-6, 1e-7, 1e-8, 1e-9, 1e-10]
     for tol in tols:
-        res, sol, first_deriv, derivs = rk_defect_control_static_alpha(model, t_span, y0[0], tol, solution)
+        res, sol, first_deriv, derivs = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
         computed_solutions = [sol(x) for x in t_eval]
         
         plt.figure()
         plt.plot(t_eval, actual_solutions, label="actual solution")
         plt.plot(t_eval, computed_solutions, label="computed solution")
-        for (x, y) in res:
-            plt.axvline(x=x)
+        #for (x, y) in res:
+        #    plt.axvline(x=x)
         plt.title(f"solutions for tol={tol}")
         plt.legend()
         plt.show()
@@ -75,10 +72,12 @@ def experiment(model, solution, y0, t_span):
         # defect graphs
         # we only pick 10 of the derivs
         pick_every = (len(derivs) // 5) + 1
-        print("number of steps =", len(derivs))
+        # print("pick every", pick_every)
         plotted_derivs = []
         for i in range(0, len(derivs), pick_every):
-            plotted_derivs.append(derivs[i])
+            plotted_derivs.append(
+                derivs[i]
+            )
 
         plt.figure()
         for (x_i_minus_1, x_i_plus_1, hb) in plotted_derivs:
@@ -89,7 +88,7 @@ def experiment(model, solution, y0, t_span):
                 y = solution([pt])[0]
                 f_eval  = model(pt, y)[0]
                 hb_prime_eval = hb.prime(pt)
-                defects.append(hb_prime_eval - f_eval)
+                defects.append( abs(hb_prime_eval - f_eval) )
             maximum_defect = max(defects)
             minimum_defect = min(defects)
             plot_vals = [(defect - minimum_defect) / (maximum_defect - minimum_defect) for defect in defects]
@@ -105,5 +104,8 @@ def experiment(model, solution, y0, t_span):
         plt.legend()
         plt.show()
 
-# experiment(model3, solution3, y0_3, t_span_3)
 experiment(model2, solution2, y0_2, t_span_2)
+
+print("H CANNOT GET TOO SMALL OR WE LOSE ALL THE ADVANTAGES we wanted....")
+print("it seems we stop getting any more accurated for 1e-3 or smaller step sizes....")
+print("THE SOLVER IS BEING FORCED TO TAKE REALLY SMALL STEPS => this is making everything really slow.... => does not matter if we are using only 10 function evaluation per step if we need to take a 1000 steps where we could just take 20....")

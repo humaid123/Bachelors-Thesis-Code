@@ -11,7 +11,7 @@ alpha = symbols("alpha")
 
 # the first three rows are the evaluations of a*(x**5) + b*(x**4) + c*(x**3) + d*(x**2) + e*x + f at -alpha, 0, 1
 # the next three rows are the evaluation of the derivative 5*a*(x**4) + 4*b*(x**3) + 3*c*(x**2) + 2*d*x + e at -alpha, 0, 1
-# A contains the RHS of the system, x will contain the coefficients [a, b, c, d, e, d]
+# A contains the RHS of the system, x will contain the coefficients [a, b, c, d, e, f]
 A = [
     [(-alpha)**5    , (-alpha)**4   , (-alpha)**3    ,  (-alpha)**2  , -alpha    , 1],  # quintic at -alpha
     [ 0             ,  0            ,  0             ,  0            ,  0        , 1],  # quintic at 0

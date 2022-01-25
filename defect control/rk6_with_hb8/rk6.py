@@ -1,5 +1,5 @@
 from math import sqrt
-from HB import HB
+from HB8 import HB, create_defect_samplings, create_continuous_first_derivatives_from_interpolants, ContinuousSolution, create_continuous_first_derivatives_from_results, create_continuous_sol_from_interpolants, create_continuous_sol_from_results, create_continuous_first_derivatives_from_results, create_continuous_sol_from_interpolants, create_continuous_sol_from_results
 
 # http://people.math.sfu.ca/~jverner/RKV65.IIIXb.Efficient.00000144617.081204.RATOnWeb
 A = [
@@ -46,113 +46,6 @@ def one_step(func, xn, yn, f_start, h):
     yn_plus_1_higher_order = yn + h * sigma_prod(B_HAT, k, 0, n_stages) 
 
     return (k, yn_plus_1, yn_plus_1_higher_order)
-
-# ===============================================================================================================
-# Helper functions
-
-def create_continuous_sol_from_interpolants(interps):
-    def sol(x) -> float:
-        for hb in interps:
-            # if (hb.x_i_minus_1 <= x <= hb.x_i):
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.eval(x)
-        # last_hb = interps[-1]
-        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-        #     return last_hb.eval(x)
-        
-        first_hb = interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_1} <= x <= {interps[-1].x_i_plus_1}")
-        return -1
-
-    return sol
-
-
-def create_continuous_sol_from_results(res, fn_s):
-    interps = []
-    
-    for i in range(len(res) - 2):
-        x_i_minus_1, y_i_minus_1 = res[i]    
-        x_i, y_i                 = res[i + 1]    
-        x_i_plus_1, y_i_plus_1   = res[i + 2]
-
-        f_i_minus_1 = fn_s[i]    
-        f_i         = fn_s[i + 1]    
-        f_i_plus_1  = fn_s[i + 2]
-        
-        interps.append(
-            HB (
-                x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-            )
-        )
-    return create_continuous_sol_from_interpolants(interps)
-
-def create_continuous_first_derivatives_from_interpolants(interps):
-    def sol(x) -> float:
-        for hb in interps:
-            # if (hb.x_i_minus_1 <= x <= hb.x_i):
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.prime(x)
-        # last_hb = interps[-1]
-        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-        #     return last_hb.prime(x)
-
-        first_hb = interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.prime(x)
-        
-        print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_1} <= x <= {interps[-1].x_i_plus_1}")
-        return -1
-
-    return sol
-
-
-def create_continuous_first_derivatives_from_results(res, fn_s):
-    interps = []
-    
-    for i in range(len(res) - 2):
-        x_i_minus_1, y_i_minus_1 = res[i]    
-        x_i, y_i                 = res[i + 1]    
-        x_i_plus_1, y_i_plus_1   = res[i + 2]
-
-        f_i_minus_1 = fn_s[i]    
-        f_i         = fn_s[i + 1]    
-        f_i_plus_1  = fn_s[i + 2]
-        
-        interps.append(
-            HB (
-                x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-            )
-        )
-    return create_continuous_first_derivatives_from_interpolants(interps)
-
-def create_defect_samplings(res, fn_s):
-    result = []
-    for i in range(len(res) - 2):
-        x_i_minus_1, y_i_minus_1 = res[i]    
-        x_i, y_i                 = res[i + 1]    
-        x_i_plus_1, y_i_plus_1   = res[i + 2]
-
-        f_i_minus_1 = fn_s[i]    
-        f_i         = fn_s[i + 1]    
-        f_i_plus_1  = fn_s[i + 2]
-        
-        interp = HB (
-                x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-        )
-        result.append( (x_i_minus_1, x_i, x_i_plus_1, interp) )
-    return result
-        
 
 # =================================================================================================================
 # start of fixed step-size solver
@@ -392,6 +285,12 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     res.append( (xn, yn) )
     fn_s.append(f_start)
 
+    xn = xn + h
+    yn = solution([xn])[0]
+    f_start = fun(xn, yn)[0]
+    res.append( (xn, yn) )
+    fn_s.append(f_start)
+
     n_steps = 0
     n_successful_steps = 0
 
@@ -400,14 +299,17 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
 
         x_i, y_i = res[-1]
         x_i_minus_1, y_i_minus_1 = res[-2]
+        x_i_minus_2, y_i_minus_2 = res[-3]
         x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
 
         f_i = fn_s[-1]
         f_i_minus_1 = fn_s[-2]
+        f_i_minus_2 = fn_s[-3]
         f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
 
         this_interp = HB(
-            x_i_minus_1, x_i, x_i_plus_1,
+            x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+            y_i_minus_2, f_i_minus_2,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
             y_i_plus_1, f_i_plus_1 
@@ -469,35 +371,6 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
 
 # =================================================================================
 # the following attempt is when the solver is to keep alpha at 1 throughout the integration
-class ContinuousSolution:
-    def __init__(self) -> None:
-        self.interps = []
-    
-    def eval(self, x) -> float:
-        for hb in self.interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.eval(x)
-
-        first_hb = self.interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
-
-    def prime(self, x) -> float:
-        for hb in self.interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.prime(x)
-
-        first_hb = self.interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.prime(x)
-        
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
-    
-    def append(self, interp) -> None:
-        self.interps.append(interp)
 
 # will also have solution for the first step as a proof of concept
 def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
@@ -522,15 +395,25 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
     res.append( (xn, yn) )
     fn_s.append(f_start)
 
+    xn = xn + h
+    yn = solution([ xn ])[0]
+    f_start = fun(xn, yn)[0]
+    res.append( (xn, yn) )
+    fn_s.append(f_start)
+
     x_i_plus_1, y_i_plus_1   = res[-1]
     x_i, y_i                 = res[-2]
     x_i_minus_1, y_i_minus_1 = res[-3]
+    x_i_minus_2, y_i_minus_2 = res[-4]
+
     f_i_plus_1  = fn_s[-1]
     f_i         = fn_s[-2]
     f_i_minus_1 = fn_s[-3]
+    f_i_minus_2 = fn_s[-4]
 
     this_interp = HB(
-        x_i_minus_1, x_i, x_i_plus_1,
+        x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+        y_i_minus_2, f_i_minus_2,
         y_i_minus_1, f_i_minus_1,
         y_i, f_i,
         y_i_plus_1, f_i_plus_1 
@@ -553,12 +436,16 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
         f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
 
         x_i_minus_1 = x_i - h
-
         y_i_minus_1 = continous_sol.eval(x_i_minus_1)
         f_i_minus_1 = continous_sol.prime(x_i_minus_1)
 
+        x_i_minus_2 = x_i_minus_1 - h
+        y_i_minus_2 = continous_sol.eval(x_i_minus_2)
+        f_i_minus_2 = continous_sol.prime(x_i_minus_2)
+
         this_interp = HB(
-            x_i_minus_1, x_i, x_i_plus_1,
+            x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+            y_i_minus_2, f_i_minus_2,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
             y_i_plus_1, f_i_plus_1 
