@@ -37,12 +37,8 @@ class ContinuousSolution:
 def create_continuous_sol_from_interpolants(interps):
     def sol(x) -> float:
         for hb in interps:
-            # if (hb.x_i_minus_1 <= x <= hb.x_i):
             if (hb.x_i <= x <= hb.x_i_plus_1):
                 return hb.eval(x)
-        # last_hb = interps[-1]
-        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-        #     return last_hb.eval(x)
         
         first_hb = interps[0]
         if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):

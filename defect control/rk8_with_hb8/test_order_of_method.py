@@ -37,4 +37,7 @@ plt.figure()
 plt.plot(log_hs, log_error_at_each_h)
 plt.show()
 
-print("we can see that the order of the method is indeed O(h ^ 6) SO IT CAN TAKE BIG STEPS IF NEEDED")
+maximum = 0
+for i in range(len(log_error_at_each_h) - 1):
+    maximum = max(maximum, log_error_at_each_h[i] - log_error_at_each_h[i + 1])
+print(maximum)

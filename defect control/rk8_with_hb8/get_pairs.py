@@ -1,7 +1,4 @@
 
-
-
-
 n_stages = 13
 a = [[0]*(n_stages+1) for _ in range(n_stages + 1)]
 c = [0] * (n_stages+1)

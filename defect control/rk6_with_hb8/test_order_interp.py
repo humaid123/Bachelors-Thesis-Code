@@ -23,7 +23,7 @@ for h in the_hs:
     for x_i in [0, 0.1, 1, 2, 5, 4.633, 10]:
         x_i_plus_1 = x_i + beta * h
         x_i_minus_1 = x_i - h
-        x_i_minus_2 = x_i - h - alpha * h
+        x_i_minus_2 = x_i - (1 + alpha) * h
 
         y_i         = solution([ x_i ])[0]
         y_i_plus_1  = solution([ x_i_plus_1 ])[0]
@@ -47,7 +47,6 @@ for h in the_hs:
         for trial in [0.1, 0.3, 0.7, 1.2, 1.5, 1.7]:
             x_eval = x_i_minus_1 + trial * h
             error = this_hb.eval(x_eval) - solution([x_eval])[0]
-            print(error)
             max_error = max(max_error, error)
 
         max_all_errors_at_this_h = max(max_all_errors_at_this_h, max_error)
@@ -64,4 +63,7 @@ plt.figure()
 plt.plot(log_hs, log_max_error_at_each_h)
 plt.show()
 
-print("we can see that the defect is also of order 6 no matter at which x we chose")
+maximum = 0
+for i in range(len(log_max_error_at_each_h) - 1):
+    maximum = max(maximum, log_max_error_at_each_h[i] - log_max_error_at_each_h[i + 1])
+print(maximum)

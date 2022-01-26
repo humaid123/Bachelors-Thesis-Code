@@ -6,7 +6,7 @@ init_printing()
 # we create the coefficients for a 3-step interpolant where the steps have sizes: [alpha * h, h, beta*h] 
 # we want formulae in alpha and beta for our septics d0, d1, d2, d3, d4, d5, d6, d7
 beta = symbols("beta")
-gamma = - (1 + symbols("alpha"))
+gamma = - 1 - symbols("alpha")
 
 # the first three rows are the evaluations of a*(x**7) + b*(x**6) + c*(x**5) + d*(x**4) + e*(x**3) + f(x**2) + gx + h at 0, beta, -1, -(1 + alpha)
 # the next three rows are the evaluations of 7a*(x**6) + 6b*(x**5) + 5c*(x**4) + 4d*(x**3) + 3e*(x**2) + 2fx + g at 0, beta, -1, -(1 + alpha)
@@ -16,9 +16,9 @@ A = [
     [beta**7        ,  beta**6      ,  beta**5       ,  beta**4      ,  beta**3      , beta**2  ,  beta  ,     1],  # septic at beta 
     [ -1            ,  1            ,  -1            ,  1            ,  -1           , 1        ,    -1  ,     1],  # septic at -1
     [gamma**7       ,  gamma**6     ,  gamma**5      ,  gamma**4     ,  gamma**3     , gamma**2 ,  gamma ,     1],  # septic at gamma = - (1 + alpha)
-    [ 0             ,  0            ,  0             ,  0            ,  0            , 0        ,  1     ,     0],  # septic prime at -0
+    [ 0             ,  0            ,  0             ,  0            ,  0            , 0        ,  1     ,     0],  # septic prime at 0
     [ 7*(beta**6)   ,  6*(beta**5)  ,  5*(beta**4)   ,  4*(beta**3)  ,  3*(beta**2)  , 2*beta   ,  1     ,     0],  # septic prime at beta
-    [ 7             ,  -6           ,  5             ,  -4           ,  3            , -2       ,  1     ,     0],   # septic prime at -1
+    [ 7             ,  -6           ,  5             ,  -4           ,  3            , -2       ,  1     ,     0],  # septic prime at -1
     [ 7*(gamma**6)  ,  6*(gamma**5) ,  5*(gamma**4)  ,  4*(gamma**3) ,  3*(gamma**2) , 2*gamma  ,  1     ,     0],  # septic prime at gamma = - (1 + alpha)
 ]
 
@@ -33,6 +33,7 @@ A = [
     #            + d6(pheta) * y_i_plus_1  + h_i * d7(pheta) * f_i_plus_1
     #       )
 
+#[alpha * h, h, beta * h]
 # thus we get that 
 # at pheta == gamma, -1, 0, alpha, ONLY one of d0, d2, d4, d6 evaluate to 1, everything else evaluate to 0
                                 # only one of d1_prime, d3_prime, d5_prime, d7_prime evaluate to 1, everythin else evaluate to 1
@@ -56,6 +57,7 @@ A = [
         # b_for_d2 equal 0 for every evaluation in A except for when septic at -1 => [0, 0, 1, 0, 0, 0, 0, 0]
     # as u_prime(t_i_plus_1) === f_i_plus_1     =>    d3_prime(pheta) == 1 and all the others are 0 
         # b_for_d3 equal 0 for every evaluation in A except for when septic prime at -1 => [0, 0, 0, 0, 0, 0, 1, 0]
+
 # when pheta == -(1 + alpha)
     # as u(t_i_minus_2) === y_i_minus_2           =>   d0(pheta) == 1 and all others are 0
         # b_for_d0 equal 0 for every evaluation in A except when septic at gamma => [0, 0, 0, 1, 0, 0, 0, 0]
@@ -91,12 +93,13 @@ def create_system(A, b):
     #    print(row)
     return this_A
 
+
+
 ans = [0] * len(b_for_d)        # create an array to store the results of solving the system
 # solve the systems
 for i in range(len(b_for_d)):
     system = Matrix(create_system(A, b_for_d[i]))
     res = solve_linear_system(system, Indexed('a', i), Indexed('b', i), Indexed('c', i), Indexed('d', i), Indexed('e', i), Indexed('f',i), Indexed("g", i), Indexed("h", i))
-    print(f"d{i} has coefficients: ", res)
     ans[i] = res
 
 # printing the solution as python functions
@@ -110,7 +113,7 @@ def get_septic_primes_as_string(a, b, c, d, e, f, g, h):
     return f"7*{a}*(x**6) + 6*{b}*(x**5) + 5*{c}*(x**4) + 4*{d}*(x**3) + 3*{e}*(x**2) + 2*{f}*x + {g}"
 
 for i, res in enumerate(ans):
-    print(f"def d{i}(x):\n    return", get_septic_as_string(res[Indexed('a', i)], res[Indexed('b', i)], res[Indexed('c', i)], res[Indexed('d', i)], res[Indexed('e', i)], res[Indexed('f', i)], res[Indexed("g", i)], res[Indexed("h", i)]))
+    print(f"def d{i}(x):\n    return (", get_septic_as_string(res[Indexed('a', i)], res[Indexed('b', i)], res[Indexed('c', i)], res[Indexed('d', i)], res[Indexed('e', i)], res[Indexed('f', i)], res[Indexed("g", i)], res[Indexed("h", i)]), ")")
 
 for i, res in enumerate(ans):
-    print(f"def d{i}_prime(x):\n    return", get_septic_primes_as_string(res[Indexed('a', i)], res[Indexed('b', i)], res[Indexed('c', i)], res[Indexed('d', i)], res[Indexed('e', i)], res[Indexed('f', i)], res[Indexed('g', i)], res[Indexed('h', i)]))
+    print(f"def d{i}_prime(x):\n    return (", get_septic_primes_as_string(res[Indexed('a', i)], res[Indexed('b', i)], res[Indexed('c', i)], res[Indexed('d', i)], res[Indexed('e', i)], res[Indexed('f', i)], res[Indexed('g', i)], res[Indexed('h', i)]), ")")

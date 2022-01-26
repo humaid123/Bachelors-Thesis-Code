@@ -1,6 +1,6 @@
 
 # from rk6 import rk_defect_control
-from rk6 import rk_defect_control_perfect_first_step
+from rk6 import rk_defect_control_perfect_first_step, rk_defect_control
 from math import exp, floor
 import matplotlib.pyplot as plt
 
@@ -35,7 +35,8 @@ def experiment(model, solution, y0, t_span):
 
     tols = [1e-6, 1e-7, 1e-8, 1e-9, 1e-10]
     for tol in tols:
-        res, sol, first_deriv, derivs = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
+        # res, sol, first_deriv, derivs = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
+        res, sol, first_deriv, derivs = rk_defect_control(model, t_span, y0[0], tol)
         computed_solutions = [sol(x) for x in t_eval]
         
         plt.figure()

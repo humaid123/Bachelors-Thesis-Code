@@ -1,147 +1,29 @@
-class ContinuousSolution:
-    def __init__(self) -> None:
-        self.interps = []
-    
-    def eval(self, x) -> float:
-        for hb in self.interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.eval(x)
+# the following is the quintics we got from solving the system with sympy
+# we can now look to test these by seeing if they satisfy our conditions
+def compare(computed_value, expected_value, for_which):
+    passed = True
+    for computed, expected in zip(computed_value, expected_value):
+        if (abs(computed - expected) > 1e-12):
+            print(f"FAIL: {for_which} by => {abs(computed-expected)}")
+            passed = False
+    if passed:
+        print(f"PASS: {for_which}")
+    else:    
+        print(computed_value)
+        print(expected_value)
 
-        first_hb = self.interps[0]
-        if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
+# these are the expected values of the computations
+b_for_d = [
+    [0, 0, 0, 1, 0, 0, 0, 0], # b_for_d0 => d0(gamma) == 1
+    [0, 0, 0, 0, 0, 0, 0, 1], # b_for_d1 => d1_prime(gamma) == 1
+    [0, 0, 1, 0, 0, 0, 0, 0], # b_for_d2 => d2(-1) == 1
+    [0, 0, 0, 0, 0, 0, 1, 0], # b_for_d3 => d3_prime(-1) == 1
+    [1, 0, 0, 0, 0, 0, 0, 0], # b_for_d4 => d4(0) == 1
+    [0, 0, 0, 0, 1, 0, 0, 0], # b_for_d5 => d5_prime(0) == 1
+    [0, 1, 0, 0, 0, 0, 0, 0], # b_for_d6 => d6(beta) == 1
+    [0, 0, 0, 0, 0, 1, 0, 0], # b_for_d7 => d7_prime(beta) == 1
+]
 
-    def prime(self, x) -> float:
-        for hb in self.interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.prime(x)
-
-        first_hb = self.interps[0]
-        if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
-            return first_hb.prime(x)
-        
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
-    
-    def append(self, interp) -> None:
-        self.interps.append(interp)
-
-
-
-
-# ===============================================================================================================
-# Helper functions
-
-def create_continuous_sol_from_interpolants(interps):
-    def sol(x) -> float:
-        for hb in interps:
-            # if (hb.x_i_minus_1 <= x <= hb.x_i):
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.eval(x)
-        # last_hb = interps[-1]
-        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-        #     return last_hb.eval(x)
-        
-        first_hb = interps[0]
-        if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_2} <= x <= {interps[-1].x_i_plus_1}")
-        return -1
-
-    return sol
-
-
-def create_continuous_sol_from_results(res, fn_s):
-    interps = []
-    
-    for i in range(len(res) - 3):
-        x_i_minus_2, y_i_minus_2 = res[i]    
-        x_i_minus_1, y_i_minus_1 = res[i + 1]    
-        x_i, y_i                 = res[i + 2]    
-        x_i_plus_1, y_i_plus_1   = res[i + 3]
-
-        f_i_minus_2 = fn_s[i]    
-        f_i_minus_1 = fn_s[i + 1]    
-        f_i         = fn_s[i + 2]    
-        f_i_plus_1  = fn_s[i + 3]
-        
-        interps.append(
-            HB (
-                x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_2, f_i_minus_2,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-            )
-        )
-    return create_continuous_sol_from_interpolants(interps)
-
-def create_continuous_first_derivatives_from_interpolants(interps):
-    def sol(x) -> float:
-        for hb in interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.prime(x)
-
-        first_hb = interps[0]
-        if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
-            return first_hb.prime(x)
-        
-        print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_2} <= x <= {interps[-1].x_i_plus_1}")
-        return -1
-
-    return sol
-
-
-def create_continuous_first_derivatives_from_results(res, fn_s):
-    interps = []
-    
-    for i in range(len(res) - 3):
-        x_i_minus_2, y_i_minus_2 = res[i]    
-        x_i_minus_1, y_i_minus_1 = res[i + 1]    
-        x_i, y_i                 = res[i + 2]    
-        x_i_plus_1, y_i_plus_1   = res[i + 3]
-
-        f_i_minus_2 = fn_s[i]    
-        f_i_minus_1 = fn_s[i + 1]    
-        f_i         = fn_s[i + 2]    
-        f_i_plus_1  = fn_s[i + 3]
-        
-        interps.append(
-            HB (
-                x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_2, f_i_minus_2,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-            )
-        )
-    return create_continuous_first_derivatives_from_interpolants(interps)
-
-def create_defect_samplings(res, fn_s):
-    result = []
-    for i in range(len(res) - 3):
-        x_i_minus_2, y_i_minus_2 = res[i]    
-        x_i_minus_1, y_i_minus_1 = res[i + 1]    
-        x_i, y_i                 = res[i + 2]    
-        x_i_plus_1, y_i_plus_1   = res[i + 3]
-
-        f_i_minus_2 = fn_s[i]    
-        f_i_minus_1 = fn_s[i + 1]    
-        f_i         = fn_s[i + 2]    
-        f_i_plus_1  = fn_s[i + 3]
-        
-        interp = HB (
-                x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_2, f_i_minus_2,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-        )
-        result.append( (x_i_minus_1, x_i, x_i_plus_1, interp) )
-    return result
-        
 def d0(x, alpha, beta):  
     return ( (6*alpha**2 + 4*alpha*beta + 8*alpha + 2*beta + 2)/(alpha**9 + 3*alpha**8*beta + 6*alpha**8 + 3*alpha**7*beta**2 + 15*alpha**7*beta + 15*alpha**7 + alpha**6*beta**3 + 12*alpha**6*beta**2 + 30*alpha**6*beta + 20*alpha**6 + 3*alpha**5*beta**3 + 18*alpha**5*beta**2 + 30*alpha**5*beta + 15*alpha**5 + 3*alpha**4*beta**3 + 12*alpha**4*beta**2 + 15*alpha**4*beta + 6*alpha**4 + alpha**3*beta**3 + 3*alpha**3*beta**2 + 3*alpha**3*beta + alpha**3)*(x**7) + (7*alpha**3 - 7*alpha**2*beta + 28*alpha**2 - 8*alpha*beta**2 - alpha*beta + 27*alpha - 4*beta**2 + 2*beta + 6)/(alpha**9 + 3*alpha**8*beta + 6*alpha**8 + 3*alpha**7*beta**2 + 15*alpha**7*beta + 15*alpha**7 + alpha**6*beta**3 + 12*alpha**6*beta**2 + 30*alpha**6*beta + 20*alpha**6 + 3*alpha**5*beta**3 + 18*alpha**5*beta**2 + 30*alpha**5*beta + 15*alpha**5 + 3*alpha**4*beta**3 + 12*alpha**4*beta**2 + 15*alpha**4*beta + 6*alpha**4 + alpha**3*beta**3 + 3*alpha**3*beta**2 + 3*alpha**3*beta + alpha**3)*(x**6) + (-14*alpha**3*beta + 14*alpha**3 - 4*alpha**2*beta**2 - 46*alpha**2*beta + 38*alpha**2 + 4*alpha*beta**3 - 22*alpha*beta**2 - 36*alpha*beta + 30*alpha + 2*beta**3 - 10*beta**2 - 6*beta + 6)/(alpha**9 + 3*alpha**8*beta + 6*alpha**8 + 3*alpha**7*beta**2 + 15*alpha**7*beta + 15*alpha**7 + alpha**6*beta**3 + 12*alpha**6*beta**2 + 30*alpha**6*beta + 20*alpha**6 + 3*alpha**5*beta**3 + 18*alpha**5*beta**2 + 30*alpha**5*beta + 15*alpha**5 + 3*alpha**4*beta**3 + 12*alpha**4*beta**2 + 15*alpha**4*beta + 6*alpha**4 + alpha**3*beta**3 + 3*alpha**3*beta**2 + 3*alpha**3*beta + alpha**3)*(x**5) + (7*alpha**3*beta**2 - 28*alpha**3*beta + 7*alpha**3 + 5*alpha**2*beta**3 + 
 8*alpha**2*beta**2 - 71*alpha**2*beta + 16*alpha**2 + 15*alpha*beta**3 - 9*alpha*beta**2 - 53*alpha*beta + 11*alpha + 6*beta**3 - 6*beta**2 - 10*beta + 2)/(alpha**9 + 3*alpha**8*beta + 6*alpha**8 + 3*alpha**7*beta**2 + 15*alpha**7*beta + 15*alpha**7 + alpha**6*beta**3 + 12*alpha**6*beta**2 + 30*alpha**6*beta + 20*alpha**6 + 3*alpha**5*beta**3 + 18*alpha**5*beta**2 + 30*alpha**5*beta + 15*alpha**5 + 3*alpha**4*beta**3 + 12*alpha**4*beta**2 + 15*alpha**4*beta + 6*alpha**4 + alpha**3*beta**3 + 3*alpha**3*beta**2 + 3*alpha**3*beta + alpha**3)*(x**4) + (14*alpha**3*beta**2 - 14*alpha**3*beta + 10*alpha**2*beta**3 + 28*alpha**2*beta**2 - 32*alpha**2*beta + 18*alpha*beta**3 + 16*alpha*beta**2 - 22*alpha*beta + 6*beta**3 + 2*beta**2 - 4*beta)/(alpha**9 + 3*alpha**8*beta + 6*alpha**8 + 3*alpha**7*beta**2 + 15*alpha**7*beta + 15*alpha**7 + alpha**6*beta**3 + 12*alpha**6*beta**2 + 30*alpha**6*beta + 20*alpha**6 + 3*alpha**5*beta**3 + 18*alpha**5*beta**2 + 30*alpha**5*beta + 15*alpha**5 + 3*alpha**4*beta**3 + 12*alpha**4*beta**2 + 15*alpha**4*beta + 6*alpha**4 + alpha**3*beta**3 + 3*alpha**3*beta**2 + 3*alpha**3*beta + alpha**3)*(x**3) + (7*alpha**2*beta**2 + 5*alpha*beta**3 + 9*alpha*beta**2 + 2*beta**3 + 2*beta**2)/(alpha**8 + 3*alpha**7*beta + 5*alpha**7 + 3*alpha**6*beta**2 + 12*alpha**6*beta + 10*alpha**6 + alpha**5*beta**3 + 9*alpha**5*beta**2 + 18*alpha**5*beta + 10*alpha**5 + 2*alpha**4*beta**3 + 9*alpha**4*beta**2 + 12*alpha**4*beta + 
@@ -192,75 +74,38 @@ def d7_prime(x, alpha, beta):
     return ( 7*1/(alpha**2*beta**4 + 2*alpha**2*beta**3 + alpha**2*beta**2 + 2*alpha*beta**5 + 6*alpha*beta**4 + 6*alpha*beta**3 + 2*alpha*beta**2 + beta**6 + 4*beta**5 + 6*beta**4 + 4*beta**3 + beta**2)*(x**6) + 6*(2*alpha - beta + 4)/(alpha**2*beta**4 + 2*alpha**2*beta**3 + alpha**2*beta**2 + 2*alpha*beta**5 + 6*alpha*beta**4 + 6*alpha*beta**3 + 2*alpha*beta**2 + beta**6 + 4*beta**5 + 6*beta**4 + 4*beta**3 + beta**2)*(x**5) + 5*(alpha**2 - 2*alpha*beta + 6*alpha - 4*beta + 6)/(alpha**2*beta**4 + 2*alpha**2*beta**3 + alpha**2*beta**2 + 2*alpha*beta**5 + 6*alpha*beta**4 + 6*alpha*beta**3 + 2*alpha*beta**2 + beta**6 + 4*beta**5 + 6*beta**4 + 4*beta**3 + beta**2)*(x**4) + 4*(-alpha**2*beta + 2*alpha**2 - 6*alpha*beta + 6*alpha - 6*beta + 4)/(alpha**2*beta**4 + 2*alpha**2*beta**3 + alpha**2*beta**2 + 2*alpha*beta**5 + 6*alpha*beta**4 + 6*alpha*beta**3 + 2*alpha*beta**2 + beta**6 + 4*beta**5 + 6*beta**4 + 4*beta**3 + beta**2)*(x**3) + 3*(-2*alpha**2*beta + alpha**2 - 6*alpha*beta + 2*alpha - 4*beta + 1)/(alpha**2*beta**4 + 2*alpha**2*beta**3 + alpha**2*beta**2 + 2*alpha*beta**5 + 6*alpha*beta**4 + 6*alpha*beta**3 + 2*alpha*beta**2 + beta**6 + 4*beta**5 + 6*beta**4 + 4*beta**3 + beta**2)*(x**2) + 2*(-alpha**2 - 2*alpha - 1)/(alpha**2*beta**3 + 2*alpha**2*beta**2 + alpha**2*beta + 2*alpha*beta**4 + 6*alpha*beta**3 + 6*alpha*beta**2 + 2*alpha*beta + beta**5 + 4*beta**4 + 6*beta**3 + 4*beta**2 + beta)*x + 0 )
 
 
-# I use a class to represent the Hermite Birkhoff interpolant
-# we will have an instance of this class on each step
-class HB:
-    def __init__(   
-        self, 
-        x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-        y_i_minus_2, f_i_minus_2,
-        y_i_minus_1, f_i_minus_1,
-        y_i, f_i,
-        y_i_plus_1, f_i_plus_1 
-    ):
-        h_i = x_i - x_i_minus_1
-        h_i_minus_1 = x_i_minus_1 - x_i_minus_2
-        h_i_plus_1 = x_i_plus_1 - x_i
-        
-        self.alpha = h_i_minus_1 / h_i
-        self.beta = h_i_plus_1 / h_i
+# values = [1, 1/2, 2, 1/4, 4, 1/8, 8, 1/(2**7), 2**7, 1/(2**10), 2**10]
+values = [1, 1/2, 2, 1/4, 4]
+for alpha in values:
+    for beta in values:
+        print(f"TESTING for alpha={alpha}, beta={beta}")
+        print("==============================================================================================")
 
-        # if (self.alpha != 1):
-        #     print("alpha not 1", self.alpha)
+        ds = [d0, d1, d2, d3, d4, d5, d6, d7]
+        d_primes = [d0_prime, d1_prime, d2_prime, d3_prime, d4_prime, d5_prime, d6_prime, d7_prime]
 
-        self.h_i = h_i
-        self.x_i = x_i
+        gamma = - (1 + alpha)
+        # we try to get recompute b_for_d[i] to check if the system for each quintic is satisfied 
+        # the first three evaluations are the evalutions of the quintic itself at -alpha, 0, 1
+        # the next three evaluations are evaluations of its derivatives at -alpha, 0, 1
+        computed_values = []
+        for i in range(8):
+            res = [
+                ds[i](0, alpha, beta),
+                ds[i](beta, alpha, beta),
+                ds[i](-1, alpha, beta),
+                ds[i](gamma, alpha, beta),
+                d_primes[i](0, alpha, beta),
+                d_primes[i](beta, alpha, beta),
+                d_primes[i](-1, alpha, beta),
+                d_primes[i](gamma, alpha, beta),
+            ]
+            computed_values.append(res)
 
-        # we also store x_i_minus_1 and x_i_plus_1 so that we can build the final interpolant
-        self.x_i_plus_1 = x_i_plus_1
-        self.x_i_minus_1 = x_i_minus_1
-        self.x_i_minus_2 = x_i_minus_2
+        for i in range(len(b_for_d)):
+            expected_value = b_for_d[i]
+            computed_value = computed_values[i]
+            compare(computed_value, expected_value, f"for b_for_d[{i}] at alpha={alpha}")
+        print("\n\n\n")
 
-        self.y_i_minus_2 = y_i_minus_2 
-        self.f_i_minus_2 = f_i_minus_2
 
-        self.y_i_minus_1 = y_i_minus_1 
-        self.f_i_minus_1 = f_i_minus_1
-        
-        self.y_i = y_i
-        self.f_i = f_i
-
-        self.y_i_plus_1 = y_i_plus_1
-        self.f_i_plus_1 = f_i_plus_1
-
-    def eval(self, x):
-        pheta = (x - self.x_i) / self.h_i  # x = t_i + pheta*h_i so pheta = (x - t_i) / h_i
-        return (  
-                             d0(pheta, self.alpha, self.beta) * self.y_i_minus_2 
-                + self.h_i * d1(pheta, self.alpha, self.beta) * self.f_i_minus_2
-
-                           + d2(pheta, self.alpha, self.beta) * self.y_i_minus_1 
-                + self.h_i * d3(pheta, self.alpha, self.beta) * self.f_i_minus_1
-                
-                           + d4(pheta, self.alpha, self.beta) * self.y_i         
-                + self.h_i * d5(pheta, self.alpha, self.beta) * self.f_i 
-                
-                           + d6(pheta, self.alpha, self.beta) * self.y_i_plus_1  
-                + self.h_i * d7(pheta, self.alpha, self.beta) * self.f_i_plus_1
-        )
-
-    def prime(self, x):
-        pheta = (x - self.x_i) / self.h_i  # x = t_i + pheta*h_i so pheta = (x - t_i) / h_i
-        return (  
-              d0_prime(pheta, self.alpha, self.beta) * self.y_i_minus_2 / self.h_i 
-            + d1_prime(pheta, self.alpha, self.beta) * self.f_i_minus_2
-
-            + d2_prime(pheta, self.alpha, self.beta) * self.y_i_minus_1 / self.h_i 
-            + d3_prime(pheta, self.alpha, self.beta) * self.f_i_minus_1
-
-            + d4_prime(pheta, self.alpha, self.beta) * self.y_i         / self.h_i 
-            + d5_prime(pheta, self.alpha, self.beta) * self.f_i 
-
-            + d6_prime(pheta, self.alpha, self.beta) * self.y_i_plus_1  / self.h_i 
-            + d7_prime(pheta, self.alpha, self.beta) * self.f_i_plus_1
-        )
