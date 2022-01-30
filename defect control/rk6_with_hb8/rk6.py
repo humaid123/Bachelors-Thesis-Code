@@ -1,5 +1,5 @@
 from math import sqrt
-from HB8 import HB, create_defect_samplings, create_continuous_first_derivatives_from_interpolants, ContinuousSolution, create_continuous_first_derivatives_from_results, create_continuous_sol_from_interpolants, create_continuous_sol_from_results, create_continuous_first_derivatives_from_results, create_continuous_sol_from_interpolants, create_continuous_sol_from_results
+from HB8 import HB, ContinuousSolution, create_defect_samplings, create_continuous_sol_from_results
 
 # http://people.math.sfu.ca/~jverner/RKV65.IIIXb.Efficient.00000144617.081204.RATOnWeb
 A = [
@@ -77,11 +77,11 @@ def rk_fixed_step(fun, t_span, y0, nsteps=100):
         f_start = fun(xn, yn)[0] # we make a final function evalution at the current step
         fn_s.append(f_start)
 
-
+    continous_sol = create_continuous_sol_from_results(res, fn_s)
     return (
         res, 
-        create_continuous_sol_from_results(res, fn_s),
-        create_continuous_first_derivatives_from_results(res, fn_s),
+        continous_sol.eval,
+        continous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
 
@@ -124,10 +124,11 @@ def rk_error_control(fun, t_span, y0, tol):
         else:
             h /= 2
     
+    continous_sol = create_continuous_sol_from_results(res, fn_s)
     return (
         res, 
-        create_continuous_sol_from_results(res, fn_s),
-        create_continuous_first_derivatives_from_results(res, fn_s),
+        continous_sol.eval,
+        continous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
 
@@ -264,10 +265,13 @@ def rk_defect_control(fun, t_span, y0, tol):
     print("number of successful steps=", n_successful_steps)
     print("number of steps=", n_steps)
     print("================================\n")
+
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
     return (
         res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
+        continuous_sol.eval,
+        continuous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
 
@@ -370,13 +374,14 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     print("number of successful steps=", n_successful_steps)
     print("number of steps=", n_steps)
     print("================================\n")
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
     return (
         res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
+        continuous_sol.eval,
+        continuous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
-
 # =================================================================================
 # the following attempt is when the solver is to keep alpha at 1 throughout the integration
 
@@ -503,7 +508,6 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
             if max_defect < (tol / 10):
                 h *= 2
         else:
-            # print("tolerance not satisfied")
             h /= 2
 
     print("tolerance=", tol)
@@ -613,9 +617,11 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
     print("number of successful steps=", n_successful_steps)
     print("number of steps=", n_steps)
     print("================================\n")
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
     return (
         res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
+        continuous_sol.eval,
+        continuous_sol.prime,
         create_defect_samplings(res, fn_s)
     )

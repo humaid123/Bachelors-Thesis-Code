@@ -1,5 +1,4 @@
 
-# from rk6 import rk_defect_control
 from rk8 import rk_defect_control_perfect_first_step
 from math import exp, floor
 import matplotlib.pyplot as plt

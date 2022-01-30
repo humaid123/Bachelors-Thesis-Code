@@ -1,138 +1,4 @@
-# ===============================================================================================================
-# Helper functions
-
-def create_continuous_sol_from_interpolants(interps):
-    def sol(x) -> float:
-        for hb in interps:
-            # if (hb.x_i_minus_1 <= x <= hb.x_i):
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.eval(x)
-        # last_hb = interps[-1]
-        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-        #     return last_hb.eval(x)
-        
-        first_hb = interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_1} <= x <= {interps[-1].x_i_plus_1}")
-        return -1
-
-    return sol
-
-
-def create_continuous_sol_from_results(res, fn_s):
-    interps = []
-    
-    for i in range(len(res) - 2):
-        x_i_minus_1, y_i_minus_1 = res[i]    
-        x_i, y_i                 = res[i + 1]    
-        x_i_plus_1, y_i_plus_1   = res[i + 2]
-
-        f_i_minus_1 = fn_s[i]    
-        f_i         = fn_s[i + 1]    
-        f_i_plus_1  = fn_s[i + 2]
-        
-        interps.append(
-            HB (
-                x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-            )
-        )
-    return create_continuous_sol_from_interpolants(interps)
-
-def create_continuous_first_derivatives_from_interpolants(interps):
-    def sol(x) -> float:
-        for hb in interps:
-            # if (hb.x_i_minus_1 <= x <= hb.x_i):
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.prime(x)
-        # last_hb = interps[-1]
-        # if (last_hb.x_i <= x <= last_hb.x_i_plus_1):
-        #     return last_hb.prime(x)
-
-        first_hb = interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.prime(x)
-        
-        print(f"ERROR: {x} is outside of the solution range: {interps[0].x_i_minus_1} <= x <= {interps[-1].x_i_plus_1}")
-        return -1
-
-    return sol
-
-
-def create_continuous_first_derivatives_from_results(res, fn_s):
-    interps = []
-    
-    for i in range(len(res) - 2):
-        x_i_minus_1, y_i_minus_1 = res[i]    
-        x_i, y_i                 = res[i + 1]    
-        x_i_plus_1, y_i_plus_1   = res[i + 2]
-
-        f_i_minus_1 = fn_s[i]    
-        f_i         = fn_s[i + 1]    
-        f_i_plus_1  = fn_s[i + 2]
-        
-        interps.append(
-            HB (
-                x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-            )
-        )
-    return create_continuous_first_derivatives_from_interpolants(interps)
-
-def create_defect_samplings(res, fn_s):
-    result = []
-    for i in range(len(res) - 2):
-        x_i_minus_1, y_i_minus_1 = res[i]    
-        x_i, y_i                 = res[i + 1]    
-        x_i_plus_1, y_i_plus_1   = res[i + 2]
-
-        f_i_minus_1 = fn_s[i]    
-        f_i         = fn_s[i + 1]    
-        f_i_plus_1  = fn_s[i + 2]
-        
-        interp = HB (
-                x_i_minus_1, x_i, x_i_plus_1,
-                y_i_minus_1, f_i_minus_1,
-                y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
-        )
-        result.append( (x_i_minus_1, x_i, x_i_plus_1, interp) )
-    return result
-        
-class ContinuousSolution:
-    def __init__(self) -> None:
-        self.interps = []
-    
-    def eval(self, x) -> float:
-        for hb in self.interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.eval(x)
-
-        first_hb = self.interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
-
-    def prime(self, x) -> float:
-        for hb in self.interps:
-            if (hb.x_i <= x <= hb.x_i_plus_1):
-                return hb.prime(x)
-
-        first_hb = self.interps[0]
-        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
-            return first_hb.prime(x)
-        
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
-    
-    def append(self, interp) -> None:
-        self.interps.append(interp)
+# this is the final file that is copy and pasted everytime we need HB6
 
 # these formulae were derived using sympy: see get_hb_coefficients.py and test_hb_coefficients.py for the derivations and the tests
 # we create a class for each of these so that the class abstracts a Hermite Birkhoff interpolant
@@ -223,3 +89,80 @@ class HB:
             + d4_prime(pheta, self.alpha) * self.y_i_plus_1  / self.h_i 
             + d5_prime(pheta, self.alpha) * self.f_i_plus_1
         )
+
+def create_defect_samplings(res, fn_s):
+    result = []
+    for i in range(len(res) - 2):
+        x_i_minus_1, y_i_minus_1 = res[i]    
+        x_i, y_i                 = res[i + 1]    
+        x_i_plus_1, y_i_plus_1   = res[i + 2]
+
+        f_i_minus_1 = fn_s[i]    
+        f_i         = fn_s[i + 1]    
+        f_i_plus_1  = fn_s[i + 2]
+        
+        interp = HB (
+                x_i_minus_1, x_i, x_i_plus_1,
+                y_i_minus_1, f_i_minus_1,
+                y_i, f_i,
+                y_i_plus_1, f_i_plus_1 
+        )
+        result.append( (x_i_minus_1, x_i, x_i_plus_1, interp) )
+    return result
+
+def create_continuous_sol_from_results(res, fn_s):
+    interps = []
+    
+    for i in range(len(res) - 2):
+        x_i_minus_1, y_i_minus_1 = res[i]    
+        x_i, y_i                 = res[i + 1]    
+        x_i_plus_1, y_i_plus_1   = res[i + 2]
+
+        f_i_minus_1 = fn_s[i]    
+        f_i         = fn_s[i + 1]    
+        f_i_plus_1  = fn_s[i + 2]
+        
+        interps.append(
+            HB (
+                x_i_minus_1, x_i, x_i_plus_1,
+                y_i_minus_1, f_i_minus_1,
+                y_i, f_i,
+                y_i_plus_1, f_i_plus_1 
+            )
+        )
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
+    return continuous_sol
+
+class ContinuousSolution:
+    def __init__(self) -> None:
+        self.interps = []
+    
+    def eval(self, x) -> float:
+        for hb in self.interps:
+            if (hb.x_i <= x <= hb.x_i_plus_1):
+                return hb.eval(x)
+
+        first_hb = self.interps[0]
+        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
+            return first_hb.eval(x)
+        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1}")
+        return -1
+
+    def prime(self, x) -> float:
+        for hb in self.interps:
+            if (hb.x_i <= x <= hb.x_i_plus_1):
+                return hb.prime(x)
+
+        first_hb = self.interps[0]
+        if (first_hb.x_i_minus_1 <= x <= first_hb.x_i):
+            return first_hb.prime(x)
+        
+        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1}")
+        return -1
+    
+    def append(self, interp) -> None:
+        self.interps.append(interp)
+    
+    def extend(self, newInterps) -> None:
+        self.interps.extend(newInterps)

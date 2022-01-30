@@ -1,7 +1,6 @@
 from math import sqrt
-from HB6 import HB, create_defect_samplings, create_continuous_first_derivatives_from_interpolants, ContinuousSolution, create_continuous_first_derivatives_from_results, create_continuous_sol_from_interpolants, create_continuous_sol_from_results, create_continuous_first_derivatives_from_results, create_continuous_sol_from_interpolants, create_continuous_sol_from_results
+from HB6 import HB, ContinuousSolution, create_defect_samplings
 
-# http://people.math.sfu.ca/~jverner/RKV65.IIIXb.Efficient.00000144617.081204.RATOnWeb
 A = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0], 
     [0.06, 0, 0, 0, 0, 0, 0, 0, 0], 
@@ -46,92 +45,6 @@ def one_step(func, xn, yn, f_start, h):
     yn_plus_1_higher_order = yn + h * sigma_prod(B_HAT, k, 0, n_stages) 
 
     return (k, yn_plus_1, yn_plus_1_higher_order)
-
-
-# =================================================================================================================
-# start of fixed step-size solver
-
-def rk_fixed_step(fun, t_span, y0, nsteps=100):
-    # theory:
-        # we take step by step from the start in t_span[0] to the end in t_span[1]
-        # each step is a rk_step as per one_step(), the size of the step, h, the step-size, is fixed based on the nubmer of steps the user wants to take
-    xn = t_span[0]
-    xend = t_span[1]
-
-    yn = y0
-    f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
-    
-    res = [(xn, yn)]
-    fn_s = [f_start]
-
-    h = (xend - xn) / nsteps
-    while xn < xend:
-        (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
-
-        # error = abs(yn_plus_1_higher_order - yn_plus_1)
-        
-        # accept the step, by moving the x and the y
-        xn = xn + h
-        yn = yn_plus_1_higher_order
-        res.append( (xn, yn) )
-        
-        f_start = fun(xn, yn)[0] # we make a final function evalution at the current step
-        fn_s.append(f_start)
-
-
-    return (
-        res, 
-        create_continuous_sol_from_results(res, fn_s),
-        create_continuous_first_derivatives_from_results(res, fn_s),
-        create_defect_samplings(res, fn_s)
-    )
-
-# ===============================================================================================================================
-# start of error control solver
-
-def rk_error_control(fun, t_span, y0, tol):
-    # theory:
-        # we take step by step from the start in t_span[0] to the end in t_span[1]
-        # each step is a rk_step as per one_step(), the size of the step, h depends on how the step taken satisfied the tolerance
-        # for now: 
-        #       if the error on the step is less than the tolerance, we accept, else we reject and half the step size to retake the step
-        #       if the error satisfied tol/10 as well, we double the step size for the next step
-    xn, xend = t_span
-
-    yn = y0
-    f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
-    
-    res = [(xn, yn)]
-    fn_s = [f_start]
-
-    h = sqrt(tol)
-    while xn < xend:
-        (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
-
-        error = abs(yn_plus_1_higher_order - yn_plus_1)
-
-        if error < tol:
-            # accept the step, by moving the x and the y
-            xn = xn + h
-            yn = yn_plus_1
-            res.append( (xn, yn) )
-
-            # so for now, I do an additional function evaluation
-            f_start = fun(xn, yn)[0]
-            fn_s.append(f_start)
-
-            if error < (tol / 10):
-                h *= 2
-        else:
-            h /= 2
-    
-    return (
-        res, 
-        create_continuous_sol_from_results(res, fn_s),
-        create_continuous_first_derivatives_from_results(res, fn_s),
-        create_defect_samplings(res, fn_s)
-    )
-
 
 # =============================================================================================================================
 # start of defect control solver
@@ -257,10 +170,14 @@ def rk_defect_control(fun, t_span, y0, tol):
     print("number of successful steps=", n_successful_steps)
     print("number of steps=", n_steps)
     print("================================\n")
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
     return (
         res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
+        # create_continuous_sol_from_interpolants(interps),
+        # create_continuous_first_derivatives_from_interpolants(interps),
+        continuous_sol.eval,
+        continuous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
 
@@ -354,12 +271,17 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     print("number of successful steps=", n_successful_steps)
     print("number of steps=", n_steps)
     print("================================\n")
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
     return (
         res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
+        # create_continuous_sol_from_interpolants(interps),
+        # create_continuous_first_derivatives_from_interpolants(interps),
+        continuous_sol.eval,
+        continuous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
+
 
 # =================================================================================
 # the following attempt is when the solver is to keep alpha at 1 throughout the integration
@@ -575,9 +497,13 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
     print("number of successful steps=", n_successful_steps)
     print("number of steps=", n_steps)
     print("================================\n")
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
     return (
         res, 
-        create_continuous_sol_from_interpolants(interps),
-        create_continuous_first_derivatives_from_interpolants(interps),
+        # create_continuous_sol_from_interpolants(interps),
+        # create_continuous_first_derivatives_from_interpolants(interps),
+        continuous_sol.eval,
+        continuous_sol.prime,
         create_defect_samplings(res, fn_s)
     )
