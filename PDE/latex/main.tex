@@ -11,24 +11,24 @@
 
 \begin{document}
 
-\section{Discontinuity in the PDE case}
+\section{Covid-19 PDE models with Discontinuities}
 \subsection{Introduction}
 \label{subsection:pde_intro}
-In this chapter, we present an investigation of solutions to discontinuous partial differential equations (PDE) problems. Using a one dimensional (1D) PDE problem typically encountered in epidemiological studies, we investigate the impacts on the accuracy and efficiency of an error-controlled solver of introducing time-dependent and space-dependent discontinuities to the system.
+In this chapter, we present an investigation of the numerical solution of Covid-19 discontinuous partial differential equations (PDE) models. Using a one dimensional (1D) PDE problem typically encountered in epidemiological studies, we investigate the impacts on the accuracy and efficiency of the solution computed by an error-controlled solver when time-dependent and space-dependent discontinuities are introduced into the model.
 
-As stated in the previous chapters, it is vital that numerical errors associated with the solvers are negligible compared to the modeling errors associated with the mathematical and theoretical definition of the problem. This is so that researchers have accurate data to perform conclusive studies. 
+As stated in the previous chapters, it is vital that numerical errors associated with the solutions computed by the solvers are negligible compared to the modeling errors associated with the mathematical and theoretical definition of the problem.
 
-However, more than was the case in ODE problems, researchers often use rudimentary solvers and are unaware of the drastic loss in efficiency and accuracy that ensues 8888 Reference to Cholera paper 8888. As it would be very surprising that such a solver would produce accurate results for the problems outlined in this paper, we spend Section $\ref{subsection:pde_software}$ on introducing BACOLIKR and explaining its importance for the accurate solving of PDE problems. To our knowledge, it is also the only PDE solver capable of event detection, which as shown in the previous chapter, becomes vital for accurate solutions to state-dependent discontinuity problems.
+However, even more so than was the case for the Covid-19 ODE models, researchers often use rudimentary solvers and are unaware of the significant loss in efficiency and accuracy that ensue 8888 Reference to Cholera paper 8888. As it would be very surprising that such an approach would produce accurate results for the problems considered in this paper, in Section $\ref{subsection:pde_software}$ we introduce BACOLIKR and explain its importance for the accurate solving of PDE problems. To our knowledge, it is also the only error-control PDE solver capable of event detection, which as shown in the previous chapter, becomes vital for the computation of accurate solutions to state-dependent discontinuity problems.
 
-In Section $\ref{subsection:pde_thrashing}$, we introduce thrashing for the PDE case and outline the impacts on the efficiency of error-controlled solvers of discontinuities, in Section $\ref{subsection:pde_software}$, we provide a description of BACOLIKR and in Section $\ref{subsection:pde_problem_def}$, we give a description of the epidemiological model used in this paper.
+In Section $\ref{subsection:pde_thrashing}$, we discuss thrashing in the presence of discontinuities for the PDE case and outline the impacts on the efficiency of error-controlled solvers, in Section $\ref{subsection:pde_software}$, we provide a description of BACOLIKR and in Section $\ref{subsection:pde_problem_def}$, we give a description of the epidemiological model used in this paper.
 
 We provide a treatment of the time-dependent discontinuity problem with and without discontinuity handling in Section $\ref{subsection:pde_time_intro}$ and a treatment of the state-dependent discontinuity problem with and without event detection in Section $\ref{subsection:pde_state_intro}$.
 
 \subsubsection{Thrashing in PDE models}
 \label{subsection:pde_thrashing}
-As was the case with ODE solvers, PDE solvers are also based on mathematical theories that guarantee convergence (a good solution) only when the solution and some of its higher derivatives are continuous. No rigorous mathematical theory guarantees that a PDE solver can solve discontinuous problems but through experiments, it has been shown that $\emph{error-control}$ solvers can integrate through discontinuities. They do so at the cost of efficiency by repeatedly reducing the step-size until the error of the step satisfies the user-provided tolerance. This repeated reduction in the step-size implies making several function evaluations in a process that is called `thrashing'.
+As was the case with ODE solvers, PDE solvers are also based on mathematical theories that assumes that the solution and some of its higher derivatives are continuous. However, for the case of discontinuous problems, it has been observed that $\emph{error-control}$ solvers can integrate through discontinuities. They do so at the cost of efficiency by repeatedly reducing the step-size until the error of the step that takes the solver past the discontinuity satisfies the user-provided tolerance. This repeated reduction in the step-size implies making a large number of function evaluations (i.e., evaluations of the right hand side of the PDE system) in a process that is called `thrashing'. This phenomenon was discussed for the ODE cased in Section 8888 Reference to ODE discontinuity 8888.
 
-Thus, when a PDE solver integrates through a discontinuity, it repeatedly reduces the step-size at that discontinuity until the step-size is small enough to integrate through it. This is observed as a spike in the number of function evaluations at a discontinuity. Figure $\ref{fig:thrashing_pde}$ shows such a phenomenon. A problem with a discontinuity placed at t=30 is solved and we plot the cumulative number of function evaluations at each step. (We can see the spike at t=30.)
+Thus, when a PDE solver integrates through a discontinuity, it repeatedly reduces the step-size at that discontinuity until the step-size is small enough to integrate through it. This is observed as a spike in the number of function evaluations in the time interval near the discontinuity. Figure $\ref{fig:thrashing_pde}$ shows such a phenomenon. A problem with a discontinuity placed at $t=30$ is solved and we plot the cumulative number of function evaluations at each step. (We can see the spike at $t=30$.)
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_thrashing}
@@ -37,68 +37,68 @@ Thus, when a PDE solver integrates through a discontinuity, it repeatedly reduce
 \end{figure}
 
 In this chapter, we will show that a PDE solver with error-control, like BACOLIKR, can integrate through one time-dependent discontinuity but that discontinuity handling leads to a more efficient solution.
-(See Section $\ref{subsection:pde_time_intro}$). We will also show that state-dependent discontinuity problems cannot be solved without event detection and that even event detection leaves the user with an accuracy-efficiency trade-off (See Section $\ref{subsection:pde_state_intro}$).
+(See Section $\ref{subsection:pde_time_intro}$). We will also show that state-dependent discontinuity problems cannot be solved without event detection (See Section $\ref{subsection:pde_state_intro}$).
 
-\subsubsection{BACOLIKR, error-control event detection PDE solver}
+\subsubsection{BACOLIKR, an error-control event detection PDE solver}
 \label{subsection:pde_software}
-BACOLIKR is a member of the BACOL family of PDE solvers 8888 need reference 8888. Its underlying principle is the same as BACOL in that it solves PDE problems with a spline collocation method using the B-spline bases. 
+BACOLIKR is a member of the BACOL family of PDE solvers 8888 need reference 8888. Its underlying principle is the same as BACOL in that it solves PDE problems with a spline collocation method using a B-spline basis; the collocation method is based on a spatial mesh of points that partitions the spatial domain. 
 
-The collocation process is applied on the spatial dimension to approximate the PDE system with a time-dependent larger ODE system. Using this ODE system and the provided boundary conditions, BACOLIKR produces a time-dependent system of Differential-Algebraic Equations (DAE) which it solves with the DAE solver, DASKR (a modification of DASSL with root-finding) 888 need a reference 888. DASKR provides adaptive time-stepping and adaptive method order selection (by choosing an appropriate BDF method). BACOLIKR also provides control over the spatial error through adaptive refinement of the spatial mesh. It uses interpolation schemes to create either a lower or a higher order method than the solution that it will return. The other interpolant is used to get an error estimate which is controlled by increasing or decreasing the number of mesh points.
+The collocation process is applied on the spatial domain to approximate the PDE system with a larger time-dependent ODE system. This ODE system and the provided boundary conditions, yields a time-dependent system of Differential-Algebraic Equations (DAE) which BACOLIKR solves with the DAE solver, DASKR (a modification of DASSL with root-finding) 8888 need a reference 8888. DASKR provides adaptive time-stepping and adaptive method order selection (by choosing an appropriate BDF method). BACOLIKR also provides control over the spatial error through adaptive refinement of the spatial mesh. It uses interpolation schemes to obtain low-cost error estimates for the numerical solution that it will return. Based no the error estimate, the spatial error can be controlled by increasing or decreasing the number of spatial mesh points.
 
-Being an error-control solver, BACOLIKR tries to satisfy a user-provided tolerance in the most efficient way possible and by using a root-finding DAE solver like DASKR, BACOLIKR can also perform event-detection and thus can be used for cold starts around discontinuities. We emphasize these two qualities of BACOLIKR as they guarantee a level of accuracy and efficiency that other PDE solvers, especially rudimentary ones, very rarely grant.
+BACOLIKR tries to satisfy a user-provided tolerance in the most efficient way possible using an adaptive spatial mesh and adaptive time-stepping and method order selection. By using the root-finding DAE solver DASKR, BACOLIKR can also perform event-detection and thus can be used to determine discontinuities. We emphasize these two important qualities of BACOLIKR as they guarantee a level of accuracy and efficiency that other PDE solvers, especially rudimentary ones, very rarely grant.
 
 \subsubsection{Problem Definition}
 \label{subsection:pde_problem_def}
-In this paper, the PDE model we will try to solve is an extension of the SEIR model for epidemiological PDE studies that uses a spatial variable, x, and a time variable, t. Similar PDE models have been used before 8888 reference to PDE Cholera papers 8888 and either uses the spread in geographical location or the spread across age groups as the additional spatial variable.
+In this paper, the PDE model we will try to solve is an extension of the SEIR model for epidemiological PDE studies that uses a spatial variable, $x$, and a time variable, $t$. Similar PDE models have been used before 8888 reference to PDE Cholera papers 8888. Here we will represent the spread in geographical location as the spatial variable.
 
-A PDE problem is fully described using a system of partial differential equations of the form:
+In this thesis, a PDE problem is described using a system of PDEs of the form:
 \begin{equation}
-u_t(x, t) = f(x, t, u(x,t), u_x(x,t), u_{xx}(x,t))
+u_t(x, t) = f(x, t, u(x,t), u_x(x,t), u_{xx}(x,t)),
 \end{equation} 
-over a spatial domain ${a \leq x \leq b}$ and an initial time ${t_0}$. 
+over a spatial domain ${a \leq x \leq b}$ and a temporal domain [${t_0}$, $t_{final}$]. 
 
 It requires a set of initial conditions of the form:
 \begin{equation}
-u(x, t) = u_0(x)
+u(x, t) = u_0(x),
 \end{equation}
-for x in the spatial domain, ${a \leq x \leq b}$.
+for $x$ in the spatial domain, ${a \leq x \leq b}$.
 
 It also requires boundary conditions of the form:
 \begin{equation}
-b_L(t, u(a,t), u_x(a,t)) = 0, b_R(t, u(b,t), u_x(b,t)) = 0 
+b_L(t, u(a,t), u_x(a,t)) = 0, \quad b_R(t, u(b,t), u_x(b,t)) = 0,
 \end{equation} 
-for every time, $t \geq t_0$ .
+for every time, $t \geq t_0$.
 
 To that effect, we define an SEIR model based on the one developed by Andrew Fraser 88888 Reference 88888 as follows:
 
 The system of PDEs is:
 \begin{equation}
-S(x, t)_t = D_S(x)S(x, t)_{xx} + \mu N - \mu S(x, t) - \frac{\beta}{N}S(x, t)I(x, t)
+S(x, t)_t = D_S(x)S(x, t)_{xx} + \mu N - \mu S(x, t) - \frac{\beta}{N}S(x, t)I(x, t),
 \end{equation}
 \begin{equation}
-E(x, t)_t = D_E(x)E(x, t)_{xx} + \frac{\beta}{N}S(x, t)I(x, t) - \alpha E(x, t) - \mu E(x, t)
-\end{equation}
-
-\begin{equation}
-I(x, t)_t = D_I(x)I(x, t)_{xx} + \alpha E(x, t) - \gamma I(x, t) - \mu I(x, t)
+E(x, t)_t = D_E(x)E(x, t)_{xx} + \frac{\beta}{N}S(x, t)I(x, t) - \alpha E(x, t) - \mu E(x, t),
 \end{equation}
 
 \begin{equation}
-R(x, t)_t = D_R(x)R(x, t)_{xx} + \gamma I(x, t) - \mu R(x, t)
+I(x, t)_t = D_I(x)I(x, t)_{xx} + \alpha E(x, t) - \gamma I(x, t) - \mu I(x, t),
+\end{equation}
+
+\begin{equation}
+R(x, t)_t = D_R(x)R(x, t)_{xx} + \gamma I(x, t) - \mu R(x, t),
 \end{equation} 
 
-The spatial domain is $-5 \leq x \leq 5$ and the temporal domain is $0 \leq t \leq 70$ for the time-dependent discontinuity problem but we will use $0 \leq t \leq 200$ for the space-dependent discontinuity problem as we attempt a long-term forecast.
+The spatial domain is $-5 \leq x \leq 5$ and the temporal domain is $0 \leq t \leq 70$ for the time-dependent discontinuity problem and $0 \leq t \leq 200$ for the space-dependent discontinuity problem.
 
-The parameters for the SEIR are as such: $\mu$, the birth rate, is set to $\frac{0.01}{365}$. $\gamma$, the recovery rate is 0.06, $\alpha$, the incubation rate is 0.125 and we will vary the transmission rate, $\beta$, between 0.035 and 0.9 based on whether measures, such as social distancing and others, are implemented or not in the model. The population size, N, is $37*10^{6}$.
+The parameters for the SEIR are as follows: $\mu$, the birth rate, is set to $\frac{0.01}{365}$. $\gamma$, the recovery rate is 0.06, $\alpha$, the incubation rate is 0.125, and we will vary the transmission rate, $\beta$, between 0.035 and 0.9 based on whether measures, such as social distancing, etc., are implemented in the model. The population size, N, is $3.7$ $x$ $10^{7}$.
 
-The model also uses diffusion functions $D_S(x)$, $D_E(x)$, $D_I(x)$ and $D_R(x)$ to start the infection at a specific point (x=0) in the spatial domain and spread it over the spatial domain over time. These are as follows:
+The model also uses diffusion functions $D_S(x)$, $D_E(x)$, $D_I(x)$ and $D_R(x)$ to model the spread of the virus over the spatial domain as time increases. These are as follows:
 \begin{equation}
-D_S(x) = D_E(x) = D_R(x) = (maxD_s - minD_s)e^{-10(\sqrt{x^{2}} - 1)^2)} + minD_s
+D_S(x) = D_E(x) = D_R(x) = (maxD_s - minD_s)e^{-10(\sqrt{x^{2}} - 1)^2)} + minD_s,
 \end{equation} 
 \begin{equation}
-D_I(x) = D_E(x)/10
+D_I(x) = D_E(x)/10.
 \end{equation}
-The diffusivity parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01 respectively. 
+The diffusivity parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01 respectively. See Figure $\ref{fig:pde_D_s}$ for a plot of $D_s(x)$. This represents the case, for example, when the population density is quite high, where there are clusters of unvaccinated people in certain region and the disease can diffuse through the population in those region more quickly. These regions are clusters centered at $x= \pm 1$.
 
 \begin{figure}[H]
 \centering
@@ -107,16 +107,17 @@ The diffusivity parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01 respectively.
 \label{fig:pde_D_s}
 \end{figure}
 
-The set of initial conditions are defined over the spatial domain as such:
+The set of initial conditions are defined over the spatial domain as follows:
 \begin{equation}
-S(x, 0) = N - I(x, 0)
+S(x, 0) = N - I(x, 0),
 \end{equation}
 \begin{equation}
-I(x, 0) = 100e^{-x^2}
+I(x, 0) = 100e^{-x^2},
 \end{equation}
 \begin{equation}
-E(x, 0) = R(x, 0) = 0
+E(x, 0) = R(x, 0) = 0.
 \end{equation}
+These initial conditions represent the case where there us a relatively small group of infected people at $x=0$. (See Figure $\ref{fig:pde_I_0}$)
 
 \begin{figure}[H]
 \centering
@@ -125,26 +126,28 @@ E(x, 0) = R(x, 0) = 0
 \label{fig:pde_I_0}
 \end{figure}
 
+============================================================
 We will use the default boundary conditions 888888888888888888 I did not understand what BACOLIKR is doing for the initial conditions here 888888888888888888
+============================================================
 
 The above gives us a complete PDE problem definition. To this problem we will add discontinuities as follows: 
-In the time-dependent discontinuity problem (Section $\ref{subsection:pde_time_intro}$), we will integrate the model with $\beta$ at a value of 0.9 from t=0 to t=30, we will then change the value of $\beta$ to 0.035 and integrate until t=70. This change in the parameter introduces a discontinuity. This simulates a scenario where 30 days into a pandemic, measures are introduced to slow its pathogen's spread.
+In the time-dependent discontinuity case (Section $\ref{subsection:pde_time_intro}$), we will integrate the model with $\beta$ at a value of 0.9 from $t=0$ to $t=30$, we will then change the value of $\beta$ to 0.035 and integrate until $t=70$. This change in the parameter introduces a discontinuity. This simulates a scenario where 30 days into a pandemic, measures are introduced to slow the spread of the pathogen.
 
-In the state-dependent discontinuity problem (Section $\ref{subsection:pde_state_intro}$), we start the integration with the value of $\beta$ at 0.9 until the integral value of the E-component of the solution over the spatial domain at the specific time-step is 30000. When that integral value reaches 30000, we change the value of $\beta$ to 0.035 until the integral value of the E-component over the spatial domain reaches 10000. We then switch around the models and integrate with a value $\beta$ of 0.9. We repeat this process until t=200. This process simulates a series of introducing and relaxing measures, such as social distancing, based on the total number of exposed individuals across the whole region.
+In the state-dependent discontinuity problem (Section $\ref{subsection:pde_state_intro}$), we start the integration with the value of $\beta$ at 0.9 until the spatial integral of $E(x, t)$ is 30000. When that integral value reaches 30000, we change the value of $\beta$ to 0.035 and keep it at this value until the integral value of $E(x, t)$ over the spatial domain reaches 10000. We then switch around the models and continue with a value $\beta$ of 0.9. We repeat this process until $t=200$. This process simulates a series of introducing and relaxing measures, such as social distancing, based on the total number of exposed individuals across the whole region.
 
-\subsection{Time Dependent Discontinuity}
+\subsection{Time Dependent Discontinuity Model}
 \label{subsection:pde_time_intro}
-In this section, we investigate the thrashing experienced by BACOLIKR on the SEIR model with a time-dependent discontinuity. The time-dependent discontinuity is introduced by changing the value of the SEIR modeling parameter, $\beta$ from 0.9 to 0.035 at t=30.
+In this section, we investigate the numerical solution computed by BACOLIKR of the Covid-19 PDE model with a time-dependent discontinuity. The time-dependent discontinuity is introduced by changing the value of the SEIR modeling parameter, $\beta$ from 0.9 to 0.035 at $t=30$.
 
-We note that this section demonstrates that the PDE time-dependent discontinuity is similar to the ODE time-dependent discontinuity problem. We will show that accurate (eye-level accuracy) solutions can be found without the use of discontinuity handling but that the use of a cold start drastically improves the efficiency.
+We note that this section demonstrates that the PDE time-dependent discontinuity is similar to the ODE time-dependent discontinuity problem. We will show that reasonably accurate solutions can be computed without the use of discontinuity handling but that the use of discontinuity handling through the use of a cold start dramatically improves the efficiency.
 
-For the following sections, we will plot the E-component of the solution at x=0 to show both that the problem has an exponentially growing component and its rapid change to exponential decay as the parameter $\beta$ changes.
+For the following sections, we will plot $E(x, t)$ at $x=0$ to show both that the problem initially has an exponentially growing component and the rapid change of the component to exponential decay as the parameter $\beta$ is reduced.
 
 \subsubsection{Naive treatment of the time-dependent discontinuity PDE model}
 \label{subsubsection:pde_time_naive}
-The naive treatment for time-dependent discontinuities is to use if-statements in the right-hand side function itself using its time argument, t.
+The naive treatment for time-dependent discontinuities is to use if-statements in the right-hand side function itself based on the value of the time argument, $t$, and to use the default tolerance.
 
-For our model, we use the time argument, t, to say that the integration starts with a value of $\beta$ at 0.9 and that from t=30 onwards, the value for $\beta$ is 0.035. The pseudo-code for this approach is as follows:
+For our model, we start with a value of $\beta$ at 0.9 and from $t=30$ onwards, the value for $\beta$ is reduced to 0.035. The pseudo-code for this approach is as follows:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -159,24 +162,24 @@ function model_with_if(t, x, u, ux, uxx)
 \end{lstlisting}
 \end{minipage}
 
-This change in the $\beta$ parameter introduces a discontinuity in the model, which leads to thrashing as discussed in Section $\ref{subsection:pde_thrashing}$. However as we have shown in Section 8888 Refer to naive ODE time problem 8888 for the ODE case, error-control PDE solvers can also reduce the step-size extensively to integrate through one discontinuity. (See Figure $\ref{fig:pde_time_disc_naive}$.)
+This change in the $\beta$ parameter introduces a discontinuity in the model, which leads to thrashing as discussed in Section $\ref{subsection:pde_thrashing}$. However as we have shown in Section 8888 Refer to naive ODE time problem 8888 for the ODE case, error-control PDE solvers can also reduce the step-size to integrate through one discontinuity with reasonable accuracy. (See Figure $\ref{fig:pde_time_disc_naive}$.)
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_time_disc_naive}
-\caption{Naive treatment of time discontinuity (at tolerance of $10^{-6}$)}
+\caption{Naive treatment of time discontinuity (with a tolerance of $10^{-6}$)}
 \label{fig:pde_time_disc_naive}
 \end{figure}
 
-From Figure $\ref{fig:pde_time_disc_naive}$, we can see that to eye-level accuracy, the resulting solution is aligned with the answer. Though the solution without discontinuity handling is accurate, in the next section, we will show how a cold start can give the same level of accuracy while using fewer function evaluations.
+From Figure $\ref{fig:pde_time_disc_naive}$, we can see that the computed solution is in good argument with a high accuracy solution. Though the solution without discontinuity handling is accurate, in the next section, we will show how a cold start can give the same level of accuracy while using fewer function evaluations.
 
-\subsubsection{Discontinuity handling to solve the time-dependent PDE model}
+\subsubsection{Discontinuity handling for the time-dependent discontinuity PDE model}
 \label{subsubsection:pde_time_disc_hand}
 In this section, we discuss the use of discontinuity handling through cold starts in the PDE case. Though the error-controlled solver, BACOLIKR, was able to get accurate solutions without discontinuity handling, we will show that cold starts allow it to be more efficient.
 
-A solver is said to perform a cold start when it restarts the integration by using the last previously obtained solution values as the initial value for the next step. The solver must clear all its data structures, start with a new spatial mesh, start with a new initial step-size and start with the default order. This way the solver does not allow any results from previous steps to interfere with the next step. Modern PDE solvers like BACOLIKR have flags that a user can set along the integration to perform cold starts. We will use such a flag to set up a cold start and report on the efficiency of our solutions.
+A solver is said to perform a cold start when it restarts by clearing all its data structures, reducing the time step-size to the small initial step-size, and reducing its time stepping method to the first initial order. This way the solver does not allow any results from previous steps to influence the next step. Modern PDE solvers like BACOLIKR have flags that a user can set to perform cold starts. We will use such a flag to set a cold start and report on the efficiency of our solutions.
 
-The idea to perform time-dependent discontinuity handling is to integrate up to the discontinuity, cold start at the discontinuity, and integrate past the discontinuity with the new model. In our case, we integrate the problem with one call from t=0 to t=30 with the model function using 0.9 for the value of the $\beta$ parameter. We then set up a cold start and integrate from t=30 to the end of the time interval with another call to the solver using a model function with $\beta$ at a value of 0.035. The pseudo-code for this approach is as follows
+The idea for performing time-dependent discontinuity handling is to use BACOLIKR to solve up to the discontinuity, cold start at the discontinuity, and then solve the model to $t_{final}$. In our case, we solve the problem with one call from $t=0$ to $t=30$ using 0.9 for the value of the $\beta$ parameter. We then set up a cold start and integrate from $t=30$ to the end of the time interval with another call to the solver using $\beta$ at a value of 0.035. The pseudo-code for this approach is as follows
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -204,20 +207,21 @@ pde_solver(solution, model_after, tspan_after)
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_time_disc_disc_hand}
-\caption{Discontinuity handling for time discontinuity problem (at tolerance of $10^{-6}$)}
+\caption{Discontinuity handling for time discontinuity problem (with a tolerance of $10^{-6}$)}
 \label{fig:pde_time_disc_disc_hand}
 \end{figure}
 
-As expected, Figure $\ref{fig:pde_time_disc_disc_hand}$ shows that BACOLIKR with the cold start was able to provide a solution with the same eye-level accuracy as it did without the cold start.
+As expected, Figure $\ref{fig:pde_time_disc_disc_hand}$ shows that BACOLIKR with the cold start was able to provide a solution with the same amount of accuracy as it did without the cold start.
 
-We now note that the use of a cold start required the solver to make 359, 755 function evaluations whereas the solver without this cold start, it required 417, 505 function evaluations. We were thus able to make 50000 fewer function evaluations which amount to around a $14\%$ gain in efficiency.
+We now note however that the use of a cold start required the solver to make 359755 function evaluations whereas the solver without this cold start, it required 417505 function evaluations. We were thus able to make around 50000 fewer function evaluations when discontinuity handling is employed which amounts to around a $14\%$ gain in efficiency.
 
 \subsubsection{PDE Time-dependent discontinuity problem tolerance study}
 \label{subsubsection:pde_time_tol}
 
-As is the case with ODE research, a researcher might want to coarsen the tolerance of the solver if they need to run the solver in a loop or through an optimization algorithm (See Appendix 8888 point to Althaus Ebola paper 8888). So we now perform a tolerance study on this time-dependent discontinuity problem to see whether the discontinuity handling allows us to use coarser tolerances as it did in the ODE case. We will also solve the problem at sharper tolerances to show how the use of discontinuity handling drastically improves the efficiency.
+As was the case with the Covid-19 ODE model, a researcher might want to coarsen the tolerance of the solver if they need to run the solver in a loop or through an optimization algorithm (See Appendix 8888 point to Althaus Ebola paper 8888) in order to improve the speed of the computation. We therefore now perform a tolerance study on this time-dependent discontinuity problem to see whether the discontinuity handling allows us to use coarser tolerances as it did in the ODE case. We will also solve the problem at sharper tolerances to show how the use of discontinuity handling significantly improves the efficiency.
 
-Figures $\ref{fig:pde_time_disc_bacolikr_naive_tol}$ shows the accuracy of the solutions without discontinuity handling at the different tolerances while Figure $\ref{fig:pde_time_disc_bacolikr_disc_hand_tol}$ shows the solutions with discontinuity handling at the different tolerances.
+Figures $\ref{fig:pde_time_disc_bacolikr_naive_tol}$ shows the accuracy of the solutions without discontinuity handling at the different tolerances while Figure $\ref{fig:pde_time_disc_bacolikr_disc_hand_tol}$ shows the solutions with discontinuity handling at the different tolerances. We plot $E(x, t)$ at x=0 in both cases. 
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_time_disc_bacolikr_naive_tol}
@@ -232,7 +236,7 @@ Figures $\ref{fig:pde_time_disc_bacolikr_naive_tol}$ shows the accuracy of the s
 \label{fig:pde_time_disc_bacolikr_disc_hand_tol}
 \end{figure}
 
-We note that both in the case with discontinuity handling and in the case without it, the solutions at $10^{-1}$ are inaccurate. We note that surprisingly, the solution at $10^[-3]$ is more accurate without discontinuity handling than with. We explain this fact by noting that the step-size at $10^{-3}$ was much smaller than required in the case without discontinuity handling than in the case with. Thus though the solution is more accurate, the solver without discontinuity handling is being inefficient as it could satisfy this tolerance with a much smaller step-size. This can be seen in Table $\ref{tab:pde_time_nfev}$ where we can see that it is doing around 2500 more function evaluations than required. As for all the tolerances sharper than $10^{-3}$, the solutions are all eye-level accurate.
+We note that both in the case with discontinuity handling and in the case without it, the solutions computed using a tolerance of $10^{-1}$ are inaccurate. We note that surprisingly, the discontinuity handling solution at a tolerance of $10^{-3}$ is more accurate without discontinuity handling than with. We explain this fact by noting that the step-size at a tolerance of $10^{-3}$ was much smaller than required in the case without discontinuity handling than in the case with discontinuity handling. Thus though the solution is more accurate, the solver without discontinuity handling is inefficient as it could satisfy this tolerance with a much larger step-size. This can be seen in Table $\ref{tab:pde_time_nfev}$ where we can see that the solver without discontinuity handling is doing around 2500 more function evaluations than required. For all tolerances sharper than $10^{-3}$, the solutions are all reasonably accurate.
 
 \begin{table}[h]
 \caption {PDE time discontinuity tolerance study} 
@@ -240,42 +244,42 @@ We note that both in the case with discontinuity handling and in the case withou
 \begin{center}
 \begin{tabular}{ c c c } 
 tolerance & BACOLIKR naive nfev & BACOLIKR disc hand nfev \\ 
-1e-1      &     40, 800         &     55, 400 \\
-1e-3      &     79, 220         &     76, 750 \\
-1e-5      &    206, 980         &    208, 870 \\
-1e-7      &    733, 210         &    543, 850 \\
-1e-9      & 1, 904, 080         & 1, 653, 830 \\
-1e-11     & 7, 140, 875         & 4, 979, 555 \\
+1e-1      &   40800         &   55400 \\
+1e-3      &   79220         &   76750 \\
+1e-5      &  206980         &  208870 \\
+1e-7      &  733210         &  543850 \\
+1e-9      & 1904080         & 1653830 \\
+1e-11     & 7140875         & 4979555 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-Table $\ref{tab:pde_time_nfev}$ shows how more efficient the use of discontinuity handling is. We note that the lower count of the number of function evaluations for the case without discontinuity handling at a tolerance of $10^{-1}$ can be ignored as the solutions at this tolerance are very inaccurate. We then note that for any sharper tolerance, the use of discontinuity handling is a gain in efficiency and that at very sharp tolerance such as $10^{-11}$, the solver does around 2 million fewer function evaluations with a cold start than without (around a $30\%$ gain in efficiency). 
+Table $\ref{tab:pde_time_nfev}$ shows the improvement in efficiency when discontinuity handling is employed. We note that the lower number of function evaluations for the case without discontinuity handling at a tolerance of $10^{-1}$ can be ignored as the solutions at this tolerance are very inaccurate. We then note that for any of the sharper tolerances, the use of discontinuity handling leads to a gain in efficiency and that at very sharp tolerance such as $10^{-11}$, the solver does around 2 million fewer function evaluations with a cold start than without (around a $30\%$ gain in efficiency). 
 
-\subsection{State Dependent Discontinuity}
+\subsection{State Dependent Discontinuity Model}
 \label{subsection:pde_state_intro}
-In this section, we discuss a state-dependent discontinuity problem. Again, we note that state-dependent discontinuity problems are not as trivial as time-dependent discontinuity problems and that in those problems, we do not have a trivial programmatic way to do a cold start. We will also attempt a long-term forecast in this section as we will run the solver to t=200 to see for how long the solver can provide accurate solutions.
+In this section, we discuss the state-dependent discontinuity problem. Again, we note that state-dependent discontinuity problems are not as trivial as time-dependent discontinuity problems and that for these problems, we do not have a practical way to introduce a cold start since we do not know where the discontinuities will arise. We will also attempt a long-term forecast in this section as we will run the solver to $t=200$ to see for how long the solver can provide accurate solutions.
 
-In state-dependent discontinuity problems, we use the value of one or several components of the solution to dictate how the model should behave. We compare the solution component(s) against pre-determined thresholds and if these thresholds are crossed, we change the model equation. However, unlike, in the ODE case, in the PDE case, we have another dimension, the spatial dimension, to account for. Some of the ways to do so are listed below:
+In state-dependent discontinuity problems, we use the value of one or several components of the solution to dictate how the model should behave. We compare one the solution component against a pre-determined threshold and if this threshold is crossed, we change the model. However, unlike, in the ODE case, in the PDE case, we have another dimension, the spatial dimension, to consider. Some of the ways to do so are listed below:
 \begin{itemize}
-\item Pick a spatial value, say x = 0, and sample the state value at this spatial point at every time interval. If the state value meets a certain threshold, we apply a different model, else we use the same model
+\item Pick a spatial value, say $x=0$, and sample the state value at this spatial point at every time interval. If the state value meets a certain threshold, we apply a different model, otherwise we continue with the same model
 
-\item Find some statistic measure (min, max, mean, median) across the spatial domain and use that value for the comparison with the threshold.
+\item Compute some statistical measure (e.g., min, max, average) across the spatial domain and use that value for the comparison with the threshold.
 
 \item Integrate over the spatial domain and use that integral value for the comparison against the threshold. Essentially this does a `sum' across the spatial domain of the chosen solution component.
 \end{itemize}
 
-In this report, we will use the third method in that we will integrate over the spatial domain. If the value of the integral crosses a maximum threshold (30000) while measures are not implemented, the value of the parameter $\beta$ is changed from 0.9 to 0.035 and if measures are implemented and we cross a certain minimum threshold (10000), the value of the parameter $\beta$ is changed back to 0.9. This essentially mimicks a government that looks at the total number of cases over all geographical locations or age groups (based on what the spatial dimension represents) to inform about the decision to make on introducing/relaxing measures.
+In this report, we will use the third method. If the value of the integral of the solution component reaches a maximum threshold (30000), the value of the parameter $\beta$ is changed from 0.9 to 0.035 and when we cross a certain minimum threshold (10000), the value of the parameter $\beta$ is changed back to 0.9. This models the situation where a government looks at the total number of cases over all geographical locations to inform a decision regarding introducing/relaxing measures.
 
-Again, we note that a discontinuity is introduced by the change in the parameter $\beta$, as the right-hand side function is essentially changed to another one, and thus a discontinuity is introduced no matter which of the method presented above, a researcher might use to account for the spatial dimension.
+Again, we note that a discontinuity is introduced by the change in the parameter $\beta$, and thus a discontinuity is introduced no matter which of the methods, presented above, that a researcher might use to account for the spatial dimension.
 
-For the following sections, we will plot the integral value of the E-component over the spatial dimension per time. An accurate solution would thus look like a graph oscillating cleanly between 10000 and 30000 as the models are changed.
+For the following sections, we will plot the integral value of $E(x, t)$ over the spatial dimension. An accurate solution will thus have an integral oscillating cleanly between 10000 and 30000 as the model is changed.
 
 \subsubsection{Naive treatment of the state-dependent discontinuity model}
 \label{subsubsection:pde_state_naive}
-The naive treatment of this problem involves using global variables which are toggled based on the integral value over the spatial domain to denote which model to use. The global variable picks between which value of $\beta$ to use in the model function.
+The naive treatment of this problem involves using global variables which are toggled based on the integral value over the spatial domain to denote which model to use. The global variable selects which value of $\beta$ to use in the model function.
 
-In our case, we can use a global boolean variable to say whether measures are implemented or not. When measures are implemented, the value of $\beta$ is 0.035 while when measures are not implemented the value of $\beta$ is 0.9. This global variable is toggled to true when it was previously false and the integral value over the spatial domain is 30, 000. The global variable is also toggled to false when it was previously true and the number of exposed individuals is now 10, 000 across the spatial domain. 
+We use a global boolean variable to indicate whether measures are implemented or not. When measures are implemented, the value of $\beta$ is 0.035; when measures are not implemented the value of $\beta$ is 0.9. This global variable is toggled to true when it was previously false and the integral of $E(x, t)$ over the spatial domain is 30000. The global variable is also toggled to false when it was previously true and the integral of the number of exposed individuals is now 10000 across the spatial domain. 
 
 In the naive implementation, the user will have to pick the time steps at which the solver should stop and run an integration over the spatial domain to get a value to compare against the thresholds. This form of manual time-stepping introduces another parameter, the `number of time intervals', that the user will have to fine-tune to obtain accurate results. We will show, in this and the next section why this parameter is very hard to get right despite how crucial it is to get accurate results. If the variable is too small, we will toggle the global variable too late as we will check the integral value after it had already crossed the threshold and if the variable is too big, we will check the integral value too often which will reduce the efficiency. 
 
@@ -329,7 +333,7 @@ Figure $\ref{fig:pde_state_disc_naive_400vs1000}$ shows integral value with 400 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_naive_400vs1000}
-\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem at a tolerance of $10^{-6}$ using 400 vs 1000 time intervals}
+\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 400 vs 1000 time intervals}
 \label{fig:pde_state_disc_naive_400vs1000}
 \end{figure}
 
@@ -342,7 +346,7 @@ One idea to solve this problem would be to use an exceedingly large number of ti
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_naive_1000vs10000}
-\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem at a tolerance of $10^{-6}$ using 1000 vs 10000 time intervals}
+\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 1000 vs 10000 time intervals}
 \label{fig:pde_state_disc_naive_1000vs10000}
 \end{figure}
 
@@ -358,7 +362,7 @@ As is the case with ODE solvers, event detection is also present in some PDE sol
 
 BACOLIKR is an improvement to the BACOLI solver of the BACOL family of 1D PDE solvers 8888 Give reference 8888 which has root-finding capabilities. Instead of using DASSL as its DAE solver, it uses DASKR which can detect roots as it solves a DAE system. 
 
-To solve the state-dependent discontinuity function, we define two pairs of root and model functions. One pair is to be used when integrating when there are no measures in place. The model function will have the parameter $\beta$ at a value of 0.9 and the root function will do the integration of the E-component of the solution over the spatial domain at the current time step and will return if the integral value is close to the maximum threshold (30, 000). The second pair will have a model function with $\beta$ at a value of 0.035 and the root function looking for a root at (10, 000). The solver starts with the first pair as measures are not implemented. It will return when the 30, 000 maximum threshold is met. At this point, the cold start flag is set and the solver is made to integrate with the second pair of model-root functions. The solver will now return when the integral value of the E-component crosses 10, 000. When that happens, we perform a cold start and run the solver with the first model-root function pair. We repeat this process until the solver reaches t=200. The pseudo-code for this approach is as follows:
+To solve the state-dependent discontinuity function, we define two pairs of root and model functions. One pair is to be used when integrating when there are no measures in place. The model function will have the parameter $\beta$ at a value of 0.9 and the root function will do the integration of the E-component of the solution over the spatial domain at the current time step and will return if the integral value is close to the maximum threshold (30, 000). The second pair will have a model function with $\beta$ at a value of 0.035 and the root function looking for a root at (10, 000). The solver starts with the first pair as measures are not implemented. It will return when the 30, 000 maximum threshold is met. At this point, the cold start flag is set and the solver is made to integrate with the second pair of model-root functions. The solver will now return when the integral value of the E-component crosses 10, 000. When that happens, we perform a cold start and run the solver with the first model-root function pair. We repeat this process until the solver reaches $t=200$. The pseudo-code for this approach is as follows:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
