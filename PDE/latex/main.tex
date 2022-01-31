@@ -239,11 +239,11 @@ Figures $\ref{fig:pde_time_disc_bacolikr_naive_tol}$ shows the accuracy of the s
 We note that both in the case with discontinuity handling and in the case without it, the solutions computed using a tolerance of $10^{-1}$ are inaccurate. We note that surprisingly, the discontinuity handling solution at a tolerance of $10^{-3}$ is more accurate without discontinuity handling than with. We explain this fact by noting that the step-size at a tolerance of $10^{-3}$ was much smaller than required in the case without discontinuity handling than in the case with discontinuity handling. Thus though the solution is more accurate, the solver without discontinuity handling is inefficient as it could satisfy this tolerance with a much larger step-size. This can be seen in Table $\ref{tab:pde_time_nfev}$ where we can see that the solver without discontinuity handling is doing around 2500 more function evaluations than required. For all tolerances sharper than $10^{-3}$, the solutions are all reasonably accurate.
 
 \begin{table}[h]
-\caption {PDE time discontinuity tolerance study} 
+\caption {PDE time discontinuity tolerance study - number of function evaluations} 
 \label{tab:pde_time_nfev}
 \begin{center}
 \begin{tabular}{ c c c } 
-tolerance & BACOLIKR naive nfev & BACOLIKR disc hand nfev \\ 
+tolerance & BACOLIKR naive  & BACOLIKR disc hand \\ 
 1e-1      &   40800         &   55400 \\
 1e-3      &   79220         &   76750 \\
 1e-5      &  206980         &  208870 \\
@@ -281,9 +281,9 @@ The naive treatment of this problem involves using global variables which are to
 
 We use a global boolean variable to indicate whether measures are implemented or not. When measures are implemented, the value of $\beta$ is 0.035; when measures are not implemented the value of $\beta$ is 0.9. This global variable is toggled to true when it was previously false and the integral of $E(x, t)$ over the spatial domain is 30000. The global variable is also toggled to false when it was previously true and the integral of the number of exposed individuals is now 10000 across the spatial domain. 
 
-In the naive implementation, the user will have to pick the time steps at which the solver should stop and run an integration over the spatial domain to get a value to compare against the thresholds. This form of manual time-stepping introduces another parameter, the `number of time intervals', that the user will have to fine-tune to obtain accurate results. We will show, in this and the next section why this parameter is very hard to get right despite how crucial it is to get accurate results. If the variable is too small, we will toggle the global variable too late as we will check the integral value after it had already crossed the threshold and if the variable is too big, we will check the integral value too often which will reduce the efficiency. 
+In the naive implementation, the user will have to pick the time steps at which the solver should stop and run an integration over the spatial domain to get a value to compare against the thresholds. This form of manual time-stepping introduces another parameter, the `number of time intervals', that the user will have to fine-tune to obtain accurate results. We will show, in this and the next section why this parameter is very hard to get right despite how crucial it is for the goal of obtaining accurate results. If the number of time intervals is too small, we will toggle the global variable too late as we will check the integral value after it had already crossed the threshold and if the number of time intervals is too large, we will check the integral value too often which will reduce the efficiency. 
 
-The naive approach in our case will be to divide the time domain into $num\_time\_intervals$ equal intervals. At the end of each interval, the solver will make use of an interpolant over the spatial domain to integrate the E-component of the solution using a compound trapezoidal rule. This integral value will be compared against the threshold and thus if measures are not implemented and the integral is greater than 30, 000, the maximum threshold, the global variable indicating that measures are implemented will be switched to true to set the parameter $\beta$ to 0.035. When there are no measures implemented and the integral value less than 10, 000, the minimum threshold, the global variable is switched to false indicating that $\beta$ is now at 0.9 as measures are relaxed. The pseudo-code for this approach is as shown:
+The naive approach in our case will be to divide the time domain into $num\_time\_intervals$ equal intervals. The solver will solve the model from the beginning of each time interval to the end of that time interval. At the end of each interval, the solver will estimate the integral of $E(x, t)$ using a compound trapezoidal rule. This integral value will be compared against the threshold and if measures are not implemented and the integral is greater than 30000, the maximum threshold, the global variable indicating that measures are implemented will be switched to true and the parameter $\beta$ will be set to 0.035. When there are no measures implemented and the integral value less than 10000, the minimum threshold, the global variable is switched to false indicating that $\beta$ is now at 0.9, corresponding to measures being relaxed. The pseudo-code for this approach is as shown:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -322,47 +322,37 @@ t_next = t_next + time_step_size
 \end{lstlisting}
 \end{minipage} 
 
-===========================================================
-Now that we are using BACOLIKR, we can look to do a cold start even in the naive implementation
-basically, every time we switch the global variable, we can also set the cold start flag...
-Tell me if you want me to add this. I think this might add around 3-5 more pages... 
-===========================================================
-
-Figure $\ref{fig:pde_state_disc_naive_400vs1000}$ shows integral value with 400 time intervals and 1000 intervals over the time period alongside a highly accurate solution obtained via event detection at sharp tolerance. We can see how both solutions are wrong as none are aligned with the `answer'. In the next section, we will show why the naive implementation cannot arrive at an accurate solution, and in the section after that, we will show how event detection provides a more intuitive way to solve such a problem.
+Figure $\ref{fig:pde_state_disc_naive_400vs1000}$ shows the integral value of $E(x, t)$ over the spatial domain with 400 time intervals and 1000 intervals over the time period together with a high accuracy solution obtained via event detection using a sharp tolerance. We can see that both solutions are not in agreement with the high accuracy solution. In the next section, we will show why the naive implementation cannot obtain an accurate solution, and in the section after that, we will show how event detection provides a better way to solve such a problem.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_naive_400vs1000}
-\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 400 vs 1000 time intervals}
+\caption{Integral value of $E(x, t)$ from a naive treatment of the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 400 and 1000 time intervals, compared with a high accuracy solution}
 \label{fig:pde_state_disc_naive_400vs1000}
 \end{figure}
 
 \subsubsection{Why the naive method cannot give an accurate solution}
 \label{subsubsection:pde_state_naive_always_inaccurate}
-The naive method cannot solve the problem accurately because of the problem of choosing the correct number of time intervals. The integration routine and the check against the thresholds can only be performed at the end of a time interval. Thus we can only detect that the thresholds are crossed only after it has been crossed not exactly at the point of crossing. This means that we may take up to one additional time step with the previous $\beta$ value and not the correct one.
+The naive method cannot solve the problem accurately because of the problem of choosing the correct number of time intervals. The check in which we compare the integral of $E(x, t)$ against the thresholds can only be performed at the end of a time interval. Thus we can only detect that the thresholds are crossed only after it has been crossed rather than exactly at the point where a threshold is crossed. This means that we may take up to one additional time step with the previous $\beta$ value rather than the correct one.
 
-One idea to solve this problem would be to use an exceedingly large number of time intervals (10000 in our case) so that we take the smallest step possible with the old value. Figure $\ref{fig:pde_state_disc_naive_1000vs10000}$ shows how doing so produces a solution more in line with the high accuracy event-detection solution. However, even this plot does not approach the accurate solution, especially at later times. 
+One idea to solve this problem would be to use an exceedingly large number of time intervals (e.g. 10000) so that we only take a very small step with the old $\beta$ value. Figure $\ref{fig:pde_state_disc_naive_1000vs10000}$ shows how doing so produces a solution more in line with the high accuracy, event-detection solution. However, even this plot does not approach the accurate solution, especially at later times. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_naive_1000vs10000}
-\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 1000 vs 10000 time intervals}
+\caption{Integral value of $E(x, t)$ from a naive treatment of the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 1000 and 10000 time intervals, compared with a high accuracy solution}
 \label{fig:pde_state_disc_naive_1000vs10000}
 \end{figure}
 
-We could now use an even larger number of time intervals but this process of finding the optimal number of intervals is not intuitive. Using a high number of intervals will lead to a loss in efficiency as we will have to run the integration routine too often. Manually fine-tuning the number of time intervals variable is thus not the optimal way of solving this problem. 
+We could now use an even larger number of time intervals but using a high number of time intervals will lead to a loss in efficiency. A much better option is to use event detection. In the next section, we will show how event detection provides an intuitive, efficient and accurate way of solving such problems. It will allow us to correctly cold start when needed and thus have BACOLIKR integrate only on continuous sub-problems of the state-dependent discontinuity problem. It will also find the time at which the value of the integral of $E(x, t)$ crosses a threshold and it will run the integration routine the minimum number of times needed to obtain an accurate solution, improving the efficiency of the solver as well.
 
-Our only option is to use event detection. In the next section, we will show how event detection provides an intuitive, efficient and accurate way of solving such problems. It will allow us to correctly cold start when needed and thus have BACOLIKR integrate only on continuous sub-problems of the state-dependent discontinuity problem. It will also find the exact time at which the integral crosses a threshold and it will run the integration routine the minimum number of times needed to obtain an accurate solution, improving the efficiency of the solver as well.
-
-\subsubsection{Event Detection solution to the naive state-dependent discontinuity model}
+\subsubsection{Event Detection solution to the state-dependent discontinuity model}
 \label{subsubsection:pde_state_event_detection}
-In the previous section, we have explained the problem with using manual time-stepping to obtain an accurate solution. In this section, we will present event detection in the PDE case, explain how it leads to more accurate results, explain how it makes the minimum number of calls to the integration routine required to obtain an accurate solution, and will also discuss solutions to the problems that arose when event detection was used.
+In the previous section, we have explained the issue with using manual time-stepping to obtain an accurate solution. In this section, we will present event detection for the PDE case, explain how it leads to more accurate results and explain how it makes the minimum number of calls to the time-stepping routine required to obtain an accurate solution.
 
-As is the case with ODE solvers, event detection is also present in some PDE solvers. Event detection also works in the same way as it does in the ODE case. To use event detection, the user provides a root function to the PDE solver. The root function uses the spatial mesh and the solution over the previously completed time step to return a floating-point number. A root is detected when that floating-point number is 0. After each time step, the solver calls the root function with the solution at the current time step alongside the current spatial mesh and some other information and stores its return value. If the return value returned by the root function changes sign between two consecutive steps, a root is present in between the steps. The PDE solver will then employ a root-finding routine within the time-step to find where the root function is zero. The solver then returns, setting flags indicating that it has found a root and provides the values and other information about the solution at the root.
+As is the case with ODE solvers, event detection is also present in some PDE solvers. Event detection also works in the same way as it does in the ODE case. To use event detection, the user provides a root function to the PDE solver. The root function uses the solution available over the previously completed time step to evaluate an event function. A root is detected when the return value of the event function is 0. After each time step, the solver calls the root function giving it the solution on the current time step together with the current spatial mesh and saves its return value. If the return value from the root function changes sign between two consecutive steps, a root is present in between the steps. The solver will then employ a root-finding algorithm within the time-step to find where the root function is zero. The solver then returns, setting flags indicating that it has found a root and provides the solution at the root. 
 
-BACOLIKR is an improvement to the BACOLI solver of the BACOL family of 1D PDE solvers 8888 Give reference 8888 which has root-finding capabilities. Instead of using DASSL as its DAE solver, it uses DASKR which can detect roots as it solves a DAE system. 
-
-To solve the state-dependent discontinuity function, we define two pairs of root and model functions. One pair is to be used when integrating when there are no measures in place. The model function will have the parameter $\beta$ at a value of 0.9 and the root function will do the integration of the E-component of the solution over the spatial domain at the current time step and will return if the integral value is close to the maximum threshold (30, 000). The second pair will have a model function with $\beta$ at a value of 0.035 and the root function looking for a root at (10, 000). The solver starts with the first pair as measures are not implemented. It will return when the 30, 000 maximum threshold is met. At this point, the cold start flag is set and the solver is made to integrate with the second pair of model-root functions. The solver will now return when the integral value of the E-component crosses 10, 000. When that happens, we perform a cold start and run the solver with the first model-root function pair. We repeat this process until the solver reaches $t=200$. The pseudo-code for this approach is as follows:
+To solve the state-dependent discontinuity function, we define two pairs of root and model functions. One pair is to be used when integrating when there are no measures in place. The model function will have the parameter $\beta$ set at a value of 0.9 and the root function performs the integration of the $E(x, t)$ over the spatial domain at the current time step and will return the difference between the integral value and the maximum threshold (30000). The second pair will have a model function with $\beta$ set to a value of 0.035 and the root function will return the difference between the integral of $E(x, t)$ and the lower threshold value of 10000. The solver starts with the first pair as measures are not implemented. It will return when the 30000 maximum threshold is met. At this point, the cold start flag is set and the solver is called to continue with the second pair of model-root functions. The solver will now return when the integral of the $E(x, t)$ crosses 10000. When that happens, we perform a cold start and run the solver with the first model-root function pair. We repeat this process until the solver reaches $t=200$. The pseudo-code for this approach is as follows:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -406,7 +396,7 @@ while t_current < tstop:
 \end{lstlisting}
 \end{minipage}
 
-Figure $\ref{fig:pde_state_disc_event_tol_6}$ shows the solution at a tolerance of $10^{-6}$ of using event detection on the state-dependent discontinuity problem. We can see that the solution correctly oscillates between 10, 000 and 30, 000 and that for the first few oscillations, it lines up with the highly accurate solution. We then see that though it oscillates correctly, at later times, it is not aligned with the highly accurate solution especially at the roots. 
+Figure $\ref{fig:pde_state_disc_event_tol_6}$ shows the solution we obtain using a tolerance of $10^{-6}$ and using event detection to solve the state-dependent discontinuity problem. We can see that the solution correctly oscillates between 10000 and 30000 and that for the first few oscillations, it lines up with the highly accurate solution. We then see that though it oscillates correctly, at later times, it is not aligned with the highly accurate solution especially at the roots. 
 
 \begin{figure}[H]
 \centering
@@ -415,9 +405,9 @@ Figure $\ref{fig:pde_state_disc_event_tol_6}$ shows the solution at a tolerance 
 \label{fig:pde_state_disc_event_tol_6}
 \end{figure}
 
-We explain this misalignment by noting that the root-detection algorithm employed inside BACOLIKR detects a root based on the tolerance. It returns that it has detected a root when the return value is equal to 0 up to a certain number of digits determined by the tolerance. Thus if we increase the tolerance and run the same experiment, the solutions at higher tolerances will tend to align themselves more with the accurate solution.
+We explain this misalignment by noting that the root-detection algorithm employed inside BACOLIKR detects a root based on the tolerance. It returns that it has detected a root when the returned value is equal to 0 within the tolerance. Thus if we increase the tolerance and run the same experiment, the solutions at higher tolerances will tend to align themselves more with the accurate solution.
 
-Figure $\ref{fig:pde_state_disc_event_tol_9}$ shows the result of solving this problem at a tolerance of $10^{-9}$. At this higher tolerance, the root is detected at a value closer to 0 than at a tolerance of $10^{-6}$. Thus the solver approaches the `real' roots and the solutions are more aligned with the accurate solution, especially at the later times, compared to the solution at a tolerance of $10^{-6}$
+Figure $\ref{fig:pde_state_disc_event_tol_9}$ shows the result of solving this problem at a tolerance of $10^{-9}$. At this higher tolerance, the root is detected when the root function returns with a value equal to 0 within a tolerance of $10^{-9}$. Thus the solver approaches the `real' roots and the solutions are more aligned with the accurate solution, especially at the later times, compared to the solution at a tolerance of $10^{-6}$.
 
 
 \begin{figure}[H]
@@ -427,109 +417,98 @@ Figure $\ref{fig:pde_state_disc_event_tol_9}$ shows the result of solving this p
 \label{fig:pde_state_disc_event_tol_9}
 \end{figure}
 
-We now note that both solutions even the one at $10^{-6}$ were much more accurate than the naive solutions that were using manual fine-tuning of the time intervals. Table $\ref{tab:pde_state_nfev}$ shows the number of function evaluations. 
+We now note that both solutions with event detection, even the one computed using a tolerance of $10^{-6}$ were much more accurate than the naive solutions that computed were using manual fine-tuning of the time intervals. Table $\ref{tab:pde_state_nfev}$ shows the number of function evaluations. 
 
 \begin{table}[h]
-\caption {PDE state discontinuity model} 
+\caption {PDE state discontinuity model - number of function evaluations} 
 \label{tab:pde_state_nfev}
 \begin{center}
 \begin{tabular}{ c c } 
 method & nfev \\ 
-naive implementation with 400 steps   & 1, 184, 880 \\
-naive implementation with 1000 steps  & 1, 280, 080 \\
-naive implementation with 10000 steps & 1, 272, 030 \\
-event detection at $10^{-6}$ tol.     & 1, 937, 730 \\
-event detection at $10^{-9}$ tol.     & 7, 915, 085 \\
+naive implementation with 400 steps   & 1184880 \\
+naive implementation with 1000 steps  & 1280080 \\
+naive implementation with 10000 steps & 1272030 \\
+event detection at $10^{-6}$ tol.     & 1937730 \\
+event detection at $10^{-9}$ tol.     & 7915085 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-Table $\ref{tab:pde_state_nfev}$ shows that event detection required more function evaluations than the solutions without event detection. However these non-event detection solution were too inaccurate and thus should not be trusted. We also note that the naive implementation have very similar numbers of function evaluations at the different time intervals because it does not do a cold start. It just runs its interpolant to perform the integration.
+Table $\ref{tab:pde_state_nfev}$ shows that event detection required more function evaluations than the solutions without event detection. However these non-event detection solution were too inaccurate and thus should not be trusted. 
 
-=======================
-One idea would be to do a cold start in the naive implementation as well when we see that a threshold was crossed. I think this will make the solver make more function evaluations...
-=======================
-
-We also discuss the fact that that the number of function evaluations is not the only measure of efficiency in this case as we also need to consider the number of times the integration routine is called. We note that for the naive implementation, if we are using 'n' time intervals, then the integration routine is called around n times. As for the event detection approach, the number of times the integration routine is called is the number of times the root function is called. With a tolerance of $10^{-6}$, the integration routine is called 2, 149 times and with a tolerance of $10^{-9}$, the integration routine is called 5, 059 times. We now note that the integration routine is thus called less than 10, 000 times in both cases and that the naive implementation did not get accurate enough even with 10, 000 calls to the integration routine. Thus event detection is the only way to get efficient accurate solutions.
+We also discuss the fact that that the number of function evaluations is not the only measure of efficiency in this case as we also need to consider the number of times the integration routine is called. We note that for the naive implementation, if we are using 'n' time intervals, then the integration routine is called around n times. For the event detection approach, the number of times the integration routine is called is the number of times the root function is called. With a tolerance of $10^{-6}$, the integration routine is called 2149 times and with a tolerance of $10^{-9}$, the integration routine is called 5059 times. We now note that the integration routine is thus called less than 10000 times in both cases and that the naive implementation did not get accurate enough even with 10000 calls to the integration routine. Thus event detection is the only way to get efficient and accurate solutions.
 
 We now note that even with event detection, we are faced with the problem of finding a good trade-off between efficiency and accuracy. Improving the accuracy comes at the price of efficiency. In the next section, we will perform a tolerance study to analyze this trade-off.
 
-======================
-Another idea is to make the root-finding algorithm find an exact zero all the time. That is, it returns a root only when it returns a zero to around 12 decimal places.
-======================
-
 \subsubsection{State problem tolerance study}
 \label{subsubsection:pde_state_tol_study}
-In this section, we perform a tolerance study on the different solutions to the state-dependent discontinuity problem. We use the naive implementation with a number of time intervals of 1000 and 10000 to see if using sharper tolerances allows us to get more accurate results in either case. We also perform a tolerance study on the event detection solution to show the efficiency and accuracy trade-off. We note that BACOLIKR even with event detection was facing the problem of not finding the exact location of the roots. The root-finding algorithm looked for a zero up to some number of digits determined by the tolerance and thus at different tolerances, each root is detected at a slight offset. The offsets from consecutive roots compound into making the solution somewhat inaccurate at later times. 
+In this section, we perform a tolerance study on the different solutions to the state-dependent discontinuity problem. We use the naive implementation with a number of time intervals of 1000 and 10000 to see if using sharper tolerances allows us to get more accurate results in either case. We also perform a tolerance study on the event detection solution to show the efficiency and accuracy trade-off.
 
-\paragraph{BACOLIKR without event}
+\paragraph{BACOLIKR without event detection}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_bacolikr_naive_1000}
-\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem at several tolerances using 1000 time intervals}
+\caption{Integral value plot of naive treatment of the state-dependent discontinuity problem at several tolerances using 1000 time intervals}
 \label{fig:pde_state_disc_tol_bacolikr_naive_1000}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_bacolikr_naive_10000}
-\caption{Integral value plot of naive treatment to the state-dependent discontinuity problem at several tolerances using 10000 time intervals}
+\caption{Integral value plot of naive treatment of the state-dependent discontinuity problem at several tolerances using 10000 time intervals}
 \label{fig:pde_state_disc_tol_bacolikr_naive_10000}
 \end{figure}
 
-Figures $\ref{fig:pde_state_disc_tol_bacolikr_naive_1000}$ and $\ref{fig:pde_state_disc_tol_bacolikr_naive_10000}$ show that the solutions at different tolerances with the naive implementation at 1000 and 10000 time intervals. We can see that increasing the number of time intervals does increase the accuracy of the solvers as with 10000 steps, the solutions oscillate more cleanly between 10000 and 30000. We note that in both cases, very coarse tolerances like $10^{-1}$ and $10^{-3}$ provide very erroneous solutions. Surprisingly, at really sharp tolerances like $10^{-9}$ and $10^{-11}$, the solutions are aligned with each other and with the answer up to the second root. However, even really sharp tolerances fail to remain accurate for long-term forecasts. See Table $\ref{tab:pde_state_tol_study}$ and Table $\ref{tab:pde_state_tol_num_integrations}$ for an idea of the efficiency comparison between using the naive implementation against using event detection. 
+Figures $\ref{fig:pde_state_disc_tol_bacolikr_naive_1000}$ and $\ref{fig:pde_state_disc_tol_bacolikr_naive_10000}$ show that the solutions at different tolerances with the naive implementation at 1000 and 10000 time intervals. We can see that increasing the number of time intervals does increase the accuracy of the solvers as with 10000 steps, the solutions oscillate more cleanly between 10000 and 30000. We note that in both cases, very coarse tolerances like $10^{-1}$ and $10^{-3}$ provide very erroneous solutions. Surprisingly, at really sharp tolerances like $10^{-9}$ and $10^{-11}$, the solutions are aligned with each other and with the answer up to the second root. However, even very sharp tolerances fail to remain accurate for long-term forecasts. See Table $\ref{tab:pde_state_tol_study}$ and Table $\ref{tab:pde_state_tol_num_integrations}$ for an idea of the efficiency comparison between using the naive implementation and the implementation that uses event detection. 
 
-We note that having misaligned solutions at the different tolerances show that the step-size is still being resized even at sharp tolerances. The solver is also erroneously saying that the tolerance has been satisfied despite the fact that none of the solutions are correct. This indicates that the solvers are not being able to step through the discontinuities as the step-size is not small enough still. Event detection seems to be the only way to accurately step through state-dependent discontinuities.
+We note that having misaligned solutions at different tolerances shows that the step-size is still being resized even at sharp tolerances. The solver is also erroneously reporting that the tolerance has been satisfied despite the fact that none of the solutions are even reasonably accurate. This indicates that the solvers are not able to step through the discontinuities since the step-size is still not small enough. The use of event detection is a better way to accurately step through state-dependent discontinuities.
 
 \paragraph{BACOLIKR with event detection}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_event}
-\caption{Integral value plot of the event detection solution to state-dependent discontinuity problem at several tolerances}
+\caption{Integral value plot of event detection solutions to state-dependent discontinuity problem at several tolerances}
 \label{fig:pde_state_disc_tol_event}
 \end{figure}
 
-With event detection, the solutions oscillate correctly between 10, 000 and 30, 000 for all tolerances except for $10^{-1}$. The other solutions are only slightly misaligned but this can be explained with the tolerance of root-finding. Depending on the tolerance, the root is detected at a different location by the root-finding algorithm and thus different tolerances detect the roots at slightly different offsets. These offsets compound such that the solutions are aligned for the first few roots but for longer-term forecasts, a sharp tolerance is required. Despite this, to eye-level accuracy, event detection can provide accurate solutions at a tolerance of only $10^[-7]$, something which the naive implementation could not do even with 10, 000 time intervals at a tolerance of $10^[-11]$.
-
-===============
-We can potentially make the root-finding / DASKR look for a root at a static tolerance, say 1e-12 and see what happens. This will help us confirm the above hypothesis/this can potentially be placed in 'future' works...
-===============
+With event detection, the solutions oscillate correctly between 10000 and 30000 for all tolerances except for $10^{-1}$. The other solutions are only slightly misaligned but this can be explained because of the tolerance used in the root-finding function. Depending on the tolerance, the root is detected at a different location by the root-finding algorithm and thus different tolerances detect the roots at slightly different times. These errors compound; the solutions are aligned for the first few roots but for accurate longer-term forecasts, a sharp tolerance is required. Despite this, event detection can provide accurate solutions at a tolerance of only $10^{-7}$, something which the naive implementation could not do even with 10000 time intervals at a tolerance of $10^{-11}$.
 
 \paragraph{Efficiency of the solvers}
 \begin{table}[h]
-\caption {State-dependent discontinuity number of function evaluations} 
+\caption {State-dependent discontinuity tolerance study - number of function evaluations} 
 \label{tab:pde_state_tol_study}
 \begin{center}
 \begin{tabular}{ c c c c } 
 tolerance & naive 1000 intervals & naive 10000 intervals & with event \\ 
-1e-1      &             101, 250 &              112, 600 &     137, 300 \\
-1e-3      &             290, 600 &              343, 410 &     376, 855 \\
-1e-5      &             848, 080 &              862, 960 &  1, 052, 920 \\
-1e-7      &          2, 217, 610 &           2, 215, 690 &  3, 217, 450\\
-1e-9      &          6, 040, 485 &           5, 811, 165 &  7, 915, 085  \\
-1e-11     &         16, 402, 140 &          18, 508, 725 & 21, 256, 400 \\
+1e-1      &             101250   &              112600   &   137300 \\
+1e-3      &             290600   &              343410   &   376855 \\
+1e-5      &             848080   &              862960   &  1052920 \\
+1e-7      &            2217610     &           2215690   &  3217450\\
+1e-9      &            6040485     &           5811165   &  7915085  \\
+1e-11     &           16402140     &          18508725   & 21256400 \\
 \end{tabular}
 \end{center}
 \end{table}
 
 \begin{table}[h]
-\caption {Number of times the integration routine is called} 
+\caption {Number of times the integration routine is called using event detection for the state-dependent problem} 
 \label{tab:pde_state_tol_num_integrations}
 \begin{center}
 \begin{tabular}{ c c } 
-tolerance & number of calls to integration routine \\ 
+tolerance & number of calls to integration routine with event detection \\ 
 1e-1      &    420 \\
 1e-3      &    940 \\
-1e-5      & 1, 634 \\
-1e-7      & 3, 405 \\
-1e-9      & 5, 059 \\
-1e-11     & 9, 753 \\
+1e-5      & 1634 \\
+1e-7      & 3405 \\
+1e-9      & 5059 \\
+1e-11     & 9753 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-Table $\ref{tab:pde_state_tol_study}$ shows that we are forced to sacrifice efficiency for accuracy in this problem. We note that all naive solutions highly depend on the time stepping and thus should not be trusted for accurate solutions. Though they use fewer function evaluations than the event detection solutions of the same tolerance, we also note that for the case of 10, 000 time intervals and if we were to use even more time intervals, the integration routine is called less with event detection than with the naive implementation. Either way, the poor accuracy of the naive implementation of the solution to the state-dependent discontinuity problem should not be understated. Event detection is the only accurate way of solving such problems. 
+Table $\ref{tab:pde_state_tol_study}$ shows that we are forced to sacrifice efficiency for accuracy in this problem. We note that all naive solutions depend highly on the time stepping and thus should not be trusted for accurate solutions. Though they use fewer function evaluations than the event detection solutions of the same tolerance, the solutions they yield are note reasonably accurate. 
 
-For the solutions using event detection, the accuracy problem is at the roots where the models are to be changed. Depending on the tolerance, the root is detected at a different location as the root-finding algorithm returns the location of the root based on the tolerance. Thus different tolerances will lead to changing the models at slightly different positions. During the exponential increase phase, we can miss the location of the root by far enough that the solutions are not aligned.
+We also note that Table $\ref{tab:pde_state_tol_num_integrations}$ shows that for the case of the naive implementation with 10000 time intervals, the integration routine is called less with event detection at all the tolerances as this naive implementation and all other implementations with more time intervals will call the integration routine more (once at the end of each interval). Either way, the poor accuracy of the naive implementation of the solution to the state-dependent discontinuity problem should not be understated. Event detection is the better way of solving such problems with reasonable accuracy. 
 
 \end{document}
