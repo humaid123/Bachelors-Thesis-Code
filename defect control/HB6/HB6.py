@@ -38,15 +38,15 @@ class HB:
         x_i_minus_1, x_i, x_i_plus_1,
         y_i_minus_1, f_i_minus_1,
         y_i, f_i,
-        y_i_plus_1, f_i_plus_1 
+        y_i_plus_1, f_i_plus_1,
+        monitor 
     ):
         h_i = x_i_plus_1 - x_i
         h_i_minus_1 = x_i - x_i_minus_1
         
         self.alpha = h_i_minus_1 / h_i
 
-        # if (self.alpha != 1):
-        #     print("alpha not 1", self.alpha)
+        monitor.different_values_alpha.add(self.alpha)
 
         self.h_i = h_i
         self.x_i = x_i
@@ -90,7 +90,7 @@ class HB:
             + d5_prime(pheta, self.alpha) * self.f_i_plus_1
         )
 
-def create_defect_samplings(res, fn_s):
+def create_defect_samplings(res, fn_s, monitor):
     result = []
     for i in range(len(res) - 2):
         x_i_minus_1, y_i_minus_1 = res[i]    
@@ -105,12 +105,13 @@ def create_defect_samplings(res, fn_s):
                 x_i_minus_1, x_i, x_i_plus_1,
                 y_i_minus_1, f_i_minus_1,
                 y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
+                y_i_plus_1, f_i_plus_1,
+                monitor
         )
         result.append( (x_i_minus_1, x_i, x_i_plus_1, interp) )
     return result
 
-def create_continuous_sol_from_results(res, fn_s):
+def create_continuous_sol_from_results(res, fn_s, monitor):
     interps = []
     
     for i in range(len(res) - 2):
@@ -127,7 +128,8 @@ def create_continuous_sol_from_results(res, fn_s):
                 x_i_minus_1, x_i, x_i_plus_1,
                 y_i_minus_1, f_i_minus_1,
                 y_i, f_i,
-                y_i_plus_1, f_i_plus_1 
+                y_i_plus_1, f_i_plus_1,
+                monitor
             )
         )
     continuous_sol = ContinuousSolution()

@@ -46,6 +46,16 @@ def one_step(func, xn, yn, f_start, h):
 
     return (k, yn_plus_1, yn_plus_1_higher_order)
 
+class Monitor:
+    def __init__(self) -> None:
+        self.different_values_alpha = set()
+        self.n_steps=0
+        self.n_successful_steps=0
+    def print(self):
+        print("alpha values", list(self.different_values_alpha))
+        print("n_steps", self.n_steps)
+        print("n_successful_steps", self.n_successful_steps)
+
 # =============================================================================================================================
 # start of defect control solver
 
@@ -100,9 +110,7 @@ def rk_defect_control(fun, t_span, y0, tol):
     res.append( (xn, yn) )
     fn_s.append(f_start)
 
-    n_steps = 0
-    n_successful_steps = 0
-
+    monitor = Monitor()
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
@@ -119,10 +127,11 @@ def rk_defect_control(fun, t_span, y0, tol):
             x_i_minus_1, x_i, x_i_plus_1,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
-            y_i_plus_1, f_i_plus_1 
+            y_i_plus_1, f_i_plus_1,
+            monitor
         )
 
-        n_steps += 1
+        monitor.n_steps += 1
 
         """
         # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
@@ -158,7 +167,7 @@ def rk_defect_control(fun, t_span, y0, tol):
             f_start = f_i_plus_1
             fn_s.append(f_start)
 
-            n_successful_steps += 1
+            monitor.n_successful_steps += 1
 
             interps.append(this_interp)
             if max_defect < (tol / 10):
@@ -167,18 +176,15 @@ def rk_defect_control(fun, t_span, y0, tol):
             h /= 2
 
     print("tolerance=", tol)
-    print("number of successful steps=", n_successful_steps)
-    print("number of steps=", n_steps)
+    monitor.print()
     print("================================\n")
     continuous_sol = ContinuousSolution()
     continuous_sol.extend(interps)
     return (
         res, 
-        # create_continuous_sol_from_interpolants(interps),
-        # create_continuous_first_derivatives_from_interpolants(interps),
         continuous_sol.eval,
         continuous_sol.prime,
-        create_defect_samplings(res, fn_s)
+        create_defect_samplings(res, fn_s, monitor)
     )
 
 
@@ -203,9 +209,7 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     res.append( (xn, yn) )
     fn_s.append(f_start)
 
-    n_steps = 0
-    n_successful_steps = 0
-
+    monitor = Monitor()
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
@@ -221,10 +225,11 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
             x_i_minus_1, x_i, x_i_plus_1,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
-            y_i_plus_1, f_i_plus_1 
+            y_i_plus_1, f_i_plus_1,
+            monitor
         )
 
-        n_steps += 1
+        monitor.n_steps += 1
 
         """
         # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
@@ -259,7 +264,7 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
             f_start = f_i_plus_1
             fn_s.append(f_start)
 
-            n_successful_steps += 1
+            monitor.n_successful_steps += 1
 
             interps.append(this_interp)
             if max_defect < (tol / 10):
@@ -268,18 +273,15 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
             h /= 2
 
     print("tolerance=", tol)
-    print("number of successful steps=", n_successful_steps)
-    print("number of steps=", n_steps)
+    monitor.print()
     print("================================\n")
     continuous_sol = ContinuousSolution()
     continuous_sol.extend(interps)
     return (
         res, 
-        # create_continuous_sol_from_interpolants(interps),
-        # create_continuous_first_derivatives_from_interpolants(interps),
         continuous_sol.eval,
         continuous_sol.prime,
-        create_defect_samplings(res, fn_s)
+        create_defect_samplings(res, fn_s, monitor)
     )
 
 
@@ -316,20 +318,18 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
     f_i         = fn_s[-2]
     f_i_minus_1 = fn_s[-3]
 
+    monitor = Monitor()
     this_interp = HB(
         x_i_minus_1, x_i, x_i_plus_1,
         y_i_minus_1, f_i_minus_1,
         y_i, f_i,
-        y_i_plus_1, f_i_plus_1 
+        y_i_plus_1, f_i_plus_1,
+        monitor
     )
 
     continous_sol = ContinuousSolution()
     continous_sol.append(this_interp)
 
-    n_steps = 0
-    n_successful_steps = 0
-
-    index = 0
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
@@ -348,7 +348,8 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
             x_i_minus_1, x_i, x_i_plus_1,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
-            y_i_plus_1, f_i_plus_1 
+            y_i_plus_1, f_i_plus_1,
+            monitor
         )
 
         """
@@ -375,7 +376,7 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
         )
         max_defect = max(defect_sample_1, defect_sample_2)
 
-        n_steps += 1
+        monitor.n_steps += 1
 
         # print("max_defect", max_defect)
         if max_defect < tol:
@@ -389,8 +390,7 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
 
             continous_sol.append(this_interp)
 
-            index += 1
-            n_successful_steps += 1
+            monitor.n_successful_steps += 1
 
             if max_defect < (tol / 10):
                 h *= 2
@@ -399,15 +399,14 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
             h /= 2
 
     print("tolerance=", tol)
-    print("number of successful steps=", n_successful_steps)
-    print("number of steps=", n_steps)
+    monitor.print()
     print("================================\n")
 
     return (
         res, 
         continous_sol.eval,
         continous_sol.prime,
-        create_defect_samplings(res, fn_s)
+        create_defect_samplings(res, fn_s, monitor)
     )
 
 ##################################################################################
@@ -429,9 +428,7 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
     res.append( (xn, yn) )
     fn_s.append(f_start)
 
-    n_steps = 0
-    n_successful_steps = 0
-
+    monitor = Monitor()
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
@@ -447,10 +444,11 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
             x_i_minus_1, x_i, x_i_plus_1,
             y_i_minus_1, f_i_minus_1,
             y_i, f_i,
-            y_i_plus_1, f_i_plus_1 
+            y_i_plus_1, f_i_plus_1,
+            monitor
         )
 
-        n_steps += 1
+        monitor.n_steps += 1
 
         """
         # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
@@ -485,7 +483,7 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
             f_start = f_i_plus_1
             fn_s.append(f_start)
 
-            n_successful_steps += 1
+            monitor.n_successful_steps += 1
 
             interps.append(this_interp)
             if max_defect < (0.2 * tol):
@@ -494,16 +492,13 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
             h /= 2
 
     print("tolerance=", tol)
-    print("number of successful steps=", n_successful_steps)
-    print("number of steps=", n_steps)
+    monitor.print()
     print("================================\n")
     continuous_sol = ContinuousSolution()
     continuous_sol.extend(interps)
     return (
         res, 
-        # create_continuous_sol_from_interpolants(interps),
-        # create_continuous_first_derivatives_from_interpolants(interps),
         continuous_sol.eval,
         continuous_sol.prime,
-        create_defect_samplings(res, fn_s)
+        create_defect_samplings(res, fn_s, monitor)
     )
