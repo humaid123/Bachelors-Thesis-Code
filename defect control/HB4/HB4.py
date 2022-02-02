@@ -29,6 +29,31 @@ def h01_prime(t) -> float:
 def h11_prime(t) -> float:
     return 3*(t**2) - 2*t
 
+def h00_horner(x) -> float:
+    return ( x**2*(2*x - 3) + 1 )
+
+def h10_horner(x) -> float:
+    return ( x*(x*(x - 2) + 1) )
+
+def h01_horner(x) -> float:
+    return ( x**2*(3 - 2*x) )
+
+def h11_horner(x) -> float:
+    return ( x**2*(x - 1) )
+
+def h00_prime_horner(x) -> float:
+    return ( x*(6*x - 6) )
+
+def h10_prime_horner(x) -> float:
+    return ( x*(3*x - 4) + 1 )
+
+def h01_prime_horner(x) -> float:
+    return ( x*(6 - 6*x) )
+
+def h11_prime_horner(x) -> float:
+    return ( x*(3*x - 2) )
+
+
 class HB:
     def __init__(
         self, 
@@ -58,6 +83,20 @@ class HB:
         return (
               h00_prime(t) * self.y_i        / self.h_i + h10_prime(t) * self.f_i
             + h01_prime(t) * self.y_i_plus_1 / self.h_i + h11_prime(t) * self.f_i_plus_1
+        )
+    
+    def eval_horner(self, x) -> float:
+        t = (x - self.x_i) / self.h_i
+        return (
+              h00_horner(t) * self.y_i        + self.h_i * h10_horner(t) * self.f_i
+            + h01_horner(t) * self.y_i_plus_1 + self.h_i * h11_horner(t) * self.f_i_plus_1
+        )
+    
+    def prime_horner(self, x) -> float:
+        t = (x - self.x_i) / self.h_i
+        return (
+              h00_prime_horner(t) * self.y_i        / self.h_i + h10_prime_horner(t) * self.f_i
+            + h01_prime_horner(t) * self.y_i_plus_1 / self.h_i + h11_prime_horner(t) * self.f_i_plus_1
         )
 
 def create_defect_samplings(res, fn_s) -> Tuple[float, float, HB]:

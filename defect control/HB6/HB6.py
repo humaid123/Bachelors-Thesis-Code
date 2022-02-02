@@ -30,6 +30,46 @@ def d4_prime(x, alpha):
 def d5_prime(x, alpha):
     return 5*1/(alpha**2 + 2*alpha + 1)*(x**4) + 4*(2*alpha - 1)/(alpha**2 + 2*alpha + 1)*(x**3) + 3*(alpha**2 - 2*alpha)/(alpha**2 + 2*alpha + 1)*(x**2) + 2*-alpha**2/(alpha**2 + 2*alpha + 1)*x + 0
 
+
+# ==========================================================================================
+def d0_horner(x, alpha) -> float:
+    return ( x**2*(x*(x*(x*(4*alpha + 2)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3) + (alpha*(5*alpha - 5) - 4)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)) + (alpha*(-10*alpha - 2) + 2)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)) + (5*alpha + 3)/(alpha**5 + 3*alpha**4 + 3*alpha**3 + alpha**2)) )
+
+def d1_horner(x, alpha) -> float:
+    return ( x**2*(x*(x*(x/(alpha**4 + 2*alpha**3 + alpha**2) + (alpha - 2)/(alpha**4 + 2*alpha**3 + alpha**2)) + (1 - 2*alpha)/(alpha**4 + 2*alpha**3 + alpha**2)) + 1/(alpha**3 + 2*alpha**2 + alpha)) )
+
+def d2_horner(x, alpha) -> float:
+    return ( x**2*(x*(x*((4 + (-7 + 4/alpha)/alpha)/alpha + x*(2 - 2/alpha)/alpha**2) + 2 + (-8 + (8 - 2/alpha)/alpha)/alpha) - 3 + (4 - 3/alpha)/alpha) + 1 )
+
+def d3_horner(x, alpha) -> float:
+    return ( x*(x*(x*(x*((2 - 2/alpha)/alpha + x/alpha**2) + 1 + (-4 + 1/alpha)/alpha) - 2 + 2/alpha) + 1) )
+
+def d4_horner(x, alpha) -> float:
+    return ( x**2*(alpha**2*(3*alpha + 5)/(alpha**3 + 3*alpha**2 + 3*alpha + 1) + x*(alpha*(alpha*(2 - 2*alpha) + 10)/(alpha**3 + 3*alpha**2 + 3*alpha + 1) + x*(x*(-2*alpha - 4)/(alpha**3 + 3*alpha**2 + 3*alpha + 1) + (alpha*(-4*alpha - 5) + 5)/(alpha**3 + 3*alpha**2 + 3*alpha + 1)))) )
+
+def d5_horner(x, alpha) -> float:
+    return ( x**2*(-alpha**2/(alpha**2 + 2*alpha + 1) + x*(alpha*(alpha - 2)/(alpha**2 + 2*alpha + 1) + x*(x/(alpha**2 + 2*alpha + 1) + (2*alpha - 1)/(alpha**2 + 2*alpha + 1)))) )
+
+def d0_prime_horner(x, alpha) -> float:
+    return ( x*(x*(x*(x*(20*alpha + 10)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3) + (alpha*(20*alpha - 20) - 16)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)) + (alpha*(-30*alpha - 6) + 6)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)) + (10*alpha + 6)/(alpha**5 + 3*alpha**4 + 3*alpha**3 + alpha**2)) )
+
+def d1_prime_horner(x, alpha) -> float:
+    return ( x*(x*(x*(5*x/(alpha**4 + 2*alpha**3 + alpha**2) + (4*alpha - 8)/(alpha**4 + 2*alpha**3 + alpha**2)) + (3 - 6*alpha)/(alpha**4 + 2*alpha**3 + alpha**2)) + 2/(alpha**3 + 2*alpha**2 + alpha)) )
+
+def d2_prime_horner(x, alpha) -> float:
+    return ( x*(x*(x*((16 + (-28 + 16/alpha)/alpha)/alpha + x*(10 - 10/alpha)/alpha**2) + 6 + (-24 + (24 - 6/alpha)/alpha)/alpha) - 6 + (8 - 6/alpha)/alpha) )
+
+def d3_prime_horner(x, alpha) -> float:
+    return ( x*(x*(x*((8 - 8/alpha)/alpha + 5*x/alpha**2) + 3 + (-12 + 3/alpha)/alpha) - 4 + 4/alpha) + 1 )
+
+def d4_prime_horner(x, alpha) -> float:
+    return ( x*(alpha**2*(6*alpha + 10)/(alpha**3 + 3*alpha**2 + 3*alpha + 1) + x*(alpha*(alpha*(6 - 6*alpha) + 30)/(alpha**3 + 3*alpha**2 + 3*alpha + 1) + x*(x*(-10*alpha - 20)/(alpha**3 + 3*alpha**2 + 3*alpha + 1) + (alpha*(-16*alpha - 20) + 20)/(alpha**3 + 3*alpha**2 + 3*alpha + 1)))) )
+
+def d5_prime_horner(x, alpha) -> float:
+    return ( x*(-2*alpha**2/(alpha**2 + 2*alpha + 1) + x*(alpha*(3*alpha - 6)/(alpha**2 + 2*alpha + 1) + x*(5*x/(alpha**2 + 2*alpha + 1) + (8*alpha - 4)/(alpha**2 + 2*alpha + 1)))) )
+
+# ==========================================================================================
+
 # I use a class to represent the Hermite Birkhoff interpolant
 # we will have an instance of this class on each step
 class HB:
@@ -88,6 +128,32 @@ class HB:
 
             + d4_prime(pheta, self.alpha) * self.y_i_plus_1  / self.h_i 
             + d5_prime(pheta, self.alpha) * self.f_i_plus_1
+        )
+
+    def eval_horner(self, x):
+        pheta = (x - self.x_i) / self.h_i  # x = t_i + pheta*h_i so pheta = (x - t_i) / h_i
+        return (  
+                             d0_horner(pheta, self.alpha) * self.y_i_minus_1 
+                + self.h_i * d1_horner(pheta, self.alpha) * self.f_i_minus_1
+                
+                           + d2_horner(pheta, self.alpha) * self.y_i         
+                + self.h_i * d3_horner(pheta, self.alpha) * self.f_i 
+                
+                           + d4_horner(pheta, self.alpha) * self.y_i_plus_1  
+                + self.h_i * d5_horner(pheta, self.alpha) * self.f_i_plus_1
+        )
+
+    def prime_horner(self, x):
+        pheta = (x - self.x_i) / self.h_i  # x = t_i + pheta*h_i so pheta = (x - t_i) / h_i
+        return (  
+              d0_prime_horner(pheta, self.alpha) * self.y_i_minus_1 / self.h_i 
+            + d1_prime_horner(pheta, self.alpha) * self.f_i_minus_1
+
+            + d2_prime_horner(pheta, self.alpha) * self.y_i         / self.h_i 
+            + d3_prime_horner(pheta, self.alpha) * self.f_i 
+
+            + d4_prime_horner(pheta, self.alpha) * self.y_i_plus_1  / self.h_i 
+            + d5_prime_horner(pheta, self.alpha) * self.f_i_plus_1
         )
 
 def create_defect_samplings(res, fn_s, monitor):
