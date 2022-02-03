@@ -1,4 +1,4 @@
-from HB8 import d0, d1, d2, d3, d4, d5, d6, d7, d0_prime, d1_prime, d2_prime, d3_prime, d4_prime, d5_prime, d6_prime, d7_prime
+from HB8_second_scheme import d0, d1, d2, d3, d4, d5, d6, d7, d0_prime, d1_prime, d2_prime, d3_prime, d4_prime, d5_prime, d6_prime, d7_prime
 
 
 # the following is the quintics we got from solving the system with sympy

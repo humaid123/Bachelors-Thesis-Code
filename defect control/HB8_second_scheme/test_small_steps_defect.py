@@ -1,7 +1,7 @@
 
 from math import exp, log2
 import matplotlib.pyplot as plt
-from HB8 import HB
+from HB8_second_scheme import HB
 
 def create_t_eval(start, end, num_points = 100):
     res = [start]

@@ -1,5 +1,5 @@
 from math import sqrt
-from HB8 import HB, ContinuousSolution, create_defect_samplings, create_continuous_sol_from_results
+from HB8_second_scheme import HB, ContinuousSolution, create_defect_samplings, create_continuous_sol_from_results
 
 # http://people.math.sfu.ca/~jverner/RKV65.IIIXb.Efficient.00000144617.081204.RATOnWeb
 A = [
@@ -397,7 +397,7 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
 # the following attempt is when the solver is to keep alpha at 1 throughout the integration
 
 # will also have solution for the first step as a proof of concept
-def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
+def rk_defect_control_static_alpha_beta(fun, t_span, y0, tol, solution):
     xn, xend = t_span
     yn = y0
     f_start = fun(xn, yn)[0] 

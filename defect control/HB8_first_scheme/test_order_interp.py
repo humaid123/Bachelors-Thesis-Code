@@ -1,6 +1,6 @@
 from math import exp, log2
 import matplotlib.pyplot as plt
-from HB8 import HB
+from HB8_first_scheme import HB
 class Monitor:
     def __init__(self) -> None:
         self.different_values_alpha = set()
