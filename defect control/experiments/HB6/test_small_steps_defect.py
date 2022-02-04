@@ -77,33 +77,24 @@ def experiment(model, solution, t_span, y0):
                
                
             plt.figure()
-            plt.plot(t_eval, defects)
+            plt.plot(t_eval, defects, label="defect")
+            plt.plot(t_eval, defects_horner, label="defect horner")
             plt.title(f"defects at h={h}")
             plt.xlabel("from x_i to x_i_plus_1")
             plt.ylabel("defect")
-            plt.show()
-
-            plt.figure()
-            plt.plot(t_eval, defects_horner)
-            plt.title(f"defects of horner form at h={h}")
-            plt.xlabel("from x_i to x_i_plus_1")
-            plt.ylabel("defect")
+            plt.legend()
             plt.show()
 
 
+
             plt.figure()
-            plt.plot(t_eval, errors)
+            plt.plot(t_eval, errors, label="error")
+            plt.plot(t_eval, errors_horner, label="error horner")
             plt.title(f"errors at h={h}")
             plt.xlabel("from x_i to x_i_plus_1")
             plt.ylabel("error")
-            plt.show()
-
-            plt.figure()
-            plt.plot(t_eval, errors_horner)
-            plt.title(f"errors of horner form at h={h}")
-            plt.xlabel("from x_i to x_i_plus_1")
-            plt.ylabel("error")
-            plt.show()        
+            plt.legend()
+            plt.show() 
 
 
 def model1(t, y):

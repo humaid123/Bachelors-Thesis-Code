@@ -131,8 +131,8 @@ def model11(t, y):
 def solution11(t):
     return [1/4 * (-1 + 5 * exp(-2 * x) + 2 * x) for x in t]
 
-# experiments(model1, solution1, 1)
-experiments(model2, solution2, 2)
+experiments(model1, solution1, 1)
+# experiments(model2, solution2, 2)
 # experiments(model3, solution3, 3)
 # experiments(model6, solution6, 6)
 # experiments(model7, solution7, 7)

@@ -1,7 +1,7 @@
 
 from math import exp, log2
 import matplotlib.pyplot as plt
-from HB4 import HB
+from HB8_second_scheme import HB
 
 def create_t_eval(start, end, num_points = 100):
     res = [start]
@@ -16,12 +16,17 @@ def create_t_eval(start, end, num_points = 100):
 class Monitor:
     def __init__(self) -> None:
         self.different_values_alpha = set()
+        self.different_values_beta = set()
         self.n_steps=0
         self.n_successful_steps=0
     def print(self):
         print("alpha values", list(self.different_values_alpha))
+        print("beta values", list(self.different_values_beta))
         print("n_steps", self.n_steps)
         print("n_successful_steps", self.n_successful_steps)
+
+beta = 1
+alpha = 1
 
 def experiment(model, solution, t_span, y0):
     monitor = Monitor()
@@ -30,19 +35,27 @@ def experiment(model, solution, t_span, y0):
         # the_xs = [1, 2, 5, 4.633, 9]
         the_xs = [1]
         for x_i in the_xs:
-            x_i_plus_1 = x_i + h
+            x_i_plus_1 = x_i + beta * h
+            x_i_minus_1 = x_i - h
+            x_i_minus_2 = x_i - (1 + alpha) * h
 
             y_i         = solution([ x_i ])[0]
             y_i_plus_1  = solution([ x_i_plus_1 ])[0]
+            y_i_minus_1 = solution([ x_i_minus_1 ])[0]
+            y_i_minus_2 = solution([ x_i_minus_2 ])[0]
 
             f_i         = model(x_i        , y_i)[0]
             f_i_plus_1  = model(x_i_plus_1 , y_i_plus_1)[0]
+            f_i_minus_1 = model(x_i_minus_1, y_i_minus_1)[0]
+            f_i_minus_2 = model(x_i_minus_2, y_i_minus_2)[0]
 
-
-            this_hb = HB( 
-                x_i, x_i_plus_1, 
-                y_i, f_i, 
-                y_i_plus_1, f_i_plus_1
+            this_hb = HB(
+                x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+                y_i_minus_2, f_i_minus_2,
+                y_i_minus_1, f_i_minus_1,
+                y_i, f_i,
+                y_i_plus_1, f_i_plus_1,
+                monitor
             )
 
             t_eval = create_t_eval(x_i, x_i_plus_1)
@@ -68,38 +81,26 @@ def experiment(model, solution, t_span, y0):
                 defects_horner.append(defect_horner)
 
                 errors.append(error)  
-                errors_horner.append(error_horner)  
-
+                errors_horner.append(error_horner)   
+               
                
             plt.figure()
-            plt.plot(t_eval, defects)
+            plt.plot(t_eval, defects, label="defects")
+            plt.plot(t_eval, defects_horner, label="defects_horner")
             plt.title(f"defects at h={h}")
             plt.xlabel("from x_i to x_i_plus_1")
             plt.ylabel("defect")
+            plt.legend()
             plt.show()
 
             plt.figure()
-            plt.plot(t_eval, defects_horner)
-            plt.title(f"defects of horner form at h={h}")
-            plt.xlabel("from x_i to x_i_plus_1")
-            plt.ylabel("defect")
-            plt.show()
-
-
-            plt.figure()
-            plt.plot(t_eval, errors)
+            plt.plot(t_eval, errors, label="errors")
+            plt.plot(t_eval, errors_horner, label="errors_horner")
             plt.title(f"errors at h={h}")
             plt.xlabel("from x_i to x_i_plus_1")
             plt.ylabel("error")
-            plt.show()
-
-            plt.figure()
-            plt.plot(t_eval, errors_horner)
-            plt.title(f"errors of horner form at h={h}")
-            plt.xlabel("from x_i to x_i_plus_1")
-            plt.ylabel("error")
-            plt.show()
-
+            plt.legend()
+            plt.show()      
             
 
 
