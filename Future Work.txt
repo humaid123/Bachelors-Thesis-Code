@@ -3,8 +3,14 @@ Future Work
 We can potentially make the root-finding / DASKR look for a root at a static tolerance, say 1e-12 and see what happens. This will help us confirm the above hypothesis/this can potentially be placed in 'future' works...
 ===============
 
+Use error-control on the first step... CRK on the first step.
+
+Can derive optimal h.
+
 Barycentric interpolation
 
 general linear methods
 
-8th order method
+10th order method
+
+start with variable alpha. If alpha is too big. switch to static alpha.

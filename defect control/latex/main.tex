@@ -1,0 +1,139 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{float} %figure inside minipage
+\graphicspath{ {./images/} }
+\usepackage[export]{adjustbox}
+\usepackage{apacite}
+
+\begin{document}
+\section{Low Cost Defect Control with Hermite-Birkhoff interpolants}
+\subsection{Introduction}
+why defect control. applications. Say that we often need continuous solution, especially to find derivatives/integrate/in bigger software. application to BVPs...
+
+\subsubsection{Problems used}
+Give a small description of the problems used - pick the non-anomalous data.
+One with growth. one with decay and one which oscillates (I think there is one which oscillates that does well.)
+
+
+\subsubsection{Lack of Defect Control of end of step solvers}
+Show that results are encouraging but still not as good a control of the defect as we might like it.
+
+\subsubsection{Cost of Traditional CRK-based Defect Control}
+Discussion of Enright's work
+https://www.cs.toronto.edu/~enright/recentMSc.html
+Say that we will examine a proof of concept of a new low cost interpolant
+
+\subsubsection{Small explanation of our basic Runge Kutta}
+Need to say that for all the codes below the Runge Kutta methods we use are basic solvers. they so the step and do step resizing based on [0.2tol, 0.8tol] and start with an initial step-size of sqrt(tol). (Basically, need to point out that we just built an `inefficient' proof of concept).
+
+Say that we are halving the steps when > 0.8*tol and doubling the steps when error < 0.2 * tol ...
+
+Small description of classical Butcher 4. rk6 from Jim Verner and your rk8.
+Say their number of stages and their order. explain that though they come as pair.
+
+\subsection{Where we got the idea = Defect control with Hermite interpolant. rk4 with hb4}
+\subsubsection{Discussion of HB4}
+cubic spline. Free interpolant. Free defect control. CAN SAMPLE ONLY TWICE as we know where the maximum is going to be.
+
+\subsubsection{results}
+Show that we can keep the defect under control => satisfy a tolerance of 1e-6. show nsteps but say we can do better. Point to explanation in next section.
+
+Show a plot of some of the defects to show that we need to only sample TWICE
+
+\subsubsection{problems with interpolation error}
+interpolation error is too big $O(h^4)$ interpolation error vs $O(h^4)$ rk4 error. differentiating cubic spline gives an $O(h^3)$ interpolation error for the derivative. Interpolation error is thus interfering. If we could get a more accurate interpolant we would guarantee that interpolation error, especially for the derivative interpolant, is lower.
+
+To do that we need to talk about HB6.
+
+\subsection{Defect control with HB6. rk4 with HB6}
+\subsubsection{Discussion of HB6}
+Derivation. order. order of derivative. Because the interpolant has order 6. and its derivative have order 5, numerical errors now dominate.
+
+
+\subsubsection{results}
+Keeps defect under control. uses less steps.
+
+will look to make the results better with HB8.
+Show a plot of some of the defects to show that we need to only sample TWICE
+\subsubsection{problems with alpha}
+Show problems with alpha. small deviation of alpha from 1 creates a problem. Show v-shaped graph at several alpha
+Discuss that alpha does not get TOO BAD. rarely 4. rarely 1/4. Usually 0.5, 1, 2
+
+
+\subsection{Defect control with HB8 - rk4 with HB8}
+\subsubsection{Derivation of HB8}
+\paragraph{First Scheme}
+Show derivation with beta*h, alpha*h, h
+Show problem. If alpha, beta is not 1. this is useless.
+Say that there is a better derivation.
+
+\paragraph{Second Scheme}
+Show derivation with alpha*h, h, beta*h
+show that more resilient to alpha, beta not being 1.
+
+\subsubsection{results}
+Show that there isn't a big improvement. Discuss how this may help with higher order Runge Kutta methods.
+Show a plot of some of the defects to show that we need to only sample TWICE
+\subsubsection{problems}
+reliance of alpha, beta being 1 though better than first scheme. 
+
+\subsection{Higher Order Runge Kuttas}
+Discuss how CRK is exponential with the order. Will require 27 function evaluations with 8th order but we get it for free. (2 function evaluations for sampling only.)
+
+\subsubsection{rk6}
+Discuss rk6 with HB6 and rk6 with $HB8\_second\_scheme$. 
+show uses less steps as expected
+
+\subsubsection{rk8}
+Discuss rk8 with $HB8\_second\_scheme$. Say that this is way cheaper. propose that we may need to go to HB10.
+
+\subsection{the Vshaped graph}
+\subsubsection{HB6}
+show that several problems with the interpolant run on random data points) have the same optimal h. 
+Possibility to derive optimal h. This way a solver based on this approach will try BIG steps. if failed we reduce the step to that optimal h. If failed still, we cannot solve the problem.
+
+\subsubsection{HB8}
+show that several problems with the interpolant run on random data points) have the same optimal h. 
+Possibility to derive optimal h. This way a solver based on this approach will try BIG steps. if failed we reduce the step to that optimal h. If failed still, we cannot solve the problem.
+
+\subsection{Static alpha}
+Because we have interpolants on all previous steps. We can use these interpolants to look up:
+basically for HB6
+	if going from $x_i$ to $x_{i_plus_1}$ with a step of size h.
+	we can look up $x_{i_minus_1}$ using alpha=1 with previousInterps.eval($x_i$ - h) for $y_{i_minus_1}$ and previousInterps.prime($x_i$ - h) for $f_{i_minus_1}$
+	
+Show results of rk4 with hb6 static alpha to show that we can get defect control with that idea.
+
+basically for HB8
+		if going from $x_i$ to $x_i{_plus_1}$ with a step of size h.
+	we can look up $x_{i_minus_1}$ with previousInterps.eval($x_i$ - h) for $y_{i_minus_1}$ and previousInterps.prime($x_i$ - h) for $f_{i_minus_1}$
+	we can look up $x_{i_minus_2}$ with previousInterps.eval($x_{i_minus_1}$ - h) for $y_{i_minus_2}$ and previousInterps.prime($x_{i_minus_1}$ - h) for $f_{i_minus_2}$.
+	
+show results of rk4 with hb8 static alpha to show that we get defect control
+	
+\subsubsection{pros}
+NO COST. same cost as variable alpha (only two function evaluations for the sampling). Keep using optimal h throughout the whole process.
+
+\subsubsection{problems}
+the first step. we may have to artificially restrict the GROWTH in the step-size.
+for example:
+if we go from t0 to t0 + h and the error estimate is much lower than the tolerance, we cannot use a step size of 2*h as t0 + h - 2*h = t0-h but we dont have an interpolant in the region < t0.
+
+\subsection{Future work}
+\subsubsection{additional problems to solve to get this to work}
+\paragraph{the first/first and second step}
+take an error control step with a stricter tolerance than the user provided tolerance. 
+Take a CRK interpolant step.
+
+\paragraph{V-shaped error}
+Derive optimal h. keep solver using BIG steps. reduce to optimal h.
+
+\paragraph{static alpha}
+use variable alpha for the first few steps. Usually not a problem as in all our experiments alpha is at a good values.
+If alpha goes to 8, use static alpha.
+
+\end{document}
