@@ -4,6 +4,17 @@
 # we create a class for each of these so that the class abstracts a Hermite Birkhoff interpolant
 # we then need to instantiate one object of this class for each interval and we get to do Hermite Birkhoff interpolation
 
+from math import cos, pi
+from scipy.interpolate import BarycentricInterpolator
+
+def get_Chebyshev_nodes(a, b, n):
+    res = []
+    for k in range(1, n+1):
+        res.append(
+            (a + b)/2 + (b-a)/2 * cos( (2*k - 1) / (2*n) * pi)
+        )
+    return res
+
 def d0(x, alpha):
     return (4*alpha + 2)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)*(x**5) + (5*alpha**2 - 5*alpha - 4)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)*(x**4) + (-10*alpha**2 - 2*alpha + 2)/(alpha**6 + 3*alpha**5 + 3*alpha**4 + alpha**3)*(x**3) + (5*alpha + 3)/(alpha**5 + 3*alpha**4 + 3*alpha**3 + alpha**2)*(x**2) + 0*x + 0
 def d1(x, alpha):
@@ -104,6 +115,15 @@ class HB:
         self.y_i_plus_1 = y_i_plus_1
         self.f_i_plus_1 = f_i_plus_1
 
+        # getting barycentric interpolator =================
+        xs = get_Chebyshev_nodes(x_i_minus_1, x_i_plus_1, 6)
+        ys = [self.eval(x) for x in xs]
+        self.eval_bary_interp = BarycentricInterpolator(xs, ys)
+
+        y_primes = [self.prime(x) for x in xs]
+        self.prime_bary_interp = BarycentricInterpolator(xs, y_primes) 
+
+
     def eval(self, x):
         pheta = (x - self.x_i) / self.h_i  # x = t_i + pheta*h_i so pheta = (x - t_i) / h_i
         return (  
@@ -155,6 +175,12 @@ class HB:
             + d4_prime_horner(pheta, self.alpha) * self.y_i_plus_1  / self.h_i 
             + d5_prime_horner(pheta, self.alpha) * self.f_i_plus_1
         )
+        
+    def eval_bary(self, x) -> float:
+        return self.eval_bary_interp(x)
+
+    def prime_bary(self, x) -> float:
+        return self.prime_bary_interp(x)
 
 def create_defect_samplings(res, fn_s, monitor):
     result = []

@@ -3,7 +3,17 @@
 # it has interpolation error of order 4
 # taken from Wikipedia => https://en.wikipedia.org/wiki/Cubic_Hermite_spline
 
+from math import cos, pi
 from typing import Tuple
+from scipy.interpolate import BarycentricInterpolator
+
+def get_Chebyshev_nodes(a, b, n):
+    res = []
+    for k in range(1, n+1):
+        res.append(
+            (a + b)/2 + (b-a)/2 * cos( (2*k - 1) / (2*n) * pi)
+        )
+    return res
 
 def h00(t) -> float:
     return 2*(t**3) - 3*(t**2) + 1
@@ -71,6 +81,13 @@ class HB:
         self.y_i_plus_1 = y_i_plus_1
         self.f_i_plus_1 = f_i_plus_1
 
+        xs = get_Chebyshev_nodes(x_i, x_i_plus_1, 4)
+        ys = [self.eval(x) for x in xs]
+        self.eval_bary_interp = BarycentricInterpolator(xs, ys)
+
+        y_primes = [self.prime(x) for x in xs]
+        self.prime_bary_interp = BarycentricInterpolator(xs, y_primes) 
+
     def eval(self, x) -> float:
         t = (x - self.x_i) / self.h_i
         return (
@@ -98,6 +115,12 @@ class HB:
               h00_prime_horner(t) * self.y_i        / self.h_i + h10_prime_horner(t) * self.f_i
             + h01_prime_horner(t) * self.y_i_plus_1 / self.h_i + h11_prime_horner(t) * self.f_i_plus_1
         )
+    
+    def eval_bary(self, x) -> float:
+        return self.eval_bary_interp(x)
+
+    def prime_bary(self, x) -> float:
+        return self.prime_bary_interp(x)
 
 def create_defect_samplings(res, fn_s) -> Tuple[float, float, HB]:
     result = []

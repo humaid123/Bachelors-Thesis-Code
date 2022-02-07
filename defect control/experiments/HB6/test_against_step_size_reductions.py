@@ -54,37 +54,42 @@ def perfect_convergence(alpha, model, solution, model_num):
             pts_to_sample, indices = create_pts(x_i_minus_1, x_i_plus_1)
             defects = []
             defects_horner = []
+            defects_bary = []
             for pt in pts_to_sample:
                 y = solution([pt])[0]
                 # y = this_hb(pt)
                 f_eval  = model(pt, y)[0]
                 hb_prime_eval = this_interp.prime(pt)
                 hb_prime_horner_eval = this_interp.prime_horner(pt)
+                hb_prime_bary_eval = this_interp.prime_bary(pt)
                 defects.append( abs(hb_prime_eval - f_eval) )
                 defects_horner.append( abs( hb_prime_horner_eval - f_eval ) )
-            # plt.figure()
+                defects_bary.append( abs( hb_prime_bary_eval - f_eval ) )
+           # plt.figure()
             # plt.plot(indices, defects, label=f"defect_{str(x_i_minus_1)}_{str(x_i_plus_1)}")
             # plt.title(f"h = {h}")
             # plt.show()
 
             convergences.append( 
-                ( h, max(defects), max(defects_horner) )
+                ( h, max(defects), max(defects_horner), max(defects_bary) )
             )
 
         hs = [-log10(convergence[0]) for convergence in convergences]
         max_defects = [log10(abs(convergence[1])) for convergence in convergences]
         max_defects_horner = [log10(abs(convergence[2])) for convergence in convergences]
-        # plt.figure()
-        # plt.plot(hs, max_defects, label="h vs max_defect")
-        # plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
-        # plt.ylabel("log of defect")
-        # plt.xlabel("log of hs")
-        # plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, model={model_num}")
-        # plt.legend()
-        # plt.show()
+        max_defects_bary = [log10(abs(convergence[3])) for convergence in convergences]
+        plt.figure()
+        plt.plot(hs, max_defects, label="h vs max_defect")
+        plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
+        plt.plot(hs, max_defects_bary, label="h vs max_defect_bary")
+        plt.ylabel("log of defect")
+        plt.xlabel("log of hs")
+        plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, model={model_num}")
+        plt.legend()
+        plt.show()
 
         monitor.print()
-    return (hs, max_defects, max_defects_horner)
+    return (hs, max_defects, max_defects_horner, max_defects_bary)
 
 def model1(t, y):
     return [(-1/2) * y**3]
@@ -119,32 +124,38 @@ def solution11(t):
     return [1/4 * (-1 + 5 * exp(-2 * x) + 2 * x) for x in t]
 
 def experiments(alpha):
-    (hs_1, max_defects_1, max_defects_horner_1) = perfect_convergence(alpha, model1, solution1, 1)
-    (hs_2, max_defects_2, max_defects_horner_2) = perfect_convergence(alpha, model2, solution2, 2)
-    (hs_3, max_defects_3, max_defects_horner_3) = perfect_convergence(alpha, model3, solution3, 3)
-    (hs_6, max_defects_6, max_defects_horner_6) = perfect_convergence(alpha, model6, solution6, 6)
-    (hs_7, max_defects_7, max_defects_horner_7) = perfect_convergence(alpha, model7, solution7, 7)
-    (hs_11, max_defects_11, max_defects_horner_11) = perfect_convergence(alpha, model11, solution11, 11)
+    (hs_1, max_defects_1, max_defects_horner_1, max_defects_bary_1) = perfect_convergence(alpha, model1, solution1, 1)
+    (hs_2, max_defects_2, max_defects_horner_2, max_defects_bary_2) = perfect_convergence(alpha, model2, solution2, 2)
+    (hs_3, max_defects_3, max_defects_horner_3, max_defects_bary_3) = perfect_convergence(alpha, model3, solution3, 3)
+    (hs_6, max_defects_6, max_defects_horner_6, max_defects_bary_6) = perfect_convergence(alpha, model6, solution6, 6)
+    (hs_7, max_defects_7, max_defects_horner_7, max_defects_bary_7) = perfect_convergence(alpha, model7, solution7, 7)
+    (hs_11, max_defects_11, max_defects_horner_11, max_defects_bary_11) = perfect_convergence(alpha, model11, solution11, 11)
 
     plt.figure()
 
     plt.plot(hs_1, max_defects_1, label="h vs max_defect, model=1")
-    # plt.plot(hs_1, max_defects_horner_1, label="h vs max_defect_horner, model=1")
+    plt.plot(hs_1, max_defects_horner_1, label="h vs max_defect_horner, model=1")
+    plt.plot(hs_1, max_defects_bary_1, label="h vs max_defect_bary, model=1")
     
     plt.plot(hs_2, max_defects_2, label="h vs max_defect, model=2")
-    # plt.plot(hs_2, max_defects_horner_2, label="h vs max_defect_horner, model=2")
+    plt.plot(hs_2, max_defects_horner_2, label="h vs max_defect_horner, model=2")
+    plt.plot(hs_2, max_defects_bary_2, label="h vs max_defect_bary, model=2")
 
     plt.plot(hs_3, max_defects_3, label="h vs max_defect, model=3")
-    # plt.plot(hs_3, max_defects_horner_3, label="h vs max_defect_horner, model=3")
+    plt.plot(hs_3, max_defects_horner_3, label="h vs max_defect_horner, model=3")
+    plt.plot(hs_3, max_defects_bary_3, label="h vs max_defect_bary, model=3")
 
     plt.plot(hs_6, max_defects_6, label="h vs max_defect, model=6")
-    # plt.plot(hs_6, max_defects_horner_6, label="h vs max_defect_horner, model=6")
+    plt.plot(hs_6, max_defects_horner_6, label="h vs max_defect_horner, model=6")
+    plt.plot(hs_6, max_defects_bary_6, label="h vs max_defect_bary, model=6")
     
     plt.plot(hs_7, max_defects_7, label="h vs max_defect, model=7")
-    # plt.plot(hs_7, max_defects_horner_7, label="h vs max_defect_horner, model=7")
+    plt.plot(hs_7, max_defects_horner_7, label="h vs max_defect_horner, model=7")
+    plt.plot(hs_7, max_defects_bary_7, label="h vs max_defect_bary, model=7")
 
     plt.plot(hs_11, max_defects_11, label="h vs max_defect, model=11")
-    # plt.plot(hs_11, max_defects_horner_11, label="h vs max_defect_horner, model=11")
+    plt.plot(hs_11, max_defects_horner_11, label="h vs max_defect_horner, model=11")
+    plt.plot(hs_11, max_defects_bary_11, label="h vs max_defect_bary, model=11")
 
     plt.ylabel("log of defect")
     plt.xlabel("log of hs")

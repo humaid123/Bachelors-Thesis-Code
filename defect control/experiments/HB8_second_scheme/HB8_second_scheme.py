@@ -1,3 +1,15 @@
+
+from math import cos, pi
+from scipy.interpolate import BarycentricInterpolator
+
+def get_Chebyshev_nodes(a, b, n):
+    res = []
+    for k in range(1, n+1):
+        res.append(
+            (a+b)/2 + (b-a)/2 * cos( (2*k - 1) / (2*n) * pi)
+        )
+    return res
+
 class ContinuousSolution:
     def __init__(self) -> None:
         self.interps = []
@@ -253,6 +265,13 @@ class HB:
         self.y_i_plus_1 = y_i_plus_1
         self.f_i_plus_1 = f_i_plus_1
 
+        xs = get_Chebyshev_nodes(x_i_minus_2, x_i_plus_1, 8)
+        ys = [self.eval(x) for x in xs]
+        self.eval_bary_interp = BarycentricInterpolator(xs, ys)
+
+        y_primes = [self.prime(x) for x in xs]
+        self.prime_bary_interp = BarycentricInterpolator(xs, y_primes) 
+
     def eval(self, x):
         pheta = (x - self.x_i) / self.h_i  # x = t_i + pheta*h_i so pheta = (x - t_i) / h_i
         return (  
@@ -316,3 +335,9 @@ class HB:
             + d6_prime_horner(pheta, self.alpha, self.beta) * self.y_i_plus_1  / self.h_i 
             + d7_prime_horner(pheta, self.alpha, self.beta) * self.f_i_plus_1
         )
+    
+    def eval_bary(self, x) -> float:
+        return self.eval_bary_interp(x)
+
+    def prime_bary(self, x) -> float:
+        return self.prime_bary_interp(x)
