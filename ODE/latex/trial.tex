@@ -9,7 +9,65 @@
 \usepackage[export]{adjustbox}
 \usepackage{apacite}
 
+
+
+
 \begin{document}
+\begin{titlepage}
+\author{Humaid Agowun and Paul Muir} 
+\title{Performance Analysis of a Collection of ODE Solvers on Covid-19 Models with Discontinuities 
+} 
+\date{\today} 
+\maketitle
+\end{titlepage}
+
+\begin{center}
+    \textbf{Abstract}
+\end{center}
+
+In this report, we consider the numerical solution of two challenging
+Covid-19 ordinary differential equation (ODE) 
+models that have discontinuities. One of the models has a 
+time-dependent, i.e., at a given point in time, a discontinuity is introduced
+into the model. The second type of discontinuity is a state-dependent discontinuity;
+this means that the time at which the discontinuity arises depends on the
+value of one of the solution components, and thus it is not known apriori.
+
+These discontinuities make the models quite challenging for standard ODE solvers.
+Furthermore, the presence of exponentially growing solution components adds further
+to the difficulties faced by standard ODE solvers when trying to solve these types of 
+problems.
+
+We report on an investigation of performance of a wide array of ODE solvers (we
+consider 21 solvers) available in four major software environments: R, Python, 
+Scilab, and Matlab, applied to these models.
+
+We focus on straightforward implementations of the models within the above environments
+where the user employs the solvers and codes the problems using default settings for 
+the solvers, e.g., default tolerances, and simple implementations for the
+discontinuities, e.g., the introduction of if-then statements into the functions that 
+define the right-hand sides of the ODE systems. Such implementations of the models
+and usage of the solvers are typical of what researchers might employ.
+
+We also include an investigation of the solution of the models using slightly more
+sophisticated, but easily implementable, treatments of the models; these treatments
+involve making better use of the capabilities of the solvers, and slightly more careful
+implementations of the models themselves.
+
+We also highlight a number of issues with the way that some of the solvers are implemented
+in some of the software environments. For example, the way in which output points, where 
+the user specifies points in the domain where the solution value should be provided,
+is an issue in some of the software environments. 
+
+{\it We show that the standard use of ODE solvers available within  widely used software 
+environments, applied to simple implementations of these Covid-19 models, will
+frequently deliver numerical solutions that have no significant digits of accuracy.
+Furthermore, the solvers give no indication that the return solutions
+may be inaccurate.} We also show that the straightforward treatments of the models 
+are always less efficient than the slightly more sophisticated treatments.
+{\it We show that the slightly more sophisticated treatments of the models can 
+result in more efficient computations while at the same time providing
+much more accurate solutions.}
 
 \include{introduction}
 \include{timeProblem}
