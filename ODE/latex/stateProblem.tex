@@ -4,13 +4,13 @@ In this section, we consider the state-dependent discontinuity problem. We start
 
 As in Section $\ref{section:time_problem}$, changes in the modelling parameter $\beta$ introduce discontinuities in the function $f(t, y(t))$ and thus some solvers will ``thrash" when trying to solve the problem (as described in Section $\ref{subsection:effect_of_discontinuity}$). We will show that the presence of several discontinuities makes the problem challenging enough that all the ODE solvers we consider, even at very sharp tolerances, will not be able to solve the problem with reasonable accuracy.
 
-The problem uses the state variable, E(t), which is the number of Exposed people, to determine when to change the parameter $\beta$. When the number of exposed people is greater than 25000, measures will be introduced and thus $\beta$ will change from 0.9 to 0.005. When the number of exposed people drops to 10000, the measures will be relaxed and $\beta$ is set to 0.9. We run this model over a longer time period toggling the parameter $\beta$ back and forth to model the periods of alternating the imposition and relaxing of the measures. This scenario corresponds to the case of an unvaccinated population where the only means of controlling the spread of the virus is through measures such as social isolation, masking, etc... The ability of the virus to infect people is not diminished as time progresses, and when measures to stop the spread of the virus are removed, the infection rate of the virus returns to its original value. More sophisticated models could be introduced by modelling the $\beta$ value as a function of time. The numerical challenges would be similar.
+The problem uses the state variable, E(t), which is the number of Exposed people, to determine when to change the parameter $\beta$. When the number of exposed people is greater than 25000, measures will be introduced and thus $\beta$ will change from 0.9 to 0.005. When the number of exposed people drops to 10000, the measures will be relaxed and $\beta$ is set to 0.9. We run this model over a longer time period toggling the parameter $\beta$ back and forth to model the periods of alternating the imposition and relaxing of the measures. This scenario corresponds to the case of an unvaccinated population where the only means of controlling the spread of the virus is through measures such as social isolation, masking, etc. The ability of the virus to infect people is not diminished as time progresses, and when measures to stop the spread of the virus are removed, the infection rate of the virus returns to its original value. More sophisticated models could be introduced by considering the $\beta$ parameter as a function of time. The numerical challenges would be similar.
 
-We start with a naive treatment of the problem with if-statements applied inside the function that defines the right-hand side of the ODE system. We proceed to show how the problem cannot be solved with reasonable accuracy this way even at sharp tolerances. Finally, we will introduce a way to efficiently and accurately solve the problem using event detection to handle the discontinuities.
+We start with a simple treatment of the problem with if-statements applied inside the function that defines the right-hand side of the ODE system. We proceed to show how this form of the problem cannot be solved with reasonable accuracy, even at sharp tolerances. Finally, we will introduce an approach to efficiently and accurately solve the problem using event detection to handle the discontinuities.
 
-\subsection{Naive treatment of Covid-19 state dependent discontinuity model}
+\subsection{Simple treatment of Covid-19 state dependent discontinuity model}
 \label{subsection:naive_state_problem}
-The naive treatment of this problem is to use global variables for tracking when measures are implemented and relaxed and to toggle these global variables as we reach the required thresholds. Global variables are needed because we need to know if the number of Exposed people is going up or down to know whether we need to check for the maximum or the minimum threshold. We then have an if-statement that will choose the value of parameter $\beta$ based on whether measures are being implemented. The pseudo-code for this algorithm is as follows:
+A simple treatment of this problem is to use global variables for tracking when measures are implemented and relaxed and to toggle these global variables as we reach the required thresholds. Global variables are needed because we need to know if the number of exposed people is going up or down to know whether we need to check for the maximum or the minimum threshold. We then have an if-statement that will choose the value of parameter $\beta$ based on whether measures are being implemented or not. The pseudo-code for this algorithm is as follows:
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=Python]
@@ -38,36 +38,36 @@ function model_with_if(_, y):
 \end{lstlisting}
 \end{minipage}
 
-\subsubsection{Naive solution of the State dependent discontinuity model in R}
+\subsubsection{Simple solution of the state dependent discontinuity model in R}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_R}
-\caption{Naive solutions to the state dependent discontinuity model in R}
+\caption{Solutions to the state dependent discontinuity model in R, based on the simple approach.}
 \label{fig:state_discontinuity_R}
 \end{figure}
-In Figure $\ref{fig:state_discontinuity_R}$, we show the results from the use of a number of solvers in R based on the naive implementation described above using default tolerances. Figure $\ref{fig:state_discontinuity_R}$ shows how difficult this problem is with a naive treatment. We note that none of the solutions are aligned and that none of the solvers get a reasonably accurate solution (described in Section $\ref{subsection:state_with_event_detection}$) as none of the computed solutions cleanly oscillate between 10000 and 25000 with clear peaks and troughs.
+In Figure $\ref{fig:state_discontinuity_R}$, we show the results from the use of a number of solvers in R based on the simple implementation described above using default tolerances. Figure $\ref{fig:state_discontinuity_R}$ shows how difficult this problem is with a simple treatment. We note that none of the solutions are aligned and that none of the solvers get a reasonably accurate solution (described in Section $\ref{subsection:state_with_event_detection}$) as none of the computed solutions cleanly oscillate between 10000 and 25000 with clear peaks and troughs.
 
 We note that none of the solvers, even the error-controlled ones, issued a warning about the integration and thus users may be tempted to think that the solver has solved the problem to within reasonable accuracy. Having no warning also tells us that the error estimation and error control algorithms employed by all the solvers did not detect anything abnormal; the solvers return with an indication that the provided solutions are accurate to within the requested tolerance.
 
-As we are modeling E, we expect that each graph should go from 25000 to 10000 and back to 25000 repeatedly but none of these graphs do so in the required pattern. We would also expect the solvers with error control to repeatedly reduce the step-size to satisfy the tolerance and compute solutions that align with each other but Figure $\ref{fig:state_discontinuity_R}$ shows that this is not the case.
+As we are modeling E(t), we expect that each graph should go from 25000 to 10000 and back to 25000 repeatedly but none of these graphs do so in the required pattern. We would also expect the solvers with error control to repeatedly reduce the step-size to satisfy the tolerance and compute solutions that align with each other but Figure $\ref{fig:state_discontinuity_R}$ shows that this is not the case.
 
-We also note that the result for `euler' is especially poor as it reaches a maximum of 40000. This is again as expected as `euler' has no error control; `rk4', the other fixed step-size method, is also performing poorly as we see the solution it computes reach approximately 30000 in its third peak. This is happening even though the space between the output points is as small as it was when we were investigating the time-dependent discontinuity problem. Because of this, we will not run any spacing of output points experiments in this section. The step-size for these fixed-step solvers is not small enough and further step-size reductions are needed.
+We also note that the result for `euler' is especially poor as it reaches a maximum of 40000. This is again as expected as `euler' has no error control; `rk4', the other fixed step-size method, is also performing poorly; we see the solution it computes reach approximately 30000 in its third peak. This is happening even though the space between the output points is as small as it was when we were investigating the time-dependent discontinuity problem. Because of this, we will not run any spacing of output points experiments in this section. The step-size for these fixed-step solvers is not small enough and further step-size reductions are needed.
 
-Another important fact to note is how poorly `Radau', as shown in Figure $\ref{fig:state_discontinuity_radau_R}$, performs. This is not a problem of the R programming environment as similar results will be seen in Python in the next section and in the Fortran code in Section $\ref{section:fortran_inaccuracies}$. The solution grows exponentially even after the parameter $\beta$ is switched to 0.005 which should force the solution to begin a decay. We perform an analysis with the Fortran code in $\ref{section:fortran_inaccuracies}$ to show that $\beta$ is indeed 0.005 while this exponential growth is happening. 
+Another important fact to note is how poorly `Radau', as shown in Figure $\ref{fig:state_discontinuity_radau_R}$, performs. This is not a problem with the R programming environment as similar results will be seen in Python in the next section and in the Fortran code in Section $\ref{section:fortran_inaccuracies}$. The solution grows exponentially even after the parameter $\beta$ is switched to 0.005, which should force the solution to begin a decay. We perform an analysis with the Fortran code later in this report to show that $\beta$ is indeed 0.005 while this exponential growth is happening. 
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_radau_R}
-\caption{Naive solution of `Radau' to the state dependent discontinuity model in R}
+\caption{Solution by `Radau' for the state dependent discontinuity model in R, based on the simple approach.}
 \label{fig:state_discontinuity_radau_R}
 \end{figure}
 
-We next proceed to show that sharp tolerances are not enough to solve this problem as was the case for the time-dependent discontinuity problem. We repeated the experiment at the sharpest tolerance that could be used prior to some of the solvers failing. This was at $10^{-13}$ in the R environment. We set both the absolute and relative tolerance to that value and show the results in Figure $\ref{fig:state_discontinuity_sharp_R}$.
+We next proceed to show that sharp tolerances are not enough to solve this problem as was the case for the time-dependent discontinuity problem. We repeat the experiment at the sharpest tolerance that could be used prior to some of the solvers failing. This was at $10^{-13}$ in the R environment. We set both the absolute and relative tolerance to that value and show the results in Figure $\ref{fig:state_discontinuity_sharp_R}$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_sharp_R}
-\caption{Naive solutions to the state dependent discontinuity model in R at a sharp tolerance}
+\caption{Solutions to the state dependent discontinuity model in R with a sharp tolerance, using the simple approach.}
 \label{fig:state_discontinuity_sharp_R}
 \end{figure}
 
@@ -75,23 +75,23 @@ We can see from Figure $\ref{fig:state_discontinuity_sharp_R}$ that the situatio
 
 The fixed step-size method `euler' and `rk4' results are the same as in Figure $\ref{fig:state_discontinuity_R}$ since these codes do not employ a tolerance.
 
-We can also point out that at such sharp tolerances `Radau' no longer computes solutions exhibiting the abnormal behavior we saw previously. From Figure $\ref{fig:state_discontinuity_radau_sharp_R}$, we can see that the solution computed by `Radau' oscillates approximately between 10000 and 25000. From supplementary experiments, we observe that `Radau' starts performing at a level that is comparable to the other solvers at a tolerance of $10^{-9}$.
+We can also point out that at such sharp tolerances `Radau' no longer computes solutions exhibiting the abnormal behavior we saw previously. From Figure $\ref{fig:state_discontinuity_radau_sharp_R}$, we can see that the solution computed by `Radau' oscillates approximately between 10000 and 25000. From supplementary experiments, we observe that `Radau' starts performing at a level that is comparable to the other solvers at a tolerance of $10^{-9}$ or sharper.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_sharp_radau_R}
-\caption{Naive solution of `Radau' to the state dependent discontinuity model in R at a sharp tolerance}
+\caption{Solution by `Radau' for the state dependent discontinuity model in R with a sharp tolerance, using the simple approach.}
 \label{fig:state_discontinuity_radau_sharp_R}
 \end{figure}
 
-\subsubsection{Naive solution of the State dependent discontinuity model in Python}
+\subsubsection{Simple solution of the state dependent discontinuity model in Python}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_py}
-\caption{Naive solutions to the state dependent discontinuity model in Python}
+\caption{Solutions to the state dependent discontinuity model in Python, based on the simple approach.}
 \label{fig:state_discontinuity_python}
 \end{figure}
-Figure $\ref{fig:state_discontinuity_python}$ shows what happens when the problem is solved using the naive implementation and default tolerances in Python. We can see that the results are similar to those obtained in R. This happens even though all solvers in Python have error control.
+Figure $\ref{fig:state_discontinuity_python}$ shows what happens when the problem is solved using the simple implementation and default tolerances in Python. We can see that the results are similar to those obtained in R. This happens even though all solvers in Python have error control.
 
 We note that all the solvers except `RK23' give solutions that at least oscillate between 10000 and 25000, though in completely dissimilar patterns. The solutions have peaks and troughs at different times. No warnings were given by the solvers.
 
@@ -102,7 +102,7 @@ Again, as shown in Figure $\ref{fig:state_discontinuity_radau_py}$, `Radau' comp
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_radau_py}
-\caption{Naive solution of `Radau' to the state dependent discontinuity model in Python}
+\caption{Solution by `Radau' for the state dependent discontinuity model in Python, based on the simple approach.}
 \label{fig:state_discontinuity_radau_py}
 \end{figure}
 
@@ -111,58 +111,58 @@ We then used very sharp tolerances to solve the problem but, as is the case in t
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_sharp_py}
-\caption{Naive solutions to the state dependent discontinuity model in Python at a sharp tolerance}
+\caption{Solutions to the state dependent discontinuity model in Python with a sharp tolerance, using the simple approach.}
 \label{fig:state_discontinuity_sharp_python}
 \end{figure}
 
-Figure $\ref{fig:state_discontinuity_sharp_python}$ shows that the results did improve. However, the solvers give solutions that are not in agreement. We note that none of the solvers are oscillating beyond 25000 as was the case with the fixed-step solvers in R. At sharp tolerances, the solutions are aligned for the first few discontinuities with only some blurring until about t=25 when the solvers give substantially different solutions. Though the pattern is correct, none of the solvers give solutions that are in agreement telling us that none got the reasonably accurate solution that we present in Section $\ref{subsection:state_with_event_detection}$. (See the comparison against the final solution in Section $\ref{subsubsection:state_solution_comparison}$ to see that even this sharp tolerance solution is not accurate enough.)
+Figure $\ref{fig:state_discontinuity_sharp_python}$ shows that the results did improve. However, the solvers give solutions that are not in agreement. We note that none of the solvers are oscillating beyond 25000 as was the case with the fixed-step solvers in R. At sharp tolerances, the solutions are aligned for the first few discontinuities with only some blurring until about t=25 when the solvers give substantially different solutions. Though the pattern is correct, none of the solvers give solutions that are in agreement telling us that none were able to compute a reasonably accurate solution such as the one that we present in Section $\ref{subsection:state_with_event_detection}$. (See the comparison against the final solution in Section $\ref{subsubsection:state_solution_comparison}$ to see that even this sharp tolerance solution is not accurate enough.)
 
 We note that `RK23' is now following the correct pattern in that it oscillates between 10000 and 25000 whereas it only reached 15000 at the default tolerance. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_sharp_radau_py}
-\caption{Naive solution of `Radau' to the state dependent discontinuity model in Python at a sharp tolerance}
+\caption{Solution by `Radau' for the state dependent discontinuity model in Python with a sharp tolerance, using on the simple approach.}
 \label{fig:state_discontinuity_sharp_radau_py}
 \end{figure}
 
-Again, as shown in Figure $\ref{fig:state_discontinuity_sharp_radau_py}$, `Radau' begins to give reasonable solutions at these sharp tolerances; the solutions follows the pattern we are expecting but as we will show in Section $\ref{subsection:state_with_event_detection}$, they are still not sufficiently accurate solutions. `Radau' starts performing reasonably well at around a tolerance of $10^{-10}$. We also note that the R and Python implementation of `Radau' are different. The `Radau' solver in Python is implemented in Python with the NumPy library whereas R uses the Fortran code. Thus we eliminate the possibility of a bug in the code as well as any problem stemming from the interface from R to Fortran or from Python to NumPy. The problem is simply in how the Radau algorithm interacts with this naive implementation of the state-dependent discontinuity. In our experiments with the Radau Fortran code, in Section $\ref{section:fortran_inaccuracies}$, the same behavior is observed.
+Again, as shown in Figure $\ref{fig:state_discontinuity_sharp_radau_py}$, the `Radau' solver begins to give reasonable solutions at these sharp tolerances; the solutions follows the pattern we are expecting but as we will show in Section $\ref{subsection:state_with_event_detection}$, they are still not sufficiently accurate solutions. The `Radau' solver starts performing reasonably well at around a tolerance of $10^{-10}$. We also note that the R and Python implementation of `Radau' are different. The `Radau' solver in Python is implemented in Python with the NumPy library whereas R uses the Fortran code. Thus we eliminate the possibility of a bug in the code as well as any problem stemming from the interface from R to Fortran or from Python to NumPy. The problem is simply in how the Radau algorithm interacts with this simple implementation of the state-dependent discontinuity. In our experiments with the Radau Fortran code, in Section $\ref{section:fortran_inaccuracies}$, the same behavior is observed.
 
-\subsubsection{Naive solution of the State dependent discontinuity model in Scilab}
+\subsubsection{Simple solution of the state dependent discontinuity model in Scilab}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_scilab}
-\caption{Naive solutions to the state dependent discontinuity model in Scilab}
+\caption{Solutions to the state dependent discontinuity model in Scilab, based on the simple approach.}
 \label{fig:state_discontinuity_scilab}
 \end{figure}
 
 Figure $\ref{fig:state_discontinuity_scilab}$ shows the same issues that we saw before. None of the solvers give solutions that are aligned which prompts us to conclude that none of them are getting a reasonably accurate solution. All of the solvers in Scilab have error control and we can also see that their solutions all follow the correct pattern of oscillating approximately between 10000 and 25000. However, as we will discuss in Section $\ref{subsection:state_with_event_detection}$, none of the solutions are very accurate. We note that the spacing between output points is not important in this analysis as at the current spacing, even the solvers that depend on the spacing are getting inaccurate answers.
 
-We then repeat the experiment at sharp tolerances. The Scilab `rkf' method does not allow the use of very sharp tolerance as it has a cap of 3000 derivative evaluation so it was omitted from this experiment. The sharpest tolerance we can use in Scilab before the other methods fail is $10^{-13}$; the results are shown in Figure $\ref{fig:state_discontinuity_sharp_scilab}$.
+We then repeat the experiment at sharp tolerances. The Scilab `rkf' method does not allow the use of very sharp tolerance as it has a cap of 3000 derivative evaluations so it was omitted from this experiment. The sharpest tolerance we can use in Scilab before the other methods fail is $10^{-13}$; the results are shown in Figure $\ref{fig:state_discontinuity_sharp_scilab}$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_sharp_sci}
-\caption{Naive solutions to the state dependent discontinuity model in Scilab at a sharp tolerance}
+\caption{Solutions to the state dependent discontinuity model in Scilab with a sharp tolerance, using the simple approach.}
 \label{fig:state_discontinuity_sharp_scilab}
 \end{figure}
 
 Again, in Figure $\ref{fig:state_discontinuity_sharp_scilab}$ we can see that the use of sharp tolerances is not enough to force the solvers to compute reasonably accurate solutions. The solutions did improve as all the solvers follow the correct pattern but none oscillate between 10000 and 25000 with clear peaks and troughs at those values. For the time period between 0 to 30, the solutions all seem to show reasonable agreement but as we go further in time, all of the solutions diverge. We also note that none of the solvers compute solutions in reasonable agreement with the solution discussed in Section $\ref{subsection:state_with_event_detection}$. (See the comparison against the final solution in Section $\ref{subsubsection:state_solution_comparison}$ to see that even these sharp tolerance solutions are not accurate enough.)
 
 
-\subsubsection{Naive solution of the State dependent discontinuity model in Matlab}
+\subsubsection{Simple solution of the state dependent discontinuity model in Matlab}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_matlab}
-\caption{Naive solutions to the state dependent discontinuity model in Matlab}
+\caption{Solutions to the state dependent discontinuity model in Matlab, based on the simple approach.}
 \label{fig:state_discontinuity_matlab}
 \end{figure}
-In Figure $\ref{fig:state_discontinuity_matlab}$. we see the same incorrect solutions in Matlab as we did in the previous environments as the solvers are run with the naive implementation at the default tolerances. The solvers do not even consistently reach 25000. We then use a sharper tolerance to see if the solutions are improved.
+In Figure $\ref{fig:state_discontinuity_matlab}$. we see the same incorrect solutions in Matlab as we did in the previous environments as the solvers are run with the simple implementation at the default tolerances. The solvers do not even consistently reach 25000. We then use a sharper tolerance to see if the solutions are improved.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/state_discontinuity_sharp_matlab}
-\caption{Naive solutions to the state dependent discontinuity model in Matlab at a sharp tolerance}
+\caption{Solutions to the state dependent discontinuity model in Matlab with a sharp tolerance, using the simple approach.}
 \label{fig:state_discontinuity_sharp_matlab}
 \end{figure}
 
@@ -171,50 +171,50 @@ Figure $\ref{fig:state_discontinuity_sharp_matlab}$ shows the results of the exp
 
 \subsubsection{State dependent discontinuity model - solution comparisons}
 \label{subsubsection:state_solution_comparison}
-In all the previous subsections, we have maintained that even the sharp tolerance solutions, though more in agreement, are not accurate. Here, we present a comparison between LSODA in Python at default tolerance, at the sharpest tolerance, and a sufficiently accurate solution that we will present shortly which uses event detection. We can see from Figure $\ref{fig:comparison_state_default_sharp_event}$ that the naive solutions from LSODA both at default and the sharp tolerance do not agree with the more accurate solution. 
+In all the previous subsections, we have maintained that even the sharp tolerance solutions, though more in agreement, are not accurate. Here, we present a comparison between the solution obtained by LSODA in Python using the simple approach at the default tolerance and at the sharpest tolerance, alongside an accurate solution that we will present shortly which is obtained using event detection. We can see from Figure $\ref{fig:comparison_state_default_sharp_event}$ that the solutions from LSODA both at default and the sharp tolerance obtained using the simple approach do not agree with the more accurate solution. 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/comparison_state_default_sharp_event}
-\caption{Solutions to the state dependent discontinuity model from LSODA - solution comparisons}
+\caption{Solutions to the state dependent discontinuity model from LSODA based on the simple approach using the default tolerance and a sharp tolerance, alongside an accurate solution.}
 \label{fig:comparison_state_default_sharp_event}
 \end{figure}
 
 \subsection{Why the solvers fail even with sharp tolerances}
 \label{subsection:state_sharp_tol_failed}
-In this section we discuss why sharp tolerances were not enough to force the solvers to accurately solve the problem in the naive way it is coded, i.e, using global variables and if-statements. 
+In this section we discuss why sharp tolerances were not enough to force the solvers to accurately solve the problem in the simple way it is coded, i.e, using global variables and if-statements. 
 
-Whenever there is a change in the value of $\beta$, the step that first encounters the ensuing discontinuity will almost always be a failed step. As discussed in Section $\ref{subsection:effect_of_discontinuity}$, the step-size at a discontinuity will always have to be much smaller than the step-size on the continuous region to the left of the discontinuity. Thus the first encounter of a solver with any discontinuity will always be in the context of a failed step.
+Whenever there is a change in the value of $\beta$, the step where the discontinuity is first encountered will almost always be a failed step. As discussed in Section $\ref{subsection:effect_of_discontinuity}$, the step-size at a discontinuity will always have to be much smaller than the step-size on the continuous region to the left of the discontinuity. Thus the first encounter of a solver with any discontinuity will always be in the context of a failed step.
 
-During this failed step, the value of the E will cross the threshold. The global variables will thus be toggled. But then, when the solver attempts to retake the step using a smaller step-size, to the left of the discontinuity, it will be using the wrong $\beta$ value. 
+During this failed step, the value of E(t) will cross the threshold. The global variables will thus be toggled. But then, when the solver attempts to retake the step using a smaller step-size, to the left of the discontinuity, it will be using the wrong $\beta$ value. 
 
-This observation is crucial as it allows us to conclude that once a failed step has occurred just before the discontinuity, the function evaluations should be based on the previous $\beta$ value but they are in fact using the new $\beta$ value. There is no trivial way to code this behavior in the ODE function, $f(t, y(t))$, since we do not know the time of the discontinuity. 
+This observation is crucial as it allows us to conclude that once a failed step has occurred due to the solver encountering a discontinuity, the function evaluations made to the left of the discontinuity should be based on the previous $\beta$ value but they are in fact obtained using the new $\beta$ value. There is no trivial way to code this behavior in the ODE function, $f(t, y(t))$, since we do not know the time of the discontinuity. 
 
-The problem, in summary, is that the solvers need to figure out how to step up to the discontinuity such that to the left of the discontinuity, the step employs function evaluations that use the previous $\beta$, and then after the discontinuity, the solver employs function evaluations that use the new $\beta$ value. This cannot be coded in a straightforward way using the interfaces available in our programming environments.
+The problem, in summary, is that the solvers need to figure out how to step up to the discontinuity such that to the left of the discontinuity, the solver employs function evaluations that use the previous $\beta$, and then after the discontinuity, the solver employs function evaluations that use the new $\beta$ value. This cannot be coded in a straightforward way using the interfaces available in the programming environments.
 
-In the next few sections, we will present the correct way to code problems with state-dependent discontinuities so that we get reasonably accurate solutions in an efficient manner.
+In the next few sections, we will present a better approach for treating problems with state-dependent discontinuities that will allow us to get reasonably accurate solutions in an efficient manner.
 
-\subsection{Introducing event detection}
+\subsection{Event detection}
 \label{subsection:intro_event_detection}
-For the time-dependent discontinuity problem, we saw that if we used error-controlled software, then the solvers can accurately work through one discontinuity at sufficiently high tolerances. We also showed that this was not the most efficient way for them to solve the problem. For the state-dependent discontinuity problem, we showed in the previous section that the solvers, using even sharp tolerances, will not be able to solve this problem with much accuracy. Because we do not know when the discontinuities occur, we cannot use the discontinuity handling technique, involving a cold restart, that we used to solve the time-dependent discontinuity problem. However, the idea that we developed in Section $\ref{subsection:time_disc_handling}$ about integrating continuous sub-problems separately and combining them into a final solution can be applied here. 
+For the time-dependent discontinuity problem, we saw that if we used error-controlled software, then the solvers can accurately work through one discontinuity at sufficiently high tolerances. We also showed that this was not the most efficient way to solve the problem. For the state-dependent discontinuity problem, we showed in the previous section that the solvers, using even sharp tolerances, are not be able to solve this problem with much accuracy. Because we do not know when the discontinuities occur, we cannot use the discontinuity handling technique, involving a cold restart, that we used to solve the time-dependent discontinuity problem. However, the idea that we developed in Section $\ref{subsection:time_disc_handling}$ about integrating continuous sub-problems separately and combining them into a final solution can be applied here. 
 
 To integrate continuous sub-problems, we need a way to detect that a threshold has been met, and then as soon as we reach such a point, we can perform a cold start. This will make the solver integrate the problem one continuous subinterval at a time. In this section, we will explain the capability of modern solvers to detect events and we will show how to encode the E(t) thresholds (either E(t)=25000 or E(t)=10000) as events so that the times at which they occur can be determined. We can then perform a cold start at these times.
 
-To perform event detection, an ODE solver will require two functions from the user: the usual ODE right-hand side function, $f(t, y(t))$ and another function which we will call the root function (commonly denoted by $g(t, y(t))$), that determines the events.
+To perform event detection, an ODE solver requires two functions from the user: the usual ODE right-hand side function, $f(t, y(t))$ and another function, the root function (commonly denoted by $g(t, y(t))$), that defines the events.
 
-The root function is a function that, given the value of the solution $y(t)$ at time $t$ to the ODE at the current step will return a real number. The ODE solution is said to have a root whenever the value of the root function is zero. The key idea is that each event must be written so that it occurs at the root of a root function.
+The root function is a function that, given the value of the solution $y(t)$ at time $t$ to the ODE at the current step will return a number. The event function, $g(t, y(t))$, is said to have a root whenever the value of the root function is zero. The key idea is that each event must be written so that it occurs at the root of a root function.
 
-The solver calls the root function at the end of each successful step that it takes and will record its value. It will then compare the value of the root function with the corresponding value from the previous step to see if there has been a change of sign. If the value of the root-function has changed sign, the solver raises a flag to say that it has detected a root and will then run a root-finding algorithm on that step to find the point where the root-function equals zero. Most solvers will then return, allowing us to perform a cold start.
+The solver calls the root function at the end of each successful step that it takes and will record its value. It will then compare the value of the root function with the corresponding value from the previous step to see if there has been a change of sign. If the value of the root-function has changed sign, the solver will then run a root-finding algorithm on that step to find the point where the root-function equals zero. Most solvers will then return, allowing us to perform a cold start.
 
-Using event detection thus entails defining a function that takes the value of the ODE solution at the current point and returns a real number which is zero whenever we want it to detect an event. For example, if we want to detect when y is 100, it is sufficient to define (y - 100) to be the root function. In the next section, we will elaborate on how to use event detection to accurately and efficiently solve the state-dependent discontinuity problem.
+Using event detection thus entails defining a function that takes the value of the ODE solution at the current point and returns a real number which is zero whenever there is an event. For example, if we want to detect when y is 100, it is sufficient to define (y - 100) to be the root function. In the next section, we will elaborate on how to use event detection to accurately and efficiently solve the state-dependent discontinuity problem.
 
-We also mention that many modern solvers have event detection built-in. Thus users should be able to use event-detection solvers from their preferred programming environments without any additional software.
+We also mention that many modern solvers have event detection built-in. Thus users should be able to use event-detection solvers from their preferred programming environments without any additional software, being required.
 
 \subsection{Solving the state dependent discontinuity model using event detection}
 \label{subsection:state_with_event_detection}
 As mentioned earlier, each toggling between the values of the parameter $\beta$ introduces a discontinuity. As none of the provided solvers are designed to solve discontinuous problems, we get the erroneous solutions reported in $\ref{subsection:naive_state_problem}$. We have seen that although sharp tolerances do result in somewhat better solutions being computed, none of the solvers were able to obtain a sufficiently accurate solution. The use of such sharp tolerances leads to inefficiencies as well. We will now present an approach using event detection that is both accurate and efficient.
 
-The solution is to use the thresholds that we have defined in our model to define events and integrate up to the time at which each threshold is reached using the event detection capability of the solver. We can then cold start from there and repeat the process with another right-hand side function corresponding to the new $\beta$ value and with a different root function that encodes the next threshold we are looking for. We repeat this process until we reach the end of the time interval. This approach allows the solvers to integrate continuous sub-problems, one at a time, and these sub-problems can then be combined into a final solution.
+The idea is to use the thresholds that we have defined in our model to define events and integrate up to the time at which each threshold is reached using the event detection capability of the solver. We can then cold start from there and repeat the process with another right-hand side function corresponding to the new $\beta$ value and with a different root function that encodes the next threshold we are looking for. We repeat this process until we reach the end of the time interval. This approach allows the solvers to integrate continuous sub-problems, one at a time, and these sub-problems can then be combined into a final solution.
 
 For our specific problem, event detection is used as follows:
 We start by solving the problem with $\beta$=0.9 and with a root function that detects when E(t) is equal to 25000. Once, using the event detection capability of the solver, we detect the time at which E(t)=25000, we do a cold start. We evaluate the solution computed by the solver at the time of the event and use that solution as the initial value for our next call to the solver. This next call will have $\beta$ at 0.005 and a root function that detects a root when E(t)=10000. We again integrate up to that new threshold and cold start when we reach it. The new cold start will have $\beta$=0.9 and the root function will look for E(t)=25000 as the event. This is repeated until we reach the desired end time. The pseudo-code is as follows:
@@ -261,7 +261,7 @@ while t_initial < 180:
 \end{lstlisting}
 \end{minipage}
 
-Some programming environments, such as Python, by default, do not stop the integration when the first event is detected. To do a cold start, we need the solver to stop at events, and to make this happen, in some programming environments we need to set appropriate flags. 
+Some programming environments, such as Python, by default, do not stop the integration when the first event is detected. To do a cold start, we need the solver to stop at events, and to make this happen, in some programming environments we need to set appropriate input parameters. 
 
 \subsubsection{Solving the state-dependent discontinuity model in R using event detection}
 \begin{figure}[H]
@@ -272,7 +272,7 @@ Some programming environments, such as Python, by default, do not stop the integ
 \end{figure}
 Several of the solvers in R have event detection capabilities. These are: `adams', `bdf', `lsoda', `Radau', and they will be used in this section to solve the state dependent discontinuity model using the approach described in the previous subsection. From Figure $\ref{fig:solve_state_discontinuity_R}$, we can see that all the solvers give solutions that are in agreement except `Radau'. This is in contrast with what happened previously when we were integrating a discontinuous problem, even at sharp tolerances. 
 
-The case of `Radau' is interesting as it was giving a poor quality solution at the default tolerances, without event detection but it is now giving at least a solution that is exhibiting a correct pattern. We note that at sharp tolerances `Radau' with event detection gives result that approach the results from the other solvers, as shown in Figure $\ref{fig:solve_state_discontinuity_sharp_R}$. We will also note the poor performance of Radau in Table $\ref{tab:state_discontinuity_R}$. We also note that `Radau' Fortran code does not have built-in detection and that the event detection has been added through the C interface, which may explain the disparity in performance that we see for that solver.
+The case of `Radau' is interesting as it was giving a poor quality solution at the default tolerances, without event detection but it is now giving at least a solution that is exhibiting a correct pattern. We note that at sharp tolerances `Radau' with event detection gives results that approach the results from the other solvers, as shown in Figure $\ref{fig:solve_state_discontinuity_sharp_R}$. We will also note the poor performance of Radau in Table $\ref{tab:state_discontinuity_R}$. We also note that `Radau' Fortran code does not have built-in detection and that the event detection has been added through the C interface, which may explain the disparity in performance that we see for that solver.
 
 \begin{figure}[H]
 \centering
@@ -363,7 +363,7 @@ From Table $\ref{tab:state_discontinuity_scilab}$, we can see that the root-find
 \caption{Solving state discontinuity model in Matlab}
 \label{fig:solve_state_discontinuity_matlab}
 \end{figure}
-Both $ode45()$ and $ode15s()$ have an event detection capability. (The root functions need to set a flag to indicate that the root is terminal in order to allow a cold start to be performed.) We applied event detection to solve the problem with the solvers in the Matlab environment and the results are shown in Figure $\ref{fig:solve_state_discontinuity_matlab}$. We remember that the solutions in Matlab without event detection were surprisingly accurate but were in disagreement with each other at points further in time. We can see that with event detection, the solutions are all in agreement at the default tolerances even at points further in time. We also see, in Table $\ref{tab:state_discontinuity_matlab}$, that the use of event detection is also more efficient than the computation without event detection.
+Both $ode45$ and $ode15s$ have an event detection capability. (The root functions need to set an input parameter to indicate that the root is terminal in order to allow a cold start to be performed.) We applied event detection to solve the problem with the solvers in the Matlab environment and the results are shown in Figure $\ref{fig:solve_state_discontinuity_matlab}$. We remember that the solutions in Matlab without event detection were surprisingly accurate but were in disagreement with each other at points further in time. We can see that with event detection, the solutions are all in agreement at the default tolerances even at points further in time. We also see, in Table $\ref{tab:state_discontinuity_matlab}$, that the use of event detection is also more efficient than the computation without event detection.
 
 \begin{table}[h]
 \caption {Efficiency data for Matlab state-dependent discontinuity model - number of function evaluations} \label{tab:state_discontinuity_matlab}
@@ -504,12 +504,12 @@ tolerance & no event detection & with event detection \\
 \end{center}
 \end{table}
 
-Table $\ref{tab:tolerance_state_discontinuity_lsoda_scilab}$ shows the number of function evaluations that LSODA used with and without event detection to solve the state dependent discontinuity problem at multiple tolerances. We can see that even at coarse tolerances, using event detection makes LSODA use fewer function evaluations while giving more accurate solutions. This reinforces that event detection is the better way to solve state-dependent discontinuity problems. 
+Table $\ref{tab:tolerance_state_discontinuity_lsoda_scilab}$ shows the number of function evaluations that LSODA uses with and without event detection to solve the state dependent discontinuity problem at multiple tolerances. We can see that even at coarse tolerances, using event detection allows LSODA use fewer function evaluations while giving more accurate solutions. This reinforces that event detection is the better way to solve state-dependent discontinuity problems. 
 
 \subsubsection{Comparing Runge-Kutta pairs across platforms for state discontinuous problem}
 In this section, we consider solvers based on Runge-Kutta pairs of the same order: DOPRI5 in R aliased as `ode45', DOPRI5 in Python aliased as `RK45', DOPRI5 in Matlab through the $ode45$ function, and RKF45 in Scilab aliased as `rkf'.
 
-We recall that without event detection, none of these solvers across the platforms solved the problem to sufficient accuracy even with sharp tolerances. We will show what happens to these solvers as the tolerance is sharpened. We also coarsen the tolerance for the case where the solvers use event detection to see how coarse the tolerance can be while still obtaining sufficient accuracy.
+We recall that without event detection, none of these solvers across the platforms solved the problem to reasonable accuracy even with sharp tolerances. We will show what happens to these solvers as the tolerance is sharpened. We also coarsen the tolerance for the case where the solvers use event detection to see how coarse the tolerance can be while still obtaining reasonable accuracy.
 
 \subparagraph{Tolerance study on state dependent discontinuity model using the R version of DOPRI5}
 The R version of DOPRI5 does not have event detection but we still perform the experiment on this solver without event detection. We pick several values for the absolute and relative tolerances and run the solvers. In so doing we see how the code performs as the tolerance is sharpened. 
@@ -517,11 +517,11 @@ The R version of DOPRI5 does not have event detection but we still perform the e
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_no_event_R}
-\caption{State dependent discontinuity model tolerance study on the R version DOPRI5 without event detection}
+\caption{State dependent discontinuity model tolerance study on the R version of DOPRI5 without event detection}
 \label{fig:tolerance_state_rk45_no_event_R}
 \end{figure}
 
-From Figure $\ref{fig:tolerance_state_rk45_no_event_R}$, we see that DOPRI5 applied to the same problem with different tolerances, gives significantly different solutions. We then report the efficiency data for this case in Table $\ref{tab:tolerance_state_discontinuity_rk45_R}$.
+From Figure $\ref{fig:tolerance_state_rk45_no_event_R}$, we see that DOPRI5 applied to the same problem with different tolerances, gives significantly different solutions. We then report the efficiency data for this case in Table $\ref{tab:tolerance_state_discontinuity_rk45_R}$. Table $\ref{tab:tolerance_state_discontinuity_rk45_R}$ shows the number of function evaluations the `ode45' solver uses. As it does not have event detection unlike the equivalent solvers in Python and Matlab, we cannot compare how the number of function evaluations differs with and without event detection. However, looking at the efficiency data of the Runge-Kutta pairs in the other environment and with R's LSODA solver, we can argue that it too will use less function evaluations with event detection than without.
 
 \begin{table}[h]
 \caption {The R version of DOPRI5 applied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_rk45_R} 
@@ -541,7 +541,7 @@ tolerance & no event detection \\
 \end{table}
 
 \subparagraph{Tolerance study on state dependent discontinuity model using the Python version of DOPRI5}
-We perform the same experiment in Python. The Python version of DOPRI5 does have an event detection capability. The absolute and relative tolerances are set to a range of values and the solver is run both with and without event detection. We report on how the code performs as the tolerance is sharpened in the case without event detection. Since the Python version of DOPRI5 has event detection, we will see how coarse the tolerance can be set while still giving us a reasonably accurate solution. We note that the solver crashes if we ask for a tolerance of 0.1.
+We perform the same experiment in Python. The Python version of DOPRI5 does have an event detection capability. The absolute and relative tolerances are set to a range of values and the solver is run both with and without event detection. We report on how the code performs as the tolerance is sharpened in the case without event detection. Since the Python version of DOPRI5 has event detection, we will see how coarse the tolerance can be set while still giving us a reasonably accurate solution. We will use results from the Runge-Kutta pair in Python and in Matlab, that both have event detection, to inform on how we can expect the results from the Scilab `rkf' and  the R `ode45' solvers, which do not have event detection, are supposed to be. We note that the solver crashes if we ask for a tolerance of 0.1.
 
 \begin{figure}[h]
 \centering
@@ -557,9 +557,7 @@ We perform the same experiment in Python. The Python version of DOPRI5 does have
 \label{fig:tolerance_state_rk45_with_event_py}
 \end{figure}
 
-In Figure $\ref{fig:tolerance_state_rk45_no_event_py}$, we can see that even at sharp tolerances, the solver is not able to compute a reasonably accurate solution.
-
-In contrast, when using event detection, the code can use very coarse tolerances. We can see that a tolerance of $10^{-4}$ is sharp enough to solve the given problem accurately; the blurring that occurs is due to the coarser tolerances. We present the efficiency data in Table $\ref{tab:tolerance_state_discontinuity_rk45_py}$ to show how the code with event detection is also far more efficient.
+In Figure $\ref{fig:tolerance_state_rk45_no_event_py}$ corresponding to the case with no event detection, we can see that even at sharp tolerances, the solver is not able to compute a reasonably accurate solution. In contrast, in Figure $\ref{fig:tolerance_state_rk45_with_event_py}$, which corresponds to the case when we use event detection, the code can use very coarse tolerances. We can see that a tolerance of $10^{-4}$ is sharp enough to solve the given problem accurately; the blurring that occurs is due to the coarser tolerances. We present the efficiency data in Table $\ref{tab:tolerance_state_discontinuity_rk45_py}$ to show how the code with event detection is also far more efficient.
 
 \begin{table}[h]
 \caption {The Python version of DOPRI5 apllied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_rk45_py} 
@@ -582,8 +580,7 @@ We can see in Table $\ref{tab:tolerance_state_discontinuity_rk45_py}$ that acros
 \subparagraph{Tolerance study on state dependent discontinuity model using the Scilab version of RKF45}
 Scilab uses RKF45 which is a different Runge-Kutta pair from what is used in DOPRI5 but the pairs have the same order. It does not have event detection but we can still perform the experiment on the solver without event detection. We pick several values for the absolute and relative tolerances and run the solver. In so doing we see how the solver performs as the tolerance is sharpened. 
 
-The Scilab version of `rkf' can only integrate up to time 90 as it has a hard cap of 3000 derivative evaluations but this is enough to see that even at sharper tolerances, the solutions are not in agreement. Figure $\ref{fig:tolerance_state_rk45_no_event_sci}$ shows that the problem cannot be solved by simply using sharper tolerances. We can conclude that event detection is required. 
-
+The Scilab version of `rkf' can only integrate up to time 90 as it has a hard cap of 3000 derivative evaluations but this is enough to see that even at sharper tolerances, the solutions are not in agreement. Figure $\ref{fig:tolerance_state_rk45_no_event_sci}$ shows that the problem cannot be solved by simply using sharper tolerances. 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_no_event_sci}
@@ -622,7 +619,7 @@ From Figure $\ref{fig:tolerance_state_rk45_no_event_matlab}$, we can see that th
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_with_event_matlab}
-\caption{State dependent discontinuity Model tolerance study on the Matlab version of DOPRI5 with event detection}
+\caption{State dependent discontinuity model tolerance study on the Matlab version of DOPRI5 with event detection}
 \label{fig:tolerance_state_rk45_with_event_matlab}
 \end{figure}
 In Figure $\ref{fig:tolerance_state_rk45_with_event_matlab}$, we can see that the computations corresponding to most tolerances give solutions that are in agreement. A tolerance of 0.1 now follows the correct pattern but is not in agreement with the other tolerances at further points in time. For tolerances of $10^{-2}$ and sharper, we get accurate solutions.

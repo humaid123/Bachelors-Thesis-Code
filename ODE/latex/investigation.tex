@@ -23,4 +23,4 @@ From Figure $\ref{fig:fortran_radau_tol_6}$, we again see the unusual behaviour.
 \label{fig:fortran_radau_tol_12}
 \end{figure}
 
-From this investigation of the Fortran source code, we can conclude that the issue is not in the interface from R to the Fortran solver or the Python implementation. We also added `print' statements during our investigation to confirm that the parameter $\beta$ was set to 0.005 when appropriate. So the issue seems to be with the `Radau' algorithm itself. Further detailed investigation of the `Radau' algorithm will be required in order to determine the source of this issue.
+From this investigation of the Fortran source code, we can conclude that the issue is not with the interface from R to the Fortran solver or the Python implementation. We also added `print' statements during our investigation to confirm that the parameter $\beta$ was set to 0.005 when appropriate. The issue appears to be with the `Radau' algorithm itself. Further detailed investigation of the `Radau' algorithm will be required in order to determine the source of this issue.
