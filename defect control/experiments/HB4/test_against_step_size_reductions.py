@@ -38,9 +38,18 @@ def perfect_convergence(model, solution, model_num):
             defects = []
             defects_horner = []
             defects_bary = []
+            errors = []
+            errors_horner = []
+            errors_bary = []
             for pt in pts_to_sample:
                 y = solution([pt])[0]
-                # y = this_hb(pt)
+                hb_eval = this_interp.eval(pt)
+                hb_eval_horner = this_interp.eval_horner(pt)
+                hb_eval_bary = this_interp.eval_bary(pt)
+                errors.append( abs(hb_eval - y) )
+                errors_horner.append( abs(hb_eval_horner - y) )
+                errors_bary.append( abs(hb_eval_bary - y) )
+
                 f_eval  = model(pt, y)[0]
                 hb_prime_eval = this_interp.prime(pt)
                 hb_prime_horner_eval = this_interp.prime_horner(pt)
@@ -54,7 +63,7 @@ def perfect_convergence(model, solution, model_num):
             # plt.show()
 
             convergences.append( 
-                ( h, max(defects), max(defects_horner), max(defects_bary) )
+                ( h, max(defects), max(defects_horner), max(defects_bary), max(errors), max(errors_horner), max(errors_bary) )
             )
 
         hs = [-log10(convergence[0]) for convergence in convergences]
@@ -70,6 +79,20 @@ def perfect_convergence(model, solution, model_num):
         plt.title(f"h vs max defect at x0={x0}, model={model_num}")
         plt.legend()
         plt.show()
+
+        max_errors = [log10(convergence[4]) for convergence in convergences]
+        max_errors_horner = [log10(convergence[5]) for convergence in convergences]
+        max_errors_bary = [log10(convergence[6]) for convergence in convergences]
+        plt.figure()
+        plt.plot(hs, max_errors, label="h vs max_errors")
+        plt.plot(hs, max_errors_horner, label="h vs max_errors_horner")
+        plt.plot(hs, max_errors_bary, label="h vs max_errors_bary")
+        plt.ylabel("log of max errors")
+        plt.xlabel("log of hs")
+        plt.legend()
+        plt.title(f"h vs max errors at x0={x0}, model={model_num}")
+        plt.show()
+
     return (hs, max_defects, max_defects_horner, max_defects_bary)
 
 def model1(t, y):
@@ -141,7 +164,7 @@ def experiments():
     plt.ylabel("log of defect")
     plt.xlabel("log of hs")
     plt.title(f"h vs max defect")
-    plt.legend(loc="upper right")
+    # plt.legend(loc="upper right")
     plt.show()
 
 experiments()

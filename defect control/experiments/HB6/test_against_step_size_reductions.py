@@ -55,9 +55,18 @@ def perfect_convergence(alpha, model, solution, model_num):
             defects = []
             defects_horner = []
             defects_bary = []
+            errors = []
+            errors_horner = []
+            errors_bary = []
             for pt in pts_to_sample:
                 y = solution([pt])[0]
-                # y = this_hb(pt)
+                hb_eval = this_interp.eval(pt)
+                hb_eval_horner = this_interp.eval_horner(pt)
+                hb_eval_bary = this_interp.eval_bary(pt)
+                errors.append( abs(hb_eval - y) )
+                errors_horner.append( abs(hb_eval_horner - y) )
+                errors_bary.append( abs(hb_eval_bary - y) )
+
                 f_eval  = model(pt, y)[0]
                 hb_prime_eval = this_interp.prime(pt)
                 hb_prime_horner_eval = this_interp.prime_horner(pt)
@@ -65,13 +74,13 @@ def perfect_convergence(alpha, model, solution, model_num):
                 defects.append( abs(hb_prime_eval - f_eval) )
                 defects_horner.append( abs( hb_prime_horner_eval - f_eval ) )
                 defects_bary.append( abs( hb_prime_bary_eval - f_eval ) )
-           # plt.figure()
+            # plt.figure()
             # plt.plot(indices, defects, label=f"defect_{str(x_i_minus_1)}_{str(x_i_plus_1)}")
             # plt.title(f"h = {h}")
             # plt.show()
 
             convergences.append( 
-                ( h, max(defects), max(defects_horner), max(defects_bary) )
+                ( h, max(defects), max(defects_horner), max(defects_bary), max(errors), max(errors_horner), max(errors_bary) )
             )
 
         hs = [-log10(convergence[0]) for convergence in convergences]
@@ -82,10 +91,23 @@ def perfect_convergence(alpha, model, solution, model_num):
         plt.plot(hs, max_defects, label="h vs max_defect")
         plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
         plt.plot(hs, max_defects_bary, label="h vs max_defect_bary")
-        plt.ylabel("log of defect")
+        plt.ylabel("log of max defect")
         plt.xlabel("log of hs")
         plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, model={model_num}")
         plt.legend()
+        plt.show()
+
+        max_errors = [log10(convergence[4]) for convergence in convergences]
+        max_errors_horner = [log10(convergence[5]) for convergence in convergences]
+        max_errors_bary = [log10(convergence[6]) for convergence in convergences]
+        plt.figure()
+        plt.plot(hs, max_errors, label="h vs max_errors")
+        plt.plot(hs, max_errors_horner, label="h vs max_errors_horner")
+        plt.plot(hs, max_errors_bary, label="h vs max_errors_bary")
+        plt.ylabel("log of max errors")
+        plt.xlabel("log of hs")
+        plt.legend()
+        plt.title(f"h vs max errors at x0={x0}, alpha={alpha}, model={model_num}")
         plt.show()
 
         monitor.print()
@@ -160,7 +182,7 @@ def experiments(alpha):
     plt.ylabel("log of defect")
     plt.xlabel("log of hs")
     plt.title(f"h vs max defect")
-    plt.legend(loc="upper right")
+    # plt.legend(loc="upper right")
     plt.show()
 
 experiments(1)
