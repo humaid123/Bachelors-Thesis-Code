@@ -64,7 +64,7 @@ def first_step(fun, xn, yn, f_start, tol):
     For the first step, we take a step using a stronger tolerance.
     We use this stronger tolerance to also decide on the initial h value.
     """
-    h = sqrt(tol)
+    h = 1e-2 # HB6 V is at 1e-2. sqrt(tol)
     stricter_tol = tol / 100
     error = float('inf')
     while error > stricter_tol:
@@ -202,7 +202,7 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     interps = []
 
     # we do a perfect step for the one_step
-    h = sqrt(tol)
+    h = 1e-2 # HB6 V is at 1e-2. sqrt(tol)
     xn = xn + h
     yn = solution([xn])[0]
     f_start = fun(xn, yn)[0]
@@ -298,7 +298,7 @@ def rk_defect_control_static_alpha(fun, t_span, y0, tol, solution):
     fn_s = [f_start]
 
     # first solution
-    h = sqrt(tol)
+    h = 1e-2 # HB6 V is at 1e-2. sqrt(tol)
     xn = xn + h
     yn = solution([ xn ])[0]
     f_start = fun(xn, yn)[0]
@@ -421,7 +421,7 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
     interps = []
 
     # we do a perfect step for the one_step
-    h = sqrt(tol)
+    h = 1e-2 # HB6 V is at 1e-2. sqrt(tol)
     xn = xn + h
     yn = solution([xn])[0]
     f_start = fun(xn, yn)[0]

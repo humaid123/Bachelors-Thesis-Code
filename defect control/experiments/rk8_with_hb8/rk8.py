@@ -79,7 +79,7 @@ def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     interps = []
 
     # we do a perfect step for the one_step
-    h = 1e-1
+    h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
     xn = xn + h
     yn = solution([xn])[0]
     f_start = fun(xn, yn)[0]
@@ -183,7 +183,7 @@ def rk_defect_control_static_alpha_beta(fun, t_span, y0, tol, solution):
     fn_s = [f_start]
 
     # first solution
-    h = sqrt(tol)
+    h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
     xn = xn + h
     yn = solution([ xn ])[0]
     f_start = fun(xn, yn)[0]
@@ -319,7 +319,7 @@ def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
     interps = []
 
     # we do a perfect step for the one_step
-    h = sqrt(tol)
+    h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
     xn = xn + h
     yn = solution([xn])[0]
     f_start = fun(xn, yn)[0]
