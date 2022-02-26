@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.21)  4 FEB 2022 21:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.21)  25 FEB 2022 21:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -171,50 +171,142 @@ Package: apacite 2013/07/21 v6.03 APA citation
 \bibparsep=\skip51
 \bibitemsep=\skip52
 \biblabelsep=\skip53
+) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+Package: amsmath 2021/10/15 v2.17l AMS math features
+\@mathmargin=\skip54
+
+For additional information on amsmath, use the `?' option.
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks23
+\ex@=\dimen166
+))
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen167
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+Package: amsopn 2021/08/26 v2.02 operator names
+)
+\inf@bad=\count274
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count275
+\leftroot@=\count276
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count277
+\DOTSCASE@=\count278
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box56
+\strutbox@=\box57
+\big@size=\dimen168
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count279
+\c@MaxMatrixCols=\count280
+\dotsspace@=\muskip16
+\c@parentequation=\count281
+\dspbrk@lvl=\count282
+\tag@help=\toks24
+\row@=\count283
+\column@=\count284
+\maxfields@=\count285
+\andhelp@=\toks25
+\eqnshift@=\dimen169
+\alignsep@=\dimen170
+\tagshift@=\dimen171
+\tagwidth@=\dimen172
+\totwidth@=\dimen173
+\lineht@=\dimen174
+\@envbody=\toks26
+\multlinegap=\skip55
+\multlinetaggap=\skip56
+\mathdisplay@stack=\toks27
+LaTeX Info: Redefining \[ on input line 2938.
+LaTeX Info: Redefining \] on input line 2939.
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2021-12-14 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count274
-\l__pdf_internal_box=\box56
+\l__color_backend_stack_int=\count286
+\l__pdf_internal_box=\box58
 ) (main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count275
-\scratchdimen=\dimen166
-\scratchbox=\box57
-\nofMPsegments=\count276
-\nofMParguments=\count277
-\everyMPshowfont=\toks23
-\MPscratchCnt=\count278
-\MPscratchDim=\dimen167
-\MPnumerator=\count279
-\makeMPintoPDFobject=\count280
-\everyMPtoPDFconversion=\toks24
+\scratchcounter=\count287
+\scratchdimen=\dimen175
+\scratchbox=\box59
+\nofMPsegments=\count288
+\nofMParguments=\count289
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count290
+\MPscratchDim=\dimen176
+\MPnumerator=\count291
+\makeMPintoPDFobject=\count292
+\everyMPtoPDFconversion=\toks29
 )
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
 ase.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+) (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/grfext\grfext.sty
+Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
+
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefine
+keys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+))
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/kvsetkeys\kvsetkeys.s
+ty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+))
+(C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+ (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 504.
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
 fg
@@ -224,68 +316,690 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count281
-\c@maskedRefs=\count282
+\c@lstlisting=\count293
+\c@maskedRefs=\count294
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/apacite\english.apc
 File: english.apc 2013/07/21 v6.03 apacite language file
 LaTeX Info: Redefining \BPBI on input line 129.
 LaTeX Info: Redefining \BHBI on input line 130.
 )
-Overfull \hbox (11.38963pt too wide) in paragraph at lines 13--13
-[]\OT1/cmr/bx/n/14.4 Low Cost De-fect Con-trol with Hermite-Birkhoff
+Overfull \hbox (14.31467pt too wide) in paragraph at lines 15--15
+[]\OT1/cmr/bx/n/14.4 Zero Cost De-fect Con-trol with Hermite-Birkhoff
  []
 
-
-Overfull \hbox (11.58398pt too wide) in paragraph at lines 26--29
-\OT1/cmr/m/n/10 Discussion of En-right's work https://www.cs.toronto.edu/ en-ri
-ght/re-centMSc.html
- []
-
-[1
-
-{C:/Users/huago/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 48.
-
+LaTeX Font Info:    Trying to load font information for U+msa on input line 19.
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 48.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 19.
 
 
 (C:\Users\huago\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-[2] [3]
-Overfull \hbox (24.94664pt too wide) in paragraph at lines 111--115
+[1
+
+{C:/Users/huago/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+<./figures/solution_problem1.png, id=13, 462.528pt x 346.896pt>
+File: ./figures/solution_problem1.png Graphic file (type png)
+<use ./figures/solution_problem1.png>
+Package pdftex.def Info: ./figures/solution_problem1.png  used on input line 48
+.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/solution_problem2.png, id=15, 462.528pt x 346.896pt>
+File: ./figures/solution_problem2.png Graphic file (type png)
+<use ./figures/solution_problem2.png>
+Package pdftex.def Info: ./figures/solution_problem2.png  used on input line 69
+.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [2 <./figures/solution_problem1.png>]
+<./figures/solution_problem3.png, id=22, 462.528pt x 346.896pt>
+File: ./figures/solution_problem3.png Graphic file (type png)
+<use ./figures/solution_problem3.png>
+Package pdftex.def Info: ./figures/solution_problem3.png  used on input line 89
+.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [3 <./figures/solution_problem2.png> <./figures/solution_problem3.png>]
+<./figures/no_middle_step_error_control_p3_dop853.png, id=28, 462.528pt x 346.8
+96pt>
+File: ./figures/no_middle_step_error_control_p3_dop853.png Graphic file (type p
+ng)
+<use ./figures/no_middle_step_error_control_p3_dop853.png>
+Package pdftex.def Info: ./figures/no_middle_step_error_control_p3_dop853.png  
+used on input line 106.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [4]
+<./figures/no_middle_step_error_control_p7_rk45.png, id=32, 462.528pt x 346.896
+pt>
+File: ./figures/no_middle_step_error_control_p7_rk45.png Graphic file (type png
+)
+<use ./figures/no_middle_step_error_control_p7_rk45.png>
+Package pdftex.def Info: ./figures/no_middle_step_error_control_p7_rk45.png  us
+ed on input line 113.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [5 <./figures/no_middle_step_error_control_p3_dop853.png> <./figures/no_middle
+_step_error_control_p7_rk45.png>]
+Overfull \hbox (152.74199pt too wide) in paragraph at lines 140--143
+\OT1/cmr/m/n/10 ta-ble or-der of method ver-sus num-ber of stages. ============
+========================== 
+ []
+
+
+Overfull \hbox (26.58398pt too wide) in paragraph at lines 144--146
+[]\OT1/cmr/m/n/10 Discussion of En-right's work https://www.cs.toronto.edu/ en-
+right/re-centMSc.html 
+ []
+
+[6] [7] [8]
+<./figures/rk4_with_hb4_p1_global_defect.png, id=48, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p1_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p1_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p1_global_defect.png  used on i
+nput line 215.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [9]
+<./figures/rk4_with_hb4_p1_global_error.png, id=52, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p1_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p1_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p1_global_error.png  used on in
+put line 222.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb4_p1_scaled_defects.png, id=53, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p1_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p1_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p1_scaled_defects.png  used on 
+input line 229.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [10 <./figures/rk4_with_hb4_p1_global_defect.png> <./figures/rk4_with_hb4_p1_g
+lobal_error.png>]
+<./figures/rk4_with_hb4_p2_global_defect.png, id=59, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p2_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p2_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p2_global_defect.png  used on i
+nput line 239.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [11 <./figures/rk4_with_hb4_p1_scaled_defects.png>]
+<./figures/rk4_with_hb4_p2_global_error.png, id=64, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p2_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p2_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p2_global_error.png  used on in
+put line 246.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb4_p2_scaled_defects.png, id=65, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p2_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p2_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p2_scaled_defects.png  used on 
+input line 253.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [12 <./figures/rk4_with_hb4_p2_global_defect.png> <./figures/rk4_with_hb4_p2_g
+lobal_error.png>]
+<./figures/rk4_with_hb4_p2_scaled_defects_small_steps.png, id=71, 462.528pt x 3
+46.896pt>
+File: ./figures/rk4_with_hb4_p2_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk4_with_hb4_p2_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p2_scaled_defects_small_steps.p
+ng  used on input line 260.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb4_p3_global_defect.png, id=72, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p3_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p3_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p3_global_defect.png  used on i
+nput line 270.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [13 <./figures/rk4_with_hb4_p2_scaled_defects.png> <./figures/rk4_with_hb4_p2_
+scaled_defects_small_steps.png>]
+<./figures/rk4_with_hb4_p3_global_error.png, id=79, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p3_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p3_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p3_global_error.png  used on in
+put line 277.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb4_p3_scaled_defects.png, id=80, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb4_p3_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb4_p3_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb4_p3_scaled_defects.png  used on 
+input line 284.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [14 <./figures/rk4_with_hb4_p3_global_defect.png> <./figures/rk4_with_hb4_p3_g
+lobal_error.png>]
+Overfull \hbox (2.04443pt too wide) in paragraph at lines 290--291
+ \OT1/cmr/bx/n/10 ef-fi-ciency data and dis-cus-sion of the in-ter-po-la-tion e
+r-ror[] \OT1/cmr/m/n/10 We now present
+ []
+
+[15 <./figures/rk4_with_hb4_p3_scaled_defects.png>] [16]
+<./figures/rk4_with_hb6_p1_global_defect.png, id=93, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p1_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p1_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p1_global_defect.png  used on i
+nput line 350.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb6_p1_global_error.png, id=94, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p1_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p1_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p1_global_error.png  used on in
+put line 357.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [17 <./figures/rk4_with_hb6_p1_global_defect.png>]
+<./figures/rk4_with_hb6_p1_scaled_defects.png, id=99, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p1_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p1_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p1_scaled_defects.png  used on 
+input line 364.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [18 <./figures/rk4_with_hb6_p1_global_error.png> <./figures/rk4_with_hb6_p1_sc
+aled_defects.png>]
+<./figures/rk4_with_hb6_p2_global_defect.png, id=105, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p2_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p2_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p2_global_defect.png  used on i
+nput line 374.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb6_p2_global_error.png, id=106, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p2_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p2_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p2_global_error.png  used on in
+put line 381.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb6_p2_scaled_defects.png, id=107, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p2_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p2_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p2_scaled_defects.png  used on 
+input line 388.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [19 <./figures/rk4_with_hb6_p2_global_defect.png> <./figures/rk4_with_hb6_p2_g
+lobal_error.png>]
+<./figures/rk4_with_hb6_p2_scaled_defects_small_steps.png, id=114, 462.528pt x 
+346.896pt>
+File: ./figures/rk4_with_hb6_p2_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk4_with_hb6_p2_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p2_scaled_defects_small_steps.p
+ng  used on input line 395.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+Overfull \hbox (15.90833pt too wide) in paragraph at lines 401--405
+\OT1/cmr/m/n/10 fi-ca-tion of RK4 with HB6 on Prob-lem 3. =====================
+===
+ []
+
+<./figures/rk4_with_hb6_p3_global_defect.png, id=115, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p3_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p3_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p3_global_defect.png  used on i
+nput line 408.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[20 <./figures/rk4_with_hb6_p2_scaled_defects.png> <./figures/rk4_with_hb6_p2_s
+caled_defects_small_steps.png>]
+<./figures/rk4_with_hb6_p3_global_error.png, id=121, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p3_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p3_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p3_global_error.png  used on in
+put line 415.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb6_p3_scaled_defects.png, id=122, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb6_p3_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb6_p3_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb6_p3_scaled_defects.png  used on 
+input line 422.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [21 <./figures/rk4_with_hb6_p3_global_defect.png> <./figures/rk4_with_hb6_p3_g
+lobal_error.png>]
+Overfull \hbox (58.1673pt too wide) in paragraph at lines 432--438
+ [] 
+ []
+
+[22 <./figures/rk4_with_hb6_p3_scaled_defects.png>]
+<./figures/hb6_alpha_v_shape.png, id=132, 462.528pt x 346.896pt>
+File: ./figures/hb6_alpha_v_shape.png Graphic file (type png)
+<use ./figures/hb6_alpha_v_shape.png>
+Package pdftex.def Info: ./figures/hb6_alpha_v_shape.png  used on input line 45
+0.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [23 <./figures/hb6_alpha_v_shape.png>] [24]
+<./figures/hb8_first_scheme_alpha_beta_test.png, id=141, 462.528pt x 346.896pt>
+
+File: ./figures/hb8_first_scheme_alpha_beta_test.png Graphic file (type png)
+<use ./figures/hb8_first_scheme_alpha_beta_test.png>
+Package pdftex.def Info: ./figures/hb8_first_scheme_alpha_beta_test.png  used o
+n input line 511.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [25] [26 <./figures/hb8_first_scheme_alpha_beta_test.png>]
+<./figures/hb8_second_scheme_alpha_beta_test.png, id=150, 462.528pt x 346.896pt
+>
+File: ./figures/hb8_second_scheme_alpha_beta_test.png Graphic file (type png)
+<use ./figures/hb8_second_scheme_alpha_beta_test.png>
+Package pdftex.def Info: ./figures/hb8_second_scheme_alpha_beta_test.png  used 
+on input line 552.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+[27]
+Overfull \hbox (90.00128pt too wide) in paragraph at lines 564--565
+[]\OT1/cmr/m/n/10 ====================================================== 
+ []
+
+<./figures/rk4_with_hb8_p1_global_defect.png, id=154, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p1_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p1_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p1_global_defect.png  used on i
+nput line 570.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[28 <./figures/hb8_second_scheme_alpha_beta_test.png>]
+<./figures/rk4_with_hb8_p1_global_error.png, id=159, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p1_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p1_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p1_global_error.png  used on in
+put line 577.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb8_p1_scaled_defects.png, id=160, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p1_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p1_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p1_scaled_defects.png  used on 
+input line 584.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [29 <./figures/rk4_with_hb8_p1_global_defect.png> <./figures/rk4_with_hb8_p1_g
+lobal_error.png>]
+<./figures/rk4_with_hb8_p2_global_defect.png, id=166, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p2_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p2_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p2_global_defect.png  used on i
+nput line 594.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb8_p2_global_error.png, id=167, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p2_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p2_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p2_global_error.png  used on in
+put line 601.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+[30 <./figures/rk4_with_hb8_p1_scaled_defects.png> <./figures/rk4_with_hb8_p2_g
+lobal_defect.png>]
+<./figures/rk4_with_hb8_p2_scaled_defects.png, id=173, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p2_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p2_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p2_scaled_defects.png  used on 
+input line 608.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb8_p3_global_defect.png, id=174, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p3_global_defect.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p3_global_defect.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p3_global_defect.png  used on i
+nput line 619.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [31 <./figures/rk4_with_hb8_p2_global_error.png> <./figures/rk4_with_hb8_p2_sc
+aled_defects.png>]
+<./figures/rk4_with_hb8_p3_global_error.png, id=181, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p3_global_error.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p3_global_error.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p3_global_error.png  used on in
+put line 626.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk4_with_hb8_p3_scaled_defects.png, id=182, 462.528pt x 346.896pt>
+File: ./figures/rk4_with_hb8_p3_scaled_defects.png Graphic file (type png)
+<use ./figures/rk4_with_hb8_p3_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk4_with_hb8_p3_scaled_defects.png  used on 
+input line 633.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [32 <./figures/rk4_with_hb8_p3_global_defect.png> <./figures/rk4_with_hb8_p3_g
+lobal_error.png>]
+Overfull \hbox (58.1673pt too wide) in paragraph at lines 643--649
+ [] 
+ []
+
+[33 <./figures/rk4_with_hb8_p3_scaled_defects.png>]
+Overfull \hbox (75.00128pt too wide) in paragraph at lines 663--664
+\OT1/cmr/m/n/10 ====================================================== 
+ []
+
+<./figures/rk6_with_hb6_p1_global_defect.png, id=192, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p1_global_defect.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p1_global_defect.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p1_global_defect.png  used on i
+nput line 669.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[34]
+<./figures/rk6_with_hb6_p1_global_error.png, id=196, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p1_global_error.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p1_global_error.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p1_global_error.png  used on in
+put line 676.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb6_p1_scaled_defects.png, id=197, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p1_scaled_defects.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p1_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p1_scaled_defects.png  used on 
+input line 683.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [35 <./figures/rk6_with_hb6_p1_global_defect.png> <./figures/rk6_with_hb6_p1_g
+lobal_error.png>]
+<./figures/rk6_with_hb6_p2_global_defect.png, id=203, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p2_global_defect.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p2_global_defect.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p2_global_defect.png  used on i
+nput line 693.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb6_p2_global_error.png, id=204, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p2_global_error.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p2_global_error.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p2_global_error.png  used on in
+put line 700.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [36 <./figures/rk6_with_hb6_p1_scaled_defects.png> <./figures/rk6_with_hb6_p2_
+global_defect.png>]
+<./figures/rk6_with_hb6_p2_scaled_defects.png, id=210, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p2_scaled_defects.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p2_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p2_scaled_defects.png  used on 
+input line 707.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb6_p2_scaled_defects_small_steps.png, id=211, 462.528pt x 
+346.896pt>
+File: ./figures/rk6_with_hb6_p2_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk6_with_hb6_p2_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p2_scaled_defects_small_steps.p
+ng  used on input line 714.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [37 <./figures/rk6_with_hb6_p2_global_error.png> <./figures/rk6_with_hb6_p2_sc
+aled_defects.png>]
+<./figures/rk6_with_hb6_p3_global_defect.png, id=218, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p3_global_defect.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p3_global_defect.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p3_global_defect.png  used on i
+nput line 725.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb6_p3_global_error.png, id=219, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p3_global_error.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p3_global_error.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p3_global_error.png  used on in
+put line 732.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [38 <./figures/rk6_with_hb6_p2_scaled_defects_small_steps.png> <./figures/rk6_
+with_hb6_p3_global_defect.png>]
+<./figures/rk6_with_hb6_p3_scaled_defects.png, id=225, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb6_p3_scaled_defects.png Graphic file (type png)
+<use ./figures/rk6_with_hb6_p3_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p3_scaled_defects.png  used on 
+input line 739.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb6_p3_scaled_defects_small_steps.png, id=226, 462.528pt x 
+346.896pt>
+File: ./figures/rk6_with_hb6_p3_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk6_with_hb6_p3_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk6_with_hb6_p3_scaled_defects_small_steps.p
+ng  used on input line 746.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [39 <./figures/rk6_with_hb6_p3_global_error.png> <./figures/rk6_with_hb6_p3_sc
+aled_defects.png>]
+Overfull \hbox (75.00128pt too wide) in paragraph at lines 754--755
+\OT1/cmr/m/n/10 ====================================================== 
+ []
+
+<./figures/rk6_with_hb8_p1_global_defect.png, id=232, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p1_global_defect.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p1_global_defect.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p1_global_defect.png  used on i
+nput line 760.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[40 <./figures/rk6_with_hb6_p3_scaled_defects_small_steps.png>]
+<./figures/rk6_with_hb8_p1_global_error.png, id=237, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p1_global_error.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p1_global_error.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p1_global_error.png  used on in
+put line 767.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb8_p1_scaled_defects.png, id=238, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p1_scaled_defects.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p1_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p1_scaled_defects.png  used on 
+input line 774.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [41 <./figures/rk6_with_hb8_p1_global_defect.png> <./figures/rk6_with_hb8_p1_g
+lobal_error.png>]
+<./figures/rk6_with_hb8_p2_global_defect.png, id=244, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p2_global_defect.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p2_global_defect.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p2_global_defect.png  used on i
+nput line 784.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb8_p2_global_error.png, id=245, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p2_global_error.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p2_global_error.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p2_global_error.png  used on in
+put line 791.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [42 <./figures/rk6_with_hb8_p1_scaled_defects.png> <./figures/rk6_with_hb8_p2_
+global_defect.png>]
+<./figures/rk6_with_hb8_p2_scaled_defects.png, id=251, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p2_scaled_defects.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p2_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p2_scaled_defects.png  used on 
+input line 798.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb8_p2_scaled_defects_small_steps.png, id=252, 462.528pt x 
+346.896pt>
+File: ./figures/rk6_with_hb8_p2_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk6_with_hb8_p2_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p2_scaled_defects_small_steps.p
+ng  used on input line 805.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [43 <./figures/rk6_with_hb8_p2_global_error.png> <./figures/rk6_with_hb8_p2_sc
+aled_defects.png>]
+<./figures/rk6_with_hb8_p3_global_defect.png, id=259, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p3_global_defect.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p3_global_defect.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p3_global_defect.png  used on i
+nput line 816.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb8_p3_global_error.png, id=260, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p3_global_error.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p3_global_error.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p3_global_error.png  used on in
+put line 823.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [44 <./figures/rk6_with_hb8_p2_scaled_defects_small_steps.png> <./figures/rk6_
+with_hb8_p3_global_defect.png>]
+<./figures/rk6_with_hb8_p3_scaled_defects.png, id=266, 462.528pt x 346.896pt>
+File: ./figures/rk6_with_hb8_p3_scaled_defects.png Graphic file (type png)
+<use ./figures/rk6_with_hb8_p3_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p3_scaled_defects.png  used on 
+input line 830.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk6_with_hb8_p3_scaled_defects_small_steps.png, id=267, 462.528pt x 
+346.896pt>
+File: ./figures/rk6_with_hb8_p3_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk6_with_hb8_p3_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk6_with_hb8_p3_scaled_defects_small_steps.p
+ng  used on input line 837.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [45 <./figures/rk6_with_hb8_p3_global_error.png> <./figures/rk6_with_hb8_p3_sc
+aled_defects.png>]
+Overfull \hbox (58.1673pt too wide) in paragraph at lines 845--851
+ [] 
+ []
+
+[46 <./figures/rk6_with_hb8_p3_scaled_defects_small_steps.png>]
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p1_global_defect' on page 47 undefin
+ed on input line 864.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p1_global_error' on page 47 undefine
+d on input line 864.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p1_scaled_defects' on page 47 undefi
+ned on input line 864.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p1_scaled_defects' on page 47 undefi
+ned on input line 864.
+
+<./figures/rk8_with_hb8_p1_global_defect.png, id=277, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p1_global_defect.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p1_global_defect.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p1_global_defect.png  used on i
+nput line 868.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk8_with_hb8_p1_global_error.png, id=278, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p1_global_error.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p1_global_error.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p1_global_error.png  used on in
+put line 875.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[47 <./figures/rk8_with_hb8_p1_global_defect.png>]
+<./figures/rk8_with_hb8_p1_scaled_defects.png, id=283, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p1_scaled_defects.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p1_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p1_scaled_defects.png  used on 
+input line 882.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p2_global_defect' on page 48 undefin
+ed on input line 888.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p2_global_error' on page 48 undefine
+d on input line 888.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p2_scaled_defects' on page 48 undefi
+ned on input line 888.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p2_scaled_defects' on page 48 undefi
+ned on input line 888.
+
+<./figures/rk8_with_hb8_p2_global_defect.png, id=284, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p2_global_defect.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p2_global_defect.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p2_global_defect.png  used on i
+nput line 892.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[48 <./figures/rk8_with_hb8_p1_global_error.png> <./figures/rk8_with_hb8_p1_sca
+led_defects.png>]
+<./figures/rk8_with_hb8_p2_global_error.png, id=290, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p2_global_error.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p2_global_error.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p2_global_error.png  used on in
+put line 899.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk8_with_hb8_p2_scaled_defects.png, id=291, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p2_scaled_defects.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p2_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p2_scaled_defects.png  used on 
+input line 906.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [49 <./figures/rk8_with_hb8_p2_global_defect.png> <./figures/rk8_with_hb8_p2_g
+lobal_error.png>]
+<./figures/rk8_with_hb8_p2_scaled_defects_small_steps.png, id=298, 462.528pt x 
+346.896pt>
+File: ./figures/rk8_with_hb8_p2_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk8_with_hb8_p2_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p2_scaled_defects_small_steps.p
+ng  used on input line 913.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p3_global_defect' on page 50 undefin
+ed on input line 919.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p3_global_error' on page 50 undefine
+d on input line 919.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p3_scaled_defects' on page 50 undefi
+ned on input line 919.
+
+
+LaTeX Warning: Reference `fig:rk8_with_hb8_p3_scaled_defects' on page 50 undefi
+ned on input line 920.
+
+<./figures/rk8_with_hb8_p3_global_defect.png, id=299, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p3_global_defect.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p3_global_defect.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p3_global_defect.png  used on i
+nput line 924.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+[50 <./figures/rk8_with_hb8_p2_scaled_defects.png> <./figures/rk8_with_hb8_p2_s
+caled_defects_small_steps.png>]
+<./figures/rk8_with_hb8_p3_global_error.png, id=305, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p3_global_error.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p3_global_error.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p3_global_error.png  used on in
+put line 931.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+<./figures/rk8_with_hb8_p3_scaled_defects.png, id=306, 462.528pt x 346.896pt>
+File: ./figures/rk8_with_hb8_p3_scaled_defects.png Graphic file (type png)
+<use ./figures/rk8_with_hb8_p3_scaled_defects.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p3_scaled_defects.png  used on 
+input line 938.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [51 <./figures/rk8_with_hb8_p3_global_defect.png> <./figures/rk8_with_hb8_p3_g
+lobal_error.png>]
+<./figures/rk8_with_hb8_p3_scaled_defects_small_steps.png, id=312, 462.528pt x 
+346.896pt>
+File: ./figures/rk8_with_hb8_p3_scaled_defects_small_steps.png Graphic file (ty
+pe png)
+<use ./figures/rk8_with_hb8_p3_scaled_defects_small_steps.png>
+Package pdftex.def Info: ./figures/rk8_with_hb8_p3_scaled_defects_small_steps.p
+ng  used on input line 945.
+(pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
+ [52 <./figures/rk8_with_hb8_p3_scaled_defects.png> <./figures/rk8_with_hb8_p3_
+scaled_defects_small_steps.png>]
+Overfull \hbox (24.94664pt too wide) in paragraph at lines 970--974
 \OT1/cmr/m/n/10 up $\OML/cmm/m/it/10 x[]$ \OT1/cmr/m/n/10 with previousInterps.
 eval($\OML/cmm/m/it/10 x[]$ \OT1/cmr/m/n/10 - h) for $\OML/cmm/m/it/10 y[]$ \OT
 1/cmr/m/n/10 and previousInterps.prime($\OML/cmm/m/it/10 x[]$
  []
 
-[4] (main.aux) ) 
+
+Overfull \hbox (83.0565pt too wide) in paragraph at lines 980--983
+[]\OT1/cmr/m/n/10 ============= Isn't it no cost => need to talk with pro-fes-s
+or =============== 
+ []
+
+[53] [54] (main.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 6142 strings out of 478659
- 101713 string characters out of 2845920
- 397788 words of memory out of 3000000
- 24207 multiletter control sequences out of 15000+600000
- 406647 words of font info for 40 fonts, out of 8000000 for 9000
+ 8279 strings out of 478659
+ 162737 string characters out of 2845920
+ 426179 words of memory out of 3000000
+ 26220 multiletter control sequences out of 15000+600000
+ 407601 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,5n,63p,436b,262s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/publi
-c/amsfonts/cm/cmbx10.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmbx12.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/huago/AppData/Local/Progra
-ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/huago/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/huago/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/hu
-ago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/U
-sers/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pf
-b>
-Output written on main.pdf (4 pages, 118933 bytes).
+ 60i,15n,67p,1846b,343s stack positions out of 5000i,500n,10000p,200000b,80000s
+ <C:\Users\huago\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm
+1000.pk><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmbx10.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmbx12.pfb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmmi10.pfb><C:/Users/huago/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/huago/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/huago/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/huago/AppD
+ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/hua
+go/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Us
+ers/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.p
+fb><C:/Users/huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb>
+Output written on main.pdf (54 pages, 3994149 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
+ 372 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 351 words of extra memory for PDF output out of 10000 (max. 10000000)
 
