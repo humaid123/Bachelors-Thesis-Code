@@ -17,10 +17,10 @@ def create_t_eval(start, end, num_points = 100):
 # %%
 def experiment(model, y0, t_span, solution):
     t_eval = create_t_eval(t_span[0], t_span[1])
-    tol = 1e-6
+    tol = 2.5e-12
     # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
-    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
-    # (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha_beta(model, t_span, y0[0], tol, solution)
+    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
+    (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha_beta(model, t_span, y0[0], tol, solution)
     print("integration complete")
 
     # ====================================== figure of rk6 vs rk6_interps vs rk45
@@ -50,8 +50,9 @@ def experiment(model, y0, t_span, solution):
     # ====================================== global error
     plt.figure()
     error = [(computed_solution - actual_solution) for (computed_solution, actual_solution) in zip(computed_solutions, actual_solutions)]
-    for this_x in xs:
-        plt.axvline(x=this_x) 
+    if tol > 1e-10:
+        for this_x in xs:
+            plt.axvline(x=this_x) 
     plt.plot(t_eval, error, label="global error")
     # plt.title("global error")
     plt.xlabel("t")

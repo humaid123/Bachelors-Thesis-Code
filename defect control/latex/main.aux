@@ -191,19 +191,138 @@
 \newlabel{fig:rk8_with_hb8_p3_scaled_defects}{{69}{52}}
 \@writefile{lof}{\contentsline {figure}{\numberline {70}{\ignorespaces Scaled Defects of RK8 with HB8 on small steps on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{52}{}\protected@file@percent }
 \newlabel{fig:rk8_with_hb8_p3_scaled_defects_small_steps}{{70}{52}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}the Vshaped graph}{52}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}the Vshaped graph and dependence on small alpha}{52}{}\protected@file@percent }
 \newlabel{section:v_shaped_graph}{{1.4}{52}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.1}HB6}{52}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.2}HB8}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Low cost with alpha = 1, interpolation}{53}{}\protected@file@percent }
-\newlabel{section:keeping_alpha_at_1}{{1.5}{53}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.1}pros}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.2}problems}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}Solving at high tolerances}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.7}Future work}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.7.1}additional problems to solve to get this to work}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{the first/first and second step}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{V-shaped error}{53}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{static alpha}{54}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{noisy defect on small step-sizes}{54}{}\protected@file@percent }
-\gdef \@abspage@last{54}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.1}The Problems}{53}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{HB4}{53}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {71}{\ignorespaces V-shape of HB4 across problems at several sampling points and with h\relax }}{53}{}\protected@file@percent }
+\newlabel{fig:v_shape_across_problems_hb4}{{71}{53}}
+\@writefile{toc}{\contentsline {paragraph}{HB6}{53}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {72}{\ignorespaces V-shape of HB6 across problems at several sampling points and with h\relax }}{54}{}\protected@file@percent }
+\newlabel{fig:v_shape_across_problems_hb6}{{72}{54}}
+\@writefile{toc}{\contentsline {paragraph}{HB8}{54}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {73}{\ignorespaces V-shape of HB8 across problems at several sampling points and with h\relax }}{55}{}\protected@file@percent }
+\newlabel{fig:v_shape_across_problems_hb8}{{73}{55}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.2}Horner's and Barycentric interpolants to get to lower tolerances.}{55}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {74}{\ignorespaces Typical plot of the HB4 interpolant monomial form vs the horner form vs the Barycentric form\relax }}{56}{}\protected@file@percent }
+\newlabel{fig:typical_interp_horner_bary_hb4}{{74}{56}}
+\@writefile{lof}{\contentsline {figure}{\numberline {75}{\ignorespaces Typical plot of the HB6 interpolant monomial form vs the horner form vs the Barycentric form\relax }}{57}{}\protected@file@percent }
+\newlabel{fig:typical_interp_horner_bary_hb6}{{75}{57}}
+\@writefile{lof}{\contentsline {figure}{\numberline {76}{\ignorespaces Typical plot of the HB8 interpolant monomial form vs the horner form vs the Barycentric form\relax }}{57}{}\protected@file@percent }
+\newlabel{fig:typical_interp_horner_bary_hb8}{{76}{57}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.3}Using the previous interpolants to keep the weight parameters at 1}{58}{}\protected@file@percent }
+\newlabel{section:keeping_alpha_at_1}{{1.4.3}{58}}
+\@writefile{toc}{\contentsline {paragraph}{HB6}{58}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {77}{\ignorespaces Global Defect of RK4 with HB6 using alpha = 1 on problem 1 at an absolute tolerance of $10^{-6}$\relax }}{59}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p1_global_defect}{{77}{59}}
+\@writefile{lof}{\contentsline {figure}{\numberline {78}{\ignorespaces Global Error of RK4 with HB6 using alpha = 1 on problem 1 at an absolute tolerance of $10^{-6}$\relax }}{59}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p1_global_error}{{78}{59}}
+\@writefile{lof}{\contentsline {figure}{\numberline {79}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 on problem 1 at an absolute tolerance of $10^{-6}$\relax }}{60}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p1_scaled_defects}{{79}{60}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 1 results}{60}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {80}{\ignorespaces Global Defect of RK4 with HB6 using alpha = 1 on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{60}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p2_global_defect}{{80}{60}}
+\@writefile{lof}{\contentsline {figure}{\numberline {81}{\ignorespaces Global Error of RK4 with HB6 using alpha = 1 on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{61}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p2_global_error}{{81}{61}}
+\@writefile{lof}{\contentsline {figure}{\numberline {82}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{61}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p2_scaled_defects}{{82}{61}}
+\@writefile{lof}{\contentsline {figure}{\numberline {83}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 on small steps on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{62}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p2_scaled_defects_small_steps}{{83}{62}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 2 results}{62}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {84}{\ignorespaces Global Defect of RK4 with HB6 using alpha = 1 on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{62}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p3_global_defect}{{84}{62}}
+\@writefile{lof}{\contentsline {figure}{\numberline {85}{\ignorespaces Global Error of RK4 with HB6 using alpha = 1 on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{63}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p3_global_error}{{85}{63}}
+\@writefile{lof}{\contentsline {figure}{\numberline {86}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{63}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk4_with_hb6_p3_scaled_defects}{{86}{63}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 3 results}{63}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Number of steps taken by RK4 when modified to do defect control with HB6 when we force alpha to be 1 vs when we do not\relax }}{64}{}\protected@file@percent }
+\newlabel{tab:rk4_with_hb6_static_vs_variable_alpha}{{5}{64}}
+\@writefile{toc}{\contentsline {paragraph}{HB8}{64}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {87}{\ignorespaces Global Defect of RK6 with HB8 using alpha and beta = 1 on problem 1 at an absolute tolerance of $10^{-6}$\relax }}{65}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p1_global_defect}{{87}{65}}
+\@writefile{lof}{\contentsline {figure}{\numberline {88}{\ignorespaces Global Error of RK6 with HB8 using alpha and beta = 1 on problem 1 at an absolute tolerance of $10^{-6}$\relax }}{65}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p1_global_error}{{88}{65}}
+\@writefile{lof}{\contentsline {figure}{\numberline {89}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 on problem 1 at an absolute tolerance of $10^{-6}$\relax }}{66}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p1_scaled_defects}{{89}{66}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 1 results}{66}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {90}{\ignorespaces Global Defect of RK6 with HB8 using alpha and beta = 1 on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{66}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p2_global_defect}{{90}{66}}
+\@writefile{lof}{\contentsline {figure}{\numberline {91}{\ignorespaces Global Error of RK6 with HB8 using alpha and beta = 1 on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{67}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p2_global_error}{{91}{67}}
+\@writefile{lof}{\contentsline {figure}{\numberline {92}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{67}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p2_scaled_defects}{{92}{67}}
+\@writefile{lof}{\contentsline {figure}{\numberline {93}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 on small steps on problem 2 at an absolute tolerance of $10^{-6}$\relax }}{68}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p2_scaled_defects_small_steps}{{93}{68}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 2 results}{68}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {94}{\ignorespaces Global Defect of RK6 with HB8 using alpha and beta = 1 on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{68}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p3_global_defect}{{94}{68}}
+\@writefile{lof}{\contentsline {figure}{\numberline {95}{\ignorespaces Global Error of RK6 with HB8 using alpha and beta = 1 on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{69}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p3_global_error}{{95}{69}}
+\@writefile{lof}{\contentsline {figure}{\numberline {96}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{69}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p3_scaled_defects}{{96}{69}}
+\@writefile{lof}{\contentsline {figure}{\numberline {97}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 on small steps on problem 3 at an absolute tolerance of $10^{-6}$\relax }}{70}{}\protected@file@percent }
+\newlabel{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}{{97}{70}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 3 results}{70}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Number of steps taken by RK6 when modified to do defect control with HB8 with alpha and beta forcibly at 1 and variable alpha and beta\relax }}{70}{}\protected@file@percent }
+\newlabel{tab:rk6_with_hb6_vs_hb8_static_vs_variable}{{6}{70}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Final Recommendation to be able to solve at sharp tolerances}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.1}Recommendations}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.2}Solving at sharp tolerances}{71}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{rk4 with HB6}{71}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {98}{\ignorespaces Global Defect of RK4 with HB6 using alpha = 1 and optimal h on problem 1 at an absolute tolerance of $10^{-12}$\relax }}{72}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p1_global_defect}{{98}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {99}{\ignorespaces Global Error of RK4 with HB6 using alpha = 1 and optimal h on problem 1 at an absolute tolerance of $10^{-12}$\relax }}{72}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p1_global_error}{{99}{72}}
+\@writefile{lof}{\contentsline {figure}{\numberline {100}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h on problem 1 at an absolute tolerance of $10^{-12}$\relax }}{73}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p1_scaled_defects}{{100}{73}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 1 results}{73}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {101}{\ignorespaces Global Defect of RK4 with HB6 using alpha = 1 and optimal h on problem 2 at an absolute tolerance of $10^{-12}$\relax }}{73}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p2_global_defect}{{101}{73}}
+\@writefile{lof}{\contentsline {figure}{\numberline {102}{\ignorespaces Global Error of RK4 with HB6 using alpha = 1 and optimal h on problem 2 at an absolute tolerance of $10^{-12}$\relax }}{74}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p2_global_error}{{102}{74}}
+\@writefile{lof}{\contentsline {figure}{\numberline {103}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h on problem 2 at an absolute tolerance of $10^{-12}$\relax }}{74}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p2_scaled_defects}{{103}{74}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 2 results}{74}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {104}{\ignorespaces Global Defect of RK4 with HB6 using alpha = 1 and optimal h on problem 3 at an absolute tolerance of $10^{-12}$\relax }}{75}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p3_global_defect}{{104}{75}}
+\@writefile{lof}{\contentsline {figure}{\numberline {105}{\ignorespaces Global Error of RK4 with HB6 using alpha = 1 and optimal h on problem 3 at an absolute tolerance of $10^{-12}$\relax }}{75}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p3_global_error}{{105}{75}}
+\@writefile{lof}{\contentsline {figure}{\numberline {106}{\ignorespaces Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h on problem 3 at an absolute tolerance of $10^{-12}$\relax }}{76}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk4_with_hb6_p3_scaled_defects}{{106}{76}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 3 results}{76}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces rk4 with hb6 using static alpha and optimal h at sharp tolerance\relax }}{76}{}\protected@file@percent }
+\newlabel{tab:rk4_with_hb6_sharp_tolerance}{{7}{76}}
+\@writefile{toc}{\contentsline {paragraph}{rk6 with HB8}{76}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {107}{\ignorespaces Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 1 at an absolute tolerance of $2.5*10^{-12}$\relax }}{77}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p1_global_defect}{{107}{77}}
+\@writefile{lof}{\contentsline {figure}{\numberline {108}{\ignorespaces Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 1 at an absolute tolerance of $2.5*10^{-12}$\relax }}{77}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p1_global_error}{{108}{77}}
+\@writefile{lof}{\contentsline {figure}{\numberline {109}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 1 at an absolute tolerance of $2.5*10^{-12}$\relax }}{78}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p1_scaled_defects}{{109}{78}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 1 results}{78}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {110}{\ignorespaces Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 2 at an absolute tolerance of $2.5*10^{-12}$\relax }}{78}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p2_global_defect}{{110}{78}}
+\@writefile{lof}{\contentsline {figure}{\numberline {111}{\ignorespaces Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 2 at an absolute tolerance of $2.5*10^{-12}$\relax }}{79}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p2_global_error}{{111}{79}}
+\@writefile{lof}{\contentsline {figure}{\numberline {112}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 2 at an absolute tolerance of $2.5*10^{-12}$\relax }}{79}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p2_scaled_defects}{{112}{79}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 2 results}{79}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {113}{\ignorespaces Global Defect of RK6 with HB8 using alpha and beta = 1 and sharp tolerance on problem 3 at an absolute tolerance of $2.5*10^{-12}$\relax }}{80}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p3_global_defect}{{113}{80}}
+\@writefile{lof}{\contentsline {figure}{\numberline {114}{\ignorespaces Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 3 at an absolute tolerance of $2.5*10^{-12}$\relax }}{80}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p3_global_error}{{114}{80}}
+\@writefile{lof}{\contentsline {figure}{\numberline {115}{\ignorespaces Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 3 at an absolute tolerance of $2.5*10^{-12}$\relax }}{81}{}\protected@file@percent }
+\newlabel{fig:sharp_tolerance_rk6_with_hb8_p3_scaled_defects}{{115}{81}}
+\@writefile{toc}{\contentsline {paragraph}{Problem 3 results}{81}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces rk6 with hb8 using static alpha and beta and optimal h at sharp tolerance\relax }}{81}{}\protected@file@percent }
+\newlabel{tab:rk6_with_hb8_sharp_tolerance}{{8}{81}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}Future work}{81}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.1}the first/first and second step}{81}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.2}HB10}{81}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.6.3}Doing error control instead of Defect control}{82}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {116}{\ignorespaces Defect is V-shape\relax }}{82}{}\protected@file@percent }
+\newlabel{fig:defect_is_v_shape}{{116}{82}}
+\@writefile{lof}{\contentsline {figure}{\numberline {117}{\ignorespaces Error is not V-shape\relax }}{83}{}\protected@file@percent }
+\newlabel{fig:error_is_not_v_shape}{{117}{83}}
+\gdef \@abspage@last{83}

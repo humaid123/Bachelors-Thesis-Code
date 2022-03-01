@@ -502,7 +502,7 @@ def rk_defect_control_static_alpha_beta(fun, t_span, y0, tol, solution):
         monitor.n_steps += 1
 
         # print("max_defect", max_defect)
-        if max_defect < tol:
+        if max_defect < (0.8*tol):
             # accept the step, by moving the x and the y
             xn = x_i_plus_1
             yn = y_i_plus_1
@@ -515,7 +515,7 @@ def rk_defect_control_static_alpha_beta(fun, t_span, y0, tol, solution):
 
             monitor.n_successful_steps += 1
 
-            if max_defect < (tol / 10):
+            if max_defect < (0.2*tol):
                 h *= 2
         else:
             h /= 2
