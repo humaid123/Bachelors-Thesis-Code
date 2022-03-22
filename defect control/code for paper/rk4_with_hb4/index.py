@@ -1,8 +1,11 @@
 # %%
-from cProfile import label
 from math import sin, sqrt, exp, cos
 import matplotlib.pyplot as plt
-from rk4 import rk_defect_control_static_alpha, rk_defect_control_perfect_first_step_smooth
+from rk4 import (
+    rk_defect_control_static_alpha, 
+    # rk_defect_control_perfect_first_step_smooth, 
+    rk_defect_control_perfect_first_step
+)
 
 # %%
 def create_t_eval(start, end, num_points = 100):
@@ -19,12 +22,11 @@ def create_t_eval(start, end, num_points = 100):
 def experiment(model, y0, t_span, solution, num):
     t_eval = create_t_eval(t_span[0], t_span[1])
     tol = 1e-6
-    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
-    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
+    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
+    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
     # (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha(model, t_span, y0[0], tol, solution)
-    # print("derivs", derivs)
     print("integration complete")
-
+"""
     # # ====================================== figure of rk6 vs rk6_interps vs rk45
     # # plt.figure()
     xs = [x[0] for x in res]
@@ -41,24 +43,25 @@ def experiment(model, y0, t_span, solution, num):
     actual_solutions = solution(t_eval)
     # plt.plot(t_eval, actual_solutions, label="solution")
 
-    # # removed rk45 plt.title("solution vs rk45 vs rk6 vs rk6_interpolated")
+    # removed rk45 plt.title("solution vs rk45 vs rk6 vs rk6_interpolated")
     # plt.title(f"Problem {num}: solution vs rk4_with_hb4")
     # plt.xlabel("t")
     # plt.ylabel('y')
     # plt.legend(loc="upper right")
     # plt.show()
-    # # ====================================== end figure of rk6 vs rk6_interps vs rk45
+    # ====================================== end figure of rk6 vs rk6_interps vs rk45
 
     # ====================================== global error
     plt.figure()
-    error = [(computed_solution - actual_solution) for (computed_solution, actual_solution) in zip(computed_solutions, actual_solutions)]
-    for this_x in xs:
-        plt.axvline(x=this_x) 
+    error = [abs(computed_solution - actual_solution) for (computed_solution, actual_solution) in zip(computed_solutions, actual_solutions)]
+    # for this_x in xs:
+    #     plt.axvline(x=this_x) 
     plt.plot(t_eval, error, label="global error")
     # plt.title(f"Problem {num}: rk4_with_hb4 - global error at tol={tol}")
+    # plt.xticks(xs)
     plt.xlabel("t")
     plt.ylabel("error")
-    plt.legend(loc="upper right")
+    # plt.legend(loc="upper right")
     plt.show()
     # ====================================== end of global error
 
@@ -74,10 +77,11 @@ def experiment(model, y0, t_span, solution, num):
     defects = [abs(actual_f_eval - hb_prime_eval) for (actual_f_eval, hb_prime_eval) in zip(actual_f_evals, hb_prime_evals)]
     plt.figure()
     plt.plot(t_eval, defects, label="global defect")
+    # plt.xticks(xs)
     plt.ylabel("defect")
     plt.xlabel("t")
     # plt.title(f"Problem {num}: rk4_with_hb4 global defect - tol={tol}")
-    plt.legend()
+    # plt.legend()
     plt.show()
     
     # ====================================== end figure of satisfying global defect
@@ -95,8 +99,6 @@ def experiment(model, y0, t_span, solution, num):
             hb_prime_eval = hb.prime(pt)
             defects.append( abs(hb_prime_eval - f_eval) )
         maximum_defect = max(defects)
-        # minimum_defect = min(defects)
-        # plot_vals = [(defect - minimum_defect) / (maximum_defect - minimum_defect) for defect in defects]
         plot_vals = [ defect/ maximum_defect for defect in defects]
         #plt.plot(xs, defects, label=f"x_{str(x_i_minus_1)}_{str(x_i_plus_1)}")
         x_axis = [i/(num_points - 1) for i in range(num_points)]
@@ -106,9 +108,9 @@ def experiment(model, y0, t_span, solution, num):
             continue
         plt.plot(x_axis, plot_vals, label=f"x_{str(x_i)}_{str(x_i_plus_1)}")
     # plt.title(f"Problem {num}: rk4_with_hb4 scaled defects")
-    plt.xlabel("x_i to x_i_plus_1")
+    plt.xlabel(r"$x_i$ to $x_{i+1}$")
     # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
-    plt.ylabel('scaled defect')
+    plt.ylabel('scaled defects')
     # plt.legend()
     plt.show()
     # ====================================== end figure of defect
@@ -118,10 +120,11 @@ def experiment(model, y0, t_span, solution, num):
     for [x_axis, plot_vals] in defects_small_steps:
         plt.plot(x_axis, plot_vals)
     # plt.title(f"Problem {num}: rk4_with_hb4 scaled defects on small step sizes")
-    plt.xlabel("x_i to x_i_plus_1")
+    plt.xlabel(r"$x_i$ to $x_{i+1}$")
     # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
-    plt.ylabel('scaled defect')
+    plt.ylabel('scaled defects')
     plt.show()
+"""
 
 # %%
 t_span_1 = [0, 10]

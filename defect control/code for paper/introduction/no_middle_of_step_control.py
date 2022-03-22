@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from math import sin, sqrt, exp, cos
 
 # %%
-methods = ["RK45", "RK23", "DOP853",] # can also add RK23, DOP853, Radau, BDF, LSODA
+methods = ["RK45", "DOP853",] # can also add RK23, DOP853, Radau, BDF, LSODA
 t_eval = np.array([ x for x in range(0, 100) ]) / 10
 tolerances =  [1e-6]
 
@@ -25,7 +25,7 @@ def experiment(model, y0, t_span, solution, num):
             plt.plot(t_eval, np.log10(abs_err), label="abs error", color="r")
             for t in dense.t: plt.axvline(x=t)
             plt.axhline(y=np.log10(atol), label="abs tol", color="g")
-            plt.title(f"Problem {num} solved with method '{method}' at atol of {atol}")
+            # plt.title(f"Problem {num} solved with method '{method}' at atol of {atol}")
             plt.legend()
             plt.show()
 
@@ -75,7 +75,7 @@ def model3(t, y):
 def solution3(t):
     return [20 / ( 1 + 19 * exp(-x/4) ) for x in t]
 
-experiment(model3, y0_3, t_span_3, solution3, 3)
+experiment(model3, y0_3, t_span_3, solution3, 2)
 
 # # %%
 # t_span_4 = [0, 10]
@@ -127,7 +127,7 @@ def solution7(t):
     alpha = 0.1
     return [exp(-alpha*x)*cos(x) for x in t]
 
-experiment(model7, y0_7, t_span_7, solution7, 7)
+experiment(model7, y0_7, t_span_7, solution7, 3)
 
 # # %%
 # # Jeff cash test set first one

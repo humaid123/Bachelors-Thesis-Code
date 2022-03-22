@@ -297,104 +297,104 @@ def rk_defect_control_static_alpha_beta(fun, t_span, y0, tol, solution):
     )
 
 ##############################################################################################
-def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
-    xn, xend = t_span
-    yn = y0
-    f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
+# def rk_defect_control_perfect_first_step_smooth(fun, t_span, y0, tol, solution):
+#     xn, xend = t_span
+#     yn = y0
+#     f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
     
-    res = [(xn, yn)]
-    fn_s = [f_start]
-    interps = []
+#     res = [(xn, yn)]
+#     fn_s = [f_start]
+#     interps = []
 
-    # we do a perfect step for the one_step
-    h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
-    xn = xn + h
-    yn = solution([xn])[0]
-    f_start = fun(xn, yn)[0]
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
+#     # we do a perfect step for the one_step
+#     h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
+#     xn = xn + h
+#     yn = solution([xn])[0]
+#     f_start = fun(xn, yn)[0]
+#     res.append( (xn, yn) )
+#     fn_s.append(f_start)
 
-    xn = xn + h
-    yn = solution([xn])[0]
-    f_start = fun(xn, yn)[0]
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
+#     xn = xn + h
+#     yn = solution([xn])[0]
+#     f_start = fun(xn, yn)[0]
+#     res.append( (xn, yn) )
+#     fn_s.append(f_start)
 
-    monitor = Monitor()
+#     monitor = Monitor()
 
-    while xn < xend:
-        (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
+#     while xn < xend:
+#         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
-        x_i, y_i = res[-1]
-        x_i_minus_1, y_i_minus_1 = res[-2]
-        x_i_minus_2, y_i_minus_2 = res[-3]
-        x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
+#         x_i, y_i = res[-1]
+#         x_i_minus_1, y_i_minus_1 = res[-2]
+#         x_i_minus_2, y_i_minus_2 = res[-3]
+#         x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
 
-        f_i = fn_s[-1]
-        f_i_minus_1 = fn_s[-2]
-        f_i_minus_2 = fn_s[-3]
-        f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
+#         f_i = fn_s[-1]
+#         f_i_minus_1 = fn_s[-2]
+#         f_i_minus_2 = fn_s[-3]
+#         f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
 
-        this_interp = HB(
-            x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-            y_i_minus_2, f_i_minus_2,
-            y_i_minus_1, f_i_minus_1,
-            y_i, f_i,
-            y_i_plus_1, f_i_plus_1,
-            monitor
-        )
+#         this_interp = HB(
+#             x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+#             y_i_minus_2, f_i_minus_2,
+#             y_i_minus_1, f_i_minus_1,
+#             y_i, f_i,
+#             y_i_plus_1, f_i_plus_1,
+#             monitor
+#         )
 
-        monitor.n_steps += 1
+#         monitor.n_steps += 1
 
-        """
-        # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
-        if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
-        if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
-        if (abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))   > 1e-12: print("wrong y_i_plus_1",  abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))
+#         """
+#         # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
+#         if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
+#         if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
+#         if (abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))   > 1e-12: print("wrong y_i_plus_1",  abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))
 
-        if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
-        if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
-        if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
-        """
+#         if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
+#         if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
+#         if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
+#         """
 
-        # defect control on [x_i to x_i_plus_1]
-        h_i = x_i_plus_1 - x_i
-        x_sample_1 = x_i + 0.4 * h_i
-        defect_sample_1 = abs( 
-            this_interp.prime(x_sample_1) - fun( x_sample_1, this_interp.eval(x_sample_1) )[0] 
-        )
+#         # defect control on [x_i to x_i_plus_1]
+#         h_i = x_i_plus_1 - x_i
+#         x_sample_1 = x_i + 0.4 * h_i
+#         defect_sample_1 = abs( 
+#             this_interp.prime(x_sample_1) - fun( x_sample_1, this_interp.eval(x_sample_1) )[0] 
+#         )
 
-        x_sample_2 = x_i + 0.8 * h_i
-        defect_sample_2 = abs(
-            this_interp.prime(x_sample_2) - fun( x_sample_2, this_interp.eval(x_sample_2) )[0]
-        )
-        max_defect = max(defect_sample_1, defect_sample_2)
+#         x_sample_2 = x_i + 0.8 * h_i
+#         defect_sample_2 = abs(
+#             this_interp.prime(x_sample_2) - fun( x_sample_2, this_interp.eval(x_sample_2) )[0]
+#         )
+#         max_defect = max(defect_sample_1, defect_sample_2)
 
-        if max_defect < (0.8 * tol):
-            # accept the step, by moving the x and the y
-            xn = x_i_plus_1
-            yn = y_i_plus_1
-            res.append( (xn, yn) )
+#         if max_defect < (0.8 * tol):
+#             # accept the step, by moving the x and the y
+#             xn = x_i_plus_1
+#             yn = y_i_plus_1
+#             res.append( (xn, yn) )
 
-            f_start = f_i_plus_1
-            fn_s.append(f_start)
+#             f_start = f_i_plus_1
+#             fn_s.append(f_start)
 
-            monitor.n_successful_steps += 1
+#             monitor.n_successful_steps += 1
 
-            interps.append(this_interp)
-            if max_defect < (0.2 * tol):
-                h *= 2
-        else:
-            h /= 2
+#             interps.append(this_interp)
+#             if max_defect < (0.2 * tol):
+#                 h *= 2
+#         else:
+#             h /= 2
 
-    print("tolerance=", tol)
-    monitor.print()
-    print("================================\n")
-    continuous_sol = ContinuousSolution()
-    continuous_sol.extend(interps)
-    return (
-        res, 
-        continuous_sol.eval,
-        continuous_sol.prime,
-        create_defect_samplings(res, fn_s, monitor)
-    )
+#     print("tolerance=", tol)
+#     monitor.print()
+#     print("================================\n")
+#     continuous_sol = ContinuousSolution()
+#     continuous_sol.extend(interps)
+#     return (
+#         res, 
+#         continuous_sol.eval,
+#         continuous_sol.prime,
+#         create_defect_samplings(res, fn_s, monitor)
+#     )

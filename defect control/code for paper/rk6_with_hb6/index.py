@@ -1,8 +1,11 @@
 # %%
 from math import sin, sqrt, exp, cos
 import matplotlib.pyplot as plt
-from rk6 import rk_defect_control_perfect_first_step, rk_defect_control, rk_defect_control_static_alpha, rk_defect_control_perfect_first_step_smooth
-
+from rk6 import (
+    rk_defect_control_static_alpha, 
+    # rk_defect_control_perfect_first_step_smooth, 
+    rk_defect_control_perfect_first_step
+)
 # %%
 def create_t_eval(start, end, num_points = 100):
     res = [start]
@@ -18,11 +21,11 @@ def create_t_eval(start, end, num_points = 100):
 def experiment(model, y0, t_span, solution):
     t_eval = create_t_eval(t_span[0], t_span[1])
     tol = 1e-6
-    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
-    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
+    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
+    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
     # (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha(model, t_span, y0[0], tol, solution)
     print("integration complete")
-
+"""
     # ====================================== figure of rk6 vs rk6_interps vs rk45
     # plt.figure()
     xs = [x[0] for x in res]
@@ -45,18 +48,20 @@ def experiment(model, y0, t_span, solution):
     # plt.ylabel('y')
     # plt.legend(loc="upper right")
     # plt.show()
-    # # ====================================== end figure of rk6 vs rk6_interps vs rk45
+    # ====================================== end figure of rk6 vs rk6_interps vs rk45
 
     # ====================================== global error
     plt.figure()
-    error = [(computed_solution - actual_solution) for (computed_solution, actual_solution) in zip(computed_solutions, actual_solutions)]
-    for this_x in xs:
-        plt.axvline(x=this_x) 
+    error = [abs(computed_solution - actual_solution) for (computed_solution, actual_solution) in zip(computed_solutions, actual_solutions)]
+    # if tol > 1e-10:
+    #     for this_x in xs:
+    #         plt.axvline(x=this_x) 
     plt.plot(t_eval, error, label="global error")
     # plt.title("global error")
+    # plt.xticks(xs)
     plt.xlabel("t")
     plt.ylabel("error")
-    plt.legend(loc="upper right")
+    # plt.legend(loc="upper right")
     plt.show()
     # ====================================== end of global error
 
@@ -72,10 +77,11 @@ def experiment(model, y0, t_span, solution):
     defects = [abs(actual_f_eval - hb_prime_eval) for (actual_f_eval, hb_prime_eval) in zip(actual_f_evals, hb_prime_evals)]
     plt.figure()
     plt.plot(t_eval, defects, label="global defect")
-    plt.xlabel("t")
+    # plt.xticks(xs)    
     plt.ylabel("defect")
-    plt.legend(loc="upper right")
+    plt.xlabel("t")
     # plt.title(f"global defect for tol={tol}")
+    # plt.legend()    
     plt.show()
     
     # ====================================== end figure of satisfying global defect
@@ -106,8 +112,9 @@ def experiment(model, y0, t_span, solution):
             continue
         plt.plot(x_axis, plot_vals, label=f"x_{str(x_i_minus_1)}_{str(x_i_plus_1)}")
     # plt.title("plot of defects")
-    plt.xlabel("x_i to x_i_plus_1")
-    plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
+    plt.xlabel(r"$x_i$ to $x_{i+1}$")
+    # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
+    plt.ylabel('scaled defects')
     # plt.legend()
     plt.show()
     # ====================================== end figure of defect
@@ -117,9 +124,11 @@ def experiment(model, y0, t_span, solution):
     for [x_axis, plot_vals] in defects_small_steps:
         plt.plot(x_axis, plot_vals)
     # plt.title("plot of defects on small step sizes")
-    plt.xlabel("x_i to x_i_plus_1")
-    plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
+    plt.xlabel(r"$x_i$ to $x_{i+1}$")
+    # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
+    plt.ylabel('scaled defects')
     plt.show()
+"""
 
 # %%
 t_span_1 = [0, 10]

@@ -130,11 +130,22 @@ In the context of numerical ODEs the defect, denoted by $\delta(t)$,  is the amo
 \delta(t) = u'(t) - f(t, u(t))
 \end{equation}
 
-Calculating the defect requires that the solution computed by the solver be differentiable. The idea of defect control is relatively new as differentiable solutions to ODEs are very expensive to calculate. One such attempt is outlined in 8888 reference to Wayne Enright CRK defect control 8888. In this paper, the defect control method that was discussed employs a continuous RK method for which the number of stages that grows exponentially with the order of the method as shown in Table 888 refer to table below 8888. In this paper we will compute a defect controlled continuous solution with no additional cost. A typical Runge-Kutta solver will thus be able to take the usual number of stages as other discrete Runge-Kutta method of the same order and still produce an accurate continuous solution.
+Calculating the defect requires that the solution computed by the solver be differentiable. The idea of defect control is relatively new as differentiable solutions to ODEs are very expensive to calculate. One such attempt is outlined in 8888 reference to Wayne Enright CRK defect control 8888. In this paper, the defect control method that was discussed employs a continuous RK method for which the number of stages that grows exponentially with the order of the method as shown in Table $\ref{tab:crk_nstages}$. In this paper we will compute a defect controlled continuous solution with no additional cost. A typical Runge-Kutta solver will thus be able to take the usual number of stages as other discrete Runge-Kutta method of the same order and still produce an accurate continuous solution.
 
-======================================
-Include table order of method versus number of stages.
-======================================
+\begin{table}[h]
+\caption {Number of stages for discrete vs continuous RK method} 
+\label{tab:crk_nstages}
+\begin{center}
+\begin{tabular}{ c c c c} 
+order   & discrete & continuous & continuous asymptotic \\ 
+4 & 4  & 4   & 8 \\ 
+5 & 5  & 6   & 12 \\ 
+6 & 6  & 7   & 15 \\ 
+7 & 7  & 9   & 20 \\ 
+8 & 8  & 13  & 27 \\ 
+\end{tabular}
+\end{center}
+\end{table}
 
 Discussion of Enright's work
 https://www.cs.toronto.edu/~enright/recentMSc.html
@@ -152,7 +163,7 @@ In this chapter, we will discuss simple IVODE solvers based on each of 3 Runge-K
 
 The first Runge-Kutta method upon which we build a defect control solver is the classical $4^{th}$ order method that uses 4 stages, the second method is a Verner $6^{th}$ order method, taken from his 6(5) pair 8888 need to look for a reference 8888, that uses 9 stages and the last method is a VErner $8^{th}$ order method from an 8(7) pair that uses 13 stages, 8888 Need a reference for that as well 8888. 
 
-The solver that was coded uses a simple step selection strategy. If the estimated maximum defect is greater than $0.8tol$, the solver rejects the step and attempts to retake it again with half the step-size. If the estimated maximum defect is less than $0.2tol$, the solver accepts the step and doubles the step-size for the next step. We will elaborate on the initial step-size used by each modification later in the chapter.
+The solver that was coded uses a simple step selection strategy. If the estimated maximum defect is greater than $tol$, the solver rejects the step and attempts to retake it again with half the step-size. If the estimated maximum defect is less than $0.1tol$, the solver accepts the step and doubles the step-size for the next step. We will elaborate on the initial step-size used by each modification later in the chapter.
 
 We now note that the solver is not optimised. A more thorough analysis of how the solver behaves and thus a more refined step selection algorithm will produce a faster solver in practice. The code we consider in this chapter only serves as a proof of concept for a more elaborate solver. 
 
@@ -291,19 +302,14 @@ We now present the number of steps that were taken by the solver to solve each p
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & number of successful steps & number of steps \\ 
-1       & 84                         & 112 \\ 
-2       & 63                         & 109 \\
-3       & 238                        & 385 \\
+1       & 88                         & 88 \\ 
+2       & 59                         & 62 \\
+3       & 225                        & 232 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-======================================================
-I changed the code to use the optimal h initially => 1e-2 instead of 1e-3
-When I did that the smooth step control was giving bad number of succ. step to nstep ratios and is giving the numbers above.... We need to use [tol, tol/10] again....
-======================================================
-
-We start our discussion by noting that we are not using an efficient step selection algorithm. Still such a high number of steps in all 3 cases is alarming and easy to explain.
+We start our discussion by noting that we are not using an efficient step selection algorithm. Still such a high number of steps in all 3 cases is alarming but easy to explain.
 
 The Hermite cubic, HB4, is an interpolant of $4^{th}$ order. However, to perform defect control we need to calculate the derivative of this interpolant. Since we are differentiatingthe interpolant, the order of the derivative is 3 and we lose one order for each subsequent higher derivative. The numerical solution is of order 4 as we are using the classical rk4 and thus the derivative of the interpolant is less accurate than the ODE solution. We need a way to get an interpolant whose derivative is at least of order 4 so that the error of the derivative of the interpolant is not larger than the error of the discrete numerical solution obtained from the RK4 method.
 
@@ -399,10 +405,8 @@ Figures $\ref{fig:rk4_with_hb6_p2_global_defect}$, $\ref{fig:rk4_with_hb6_p2_glo
 \end{figure}
 
 \paragraph{Problem 3 results}
-Figures $\ref{fig:rk4_with_hb6_p3_global_defect}$, $\ref{fig:rk4_with_hb6_p3_global_error}$ and $\ref{fig:rk4_with_hb6_p3_scaled_defects}$ shows the results of using the modification of RK4 with HB6 on Problem 3. 
-======================== Not as clear for problem 3 => not two peaks...
-We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb6_p3_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
-================================
+Figures $\ref{fig:rk4_with_hb6_p3_global_defect}$, $\ref{fig:rk4_with_hb6_p3_global_error}$ and $\ref{fig:rk4_with_hb6_p3_scaled_defects}$ shows the results of using the modification of RK4 with HB6 on Problem 3. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb6_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 3 using RK4 with HB6. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has one clear peak at $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb6_p3_global_defect}$. 
+
 
 \begin{figure}[H]
 \centering
@@ -432,14 +436,14 @@ We note that the defects are not as clean they were in the case with HB4. There 
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & n. succ. steps HB4 & n. succ. steps HB6 & nsteps HB4  & nsteps HB6 \\ 
-1       & 84                 &        26          & 112         & 31\\ 
-2       & 63                 &        36          & 109         & 66\\
-3       & 238                &        63          & 385         & 101\\
+1       & 88                 &        27          & 88         & 27 \\ 
+2       & 59                 &        36          & 62         & 40 \\
+3       & 225                &        62          & 232        & 73 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-Table $\ref{tab:rk4_with_hb6_nsteps}$ shows how the number of steps more than halves when we use hb6 as opposed to hb4. This is entirely because the interpolation error is less than the actual ODE error especially for the derivative.
+Table $\ref{tab:rk4_with_hb6_nsteps}$ shows how the number of steps more than halves when we use HB6 as opposed to HB4. This is entirely because the interpolation error is less than the actual ODE error especially for the derivative.
 
 \paragraph{Issues with $\alpha$ values}
 The issue with this scheme is that the interpolant is a multistep interpolant while the Runge-Kutta method is a one step method. The Hermite Birkhoff interpolant, HB6, is based on two steps and the parameter $\alpha$ defines how big the previous step is compared to the actual step. The error term in the Hermite-Birkhoff interpolant is minimised when the size of the two steps are the same size, i.e, when $\alpha$ is 1. The error term is proportional to $(t + \alpha)^2t^2(t + 1)^2$. When $\alpha$ differs from 1, the accuracy of the interpolant is reduced.
@@ -563,7 +567,7 @@ For the remainder of this paper, we will denote this $8^{th}$ order interpolant 
 We will now use RK4 with the second HB8 scheme and use the new defect control solver to solve the three test problems. We will show that we can sample the defect only twice to estimate the maximum defect and that this scheme can provide defect control.
 
 \paragraph{Problem 1 results}
-Figures $\ref{fig:rk4_with_hb8_p1_global_defect}$, $\ref{fig:rk4_with_hb8_p1_global_error}$ and $\ref{fig:rk4_with_hb8_p1_scaled_defects}$ shows the results of using the modification of RK4 with HB8 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb8_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 1 using RK4 with HB8 All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p1_global_defect}$. 
+Figures $\ref{fig:rk4_with_hb8_p1_global_defect}$, $\ref{fig:rk4_with_hb8_p1_global_error}$ and $\ref{fig:rk4_with_hb8_p1_scaled_defects}$ shows the results of using the modification of RK4 with HB8 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb8_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 1 using RK4 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p1_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -587,7 +591,7 @@ Figures $\ref{fig:rk4_with_hb8_p1_global_defect}$, $\ref{fig:rk4_with_hb8_p1_glo
 \end{figure}
 
 \paragraph{Problem 2 results}
-Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_global_error}$ and $\ref{fig:rk4_with_hb8_p2_scaled_defects}$ shows the results of using the modification of RK4 with HB6 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb8_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 2 using RK4 with HB8 All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p2_global_defect}$. 
+Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_global_error}$ and $\ref{fig:rk4_with_hb8_p2_scaled_defects}$ shows the results of using the modification of RK4 with HB6 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb8_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 2 using RK4 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p2_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -612,7 +616,7 @@ Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_glo
 
 \paragraph{Problem 3 results}
 Figures $\ref{fig:rk4_with_hb8_p3_global_defect}$, $\ref{fig:rk4_with_hb8_p3_global_error}$ and $\ref{fig:rk4_with_hb8_p3_scaled_defects}$ shows the results of using the modification of RK4 with HB6 on Problem 3. 
-We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h.  See Figure $\ref{fig:rk4_with_hb8_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 3 using RK4 with HB8 All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p3_global_defect}$. 
+We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h.  See Figure $\ref{fig:rk4_with_hb8_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 3 using RK4 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p3_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -642,9 +646,9 @@ We note that the defects are not as clean they were in the case with HB4. There 
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & n. succ. steps HB8 & n. succ. steps HB6 & nsteps HB8 & nsteps HB6 \\ 
-1       & 18                 &        26          & 18         & 31\\ 
-2       & 41                 &        36          & 74         & 66\\
-3       & 72                 &        63          & 130        & 101\\
+1       & 20                 &        27          & 20         & 27\\ 
+2       & 37                 &        36          & 60         & 40\\
+3       & 69                 &        62          & 89         & 73\\
 \end{tabular}
 \end{center}
 \end{table}
@@ -654,16 +658,15 @@ From Table $\ref{tab:rk4_with_hb8_nsteps}$, we can see that the number of steps 
 
 \subsection{Higher Order Runge Kuttas}
 \label{section:HBs_and_higher_order_RK}
-In this section, we attempt to perform defect control on higher order Runge-Kutta methods. We recall that related previous work used significantly more stages to transform a respective $6^{th}$ order discrete Runge-Kutta method to a continuous $6^{th}$ order Runge-Kutta method and same with an $8^{th}$ order Runge-Kutta method.
+In this section, we attempt to perform defect control using higher order Runge-Kutta methods. We recall that related previous work used significantly more stages to obtain a continuous $6^{th}$ order Runge-Kutta method and a continuous $8^{th}$ order Runge-Kutta method.
 
-In this section, we will first augment an rk6 method (See Section $\ref{section:basic_runge_kutta}$ for details about the discrete method) with HB6 and then with HB8. We hope to perform defect control and to replicate that the use of HB8 allows significantly less steps. We will then augment an rk8 method (See Section $\ref{section:basic_runge_kutta}$ for more details) with HB8 to show that though interpolation error is present, the scheme does allow defect control and thus a continuous $8^{th}$ order solution. 
+In this section, we will first augment an rk6 method (See Section $\ref{section:basic_runge_kutta}$ for details about the discrete method) with HB6 and then with HB8. We hope to perform defect control and to find that the use of HB8 allows significantly less steps. We will then augment an rk8 method (See Section $\ref{section:basic_runge_kutta}$ for more details) with HB8 to show that though interpolation error is present, the scheme does allow defect control of a continuous $8^{th}$ order solution. 
 
-For both method, we will sample the defect only twice in a step, at $0.4h$ and $0.8h$ in a step of size $h$ as the previous experiments seems to indicate that the maximum defect tend to occur at these spots.
+For both method, we will sample the defect only twice in a step, at $0.4h$ and $0.8h$ in a step of size $h$, as the previous experiments seems to indicate that the maximum defects tend to occur at these spots.
 
-\subsubsection{rk6 with HB6}
-======================================================
+\subsubsection{RK6 with HB6}
 \paragraph{Problem 1 results}
-Figures $\ref{fig:rk6_with_hb6_p1_global_defect}$, $\ref{fig:rk6_with_hb6_p1_global_error}$ and $\ref{fig:rk6_with_hb6_p1_scaled_defects}$ shows the results of using the modification of RK6 with HB6 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb6_p1_scaled_defects}$ to see the scaled defect peaking at these points. We note that we successfully control the defect and thus successfully control the error.
+Figures $\ref{fig:rk6_with_hb6_p1_global_defect}$, $\ref{fig:rk6_with_hb6_p1_global_error}$ and $\ref{fig:rk6_with_hb6_p1_scaled_defects}$ shows the results of using the RK6 with HB6 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb6_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 1 using RK6 with HB6. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk6_with_hb6_p1_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -687,7 +690,7 @@ Figures $\ref{fig:rk6_with_hb6_p1_global_defect}$, $\ref{fig:rk6_with_hb6_p1_glo
 \end{figure}
 
 \paragraph{Problem 2 results}
-Figures $\ref{fig:rk6_with_hb6_p2_global_defect}$, $\ref{fig:rk6_with_hb6_p2_global_error}$ and $\ref{fig:rk6_with_hb6_p2_scaled_defects}$ shows the results of using the modification of RK6 with HB6 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb6_p2_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
+Figures $\ref{fig:rk6_with_hb6_p2_global_defect}$, $\ref{fig:rk6_with_hb6_p2_global_error}$ and $\ref{fig:rk6_with_hb6_p2_scaled_defects}$ shows the results of using the modification of RK6 with HB6 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb6_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 2 using RK6 with HB6. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk6_with_hb6_p2_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -719,7 +722,7 @@ Figures $\ref{fig:rk6_with_hb6_p2_global_defect}$, $\ref{fig:rk6_with_hb6_p2_glo
 
 \paragraph{Problem 3 results}
 Figures $\ref{fig:rk6_with_hb6_p3_global_defect}$, $\ref{fig:rk6_with_hb6_p3_global_error}$ and $\ref{fig:rk6_with_hb6_p3_scaled_defects}$ shows the results of using the modification of RK6 with HB6 on Problem 3. 
-We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb6_p3_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
+We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb6_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 3 using RK6 with HB6. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk6_with_hb6_p3_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -749,12 +752,10 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \label{fig:rk6_with_hb6_p3_scaled_defects_small_steps}
 \end{figure}
 
-======================================
-
-\subsubsection{rk6 with HB8}
-======================================================
+\subsubsection{RK6 with HB8}
 \paragraph{Problem 1 results}
-Figures $\ref{fig:rk6_with_hb8_p1_global_defect}$, $\ref{fig:rk6_with_hb8_p1_global_error}$ and $\ref{fig:rk6_with_hb8_p1_scaled_defects}$ shows the results of using the modification of RK6 with HB8 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb8_p1_scaled_defects}$ to see the scaled defect peaking at these points. We note that we successfully control the defect and thus successfully control the error.
+Figures $\ref{fig:rk6_with_hb8_p1_global_defect}$, $\ref{fig:rk6_with_hb8_p1_global_error}$ and $\ref{fig:rk6_with_hb8_p1_scaled_defects}$ shows the results of using the modification of RK6 with HB8 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb8_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 1 using RK6 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk6_with_hb8_p1_global_defect}$. 
+
 
 \begin{figure}[H]
 \centering
@@ -778,7 +779,8 @@ Figures $\ref{fig:rk6_with_hb8_p1_global_defect}$, $\ref{fig:rk6_with_hb8_p1_glo
 \end{figure}
 
 \paragraph{Problem 2 results}
-Figures $\ref{fig:rk6_with_hb8_p2_global_defect}$, $\ref{fig:rk6_with_hb8_p2_global_error}$ and $\ref{fig:rk6_with_hb8_p2_scaled_defects}$ shows the results of using the modification of RK6 with HB8 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb8_p2_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
+Figures $\ref{fig:rk6_with_hb8_p2_global_defect}$, $\ref{fig:rk6_with_hb8_p2_global_error}$ and $\ref{fig:rk6_with_hb8_p2_scaled_defects}$ shows the results of using the modification of RK6 with HB8 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb8_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 2 using RK6 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has one clear peak at around $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk6_with_hb8_p2_global_defect}$. 
+
 
 \begin{figure}[H]
 \centering
@@ -810,7 +812,8 @@ Figures $\ref{fig:rk6_with_hb8_p2_global_defect}$, $\ref{fig:rk6_with_hb8_p2_glo
 
 \paragraph{Problem 3 results}
 Figures $\ref{fig:rk6_with_hb8_p3_global_defect}$, $\ref{fig:rk6_with_hb8_p3_global_error}$ and $\ref{fig:rk6_with_hb8_p3_scaled_defects}$ shows the results of using the modification of RK6 with HB8 on Problem 3. 
-We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb8_p3_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
+We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at either $0.4h$ or $0.8h$ along a step of size, h. See Figure $\ref{fig:rk6_with_hb8_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 3 using RK6 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk6_with_hb8_p3_global_defect}$. 
+ 
 
 \begin{figure}[H]
 \centering
@@ -844,25 +847,26 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \caption {Number of steps taken by RK6 when modified to do defect control with HB8 vs when modified with HB6} \label{tab:rk6_with_hb6_vs_hb8_nsteps}
 \begin{center}
 \begin{tabular}{ c c c c c } 
-Problem & n. successful steps HB8 & n. successful steps HB6 & nsteps HB8 & nsteps HB6 \\ 
-1       & 17                      &        26               & 18         & 32\\ 
-2       & 14                      &        18               & 19         & 26\\
-3       & 24                      &        43               & 28         & 61\\
+Problem & n. succ. steps HB8 & n. succ. steps HB6 & nsteps HB8 & nsteps HB6 \\ 
+1       & 18                 &        26          & 18         & 27\\ 
+2       & 14                 &        18          & 17         & 23\\
+3       & 24                 &        42          & 26         & 51\\
 \end{tabular}
 \end{center}
 \end{table}
 
-From Table $\ref{tab:rk6_with_hb6_vs_hb8_nsteps}$, we can see that again, using an interpolant whose interpolation error and especially interpolation error of its derivative is of higher order than the ODE solution drastically reduces the number of steps. The code becomes more efficient as a result. Since rk6 with HB6 and with HB8 is behaving similarly to rk4 with HB4 and with HB6, we expect that using a $10^{th}$ order method would not improve the situation more than HB8 has over HB6. Though fitting rk6 with HB10 will be as costless as fitting it with HB8, the fact that the interpolation error is no longer the limiting factor means that HB10 will not improve the situation. For rk6, Hb8 is the preferred interpolant.  
+From Table $\ref{tab:rk6_with_hb6_vs_hb8_nsteps}$, we can see that again, using an interpolant whose interpolation error and especially the interpolation error of its derivative is of higher order than the ODE solution drastically reduces the number of steps. The code becomes more efficient as a result. Since rk6 with HB6 and with HB8 is behaving similarly to rk4 with HB4 and with HB6, we expect that using a $10^{th}$ order method would not improve the situation more than HB8 has over HB6. Though fitting rk6 with HB10 will be as efficient as fitting it with HB8, the fact that the interpolation error is no longer the limiting factor means that HB10 will not improve the situation. For rk6, Hb8 is the preferred interpolant.  
 
 We also note that during the solving of the 3 problems, the value of $\alpha$ with HB6 rarely was bigger than 4 or smaller than $\frac{1}{4}$. The values of $\alpha$ and $\beta$ with HB8 also rarely were bigger than 4 or smaller than $\frac{1}{4}$. 
 
-\subsubsection{rk8 with HB8}
+\subsubsection{RK8 with HB8}
 In this section, we fit the RK8 method, described in Section $\ref{section:basic_runge_kutta}$, with HB8. Though we expect the interpolation error to reduce the efficiency of this modification, we provide a proof of concept that an RK8 can have defect control with the scheme presented in this chapter. 
 ===============
 We will look into an HB10 scheme later. Depending on time, I may do it as well.
 ==================
 \paragraph{Problem 1 results}
-Figures $\ref{fig:rk8_with_hb8_p1_global_defect}$, $\ref{fig:rk8_with_hb8_p1_global_error}$ and $\ref{fig:rk8_with_hb8_p1_scaled_defects}$ shows the results of using the modification of RK8 with HB8 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb8_p1_scaled_defects}$ to see the scaled defect peaking at these points. We note that we successfully control the defect and thus successfully control the error.
+Figures $\ref{fig:rk8_with_hb8_p1_global_defect}$, $\ref{fig:rk8_with_hb8_p1_global_error}$ and $\ref{fig:rk8_with_hb8_p1_scaled_defects}$ shows the results of using the modification of RK8 with HB8 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb8_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 1 using RK8 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk8_with_hb8_p1_global_defect}$. 
+ 
 
 \begin{figure}[H]
 \centering
@@ -886,7 +890,7 @@ Figures $\ref{fig:rk8_with_hb8_p1_global_defect}$, $\ref{fig:rk8_with_hb8_p1_glo
 \end{figure}
 
 \paragraph{Problem 2 results}
-Figures $\ref{fig:rk8_with_hb8_p2_global_defect}$, $\ref{fig:rk8_with_hb8_p2_global_error}$ and $\ref{fig:rk8_with_hb8_p2_scaled_defects}$ shows the results of using the modification of RK8 with HB8 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb8_p2_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
+Figures $\ref{fig:rk8_with_hb8_p2_global_defect}$, $\ref{fig:rk8_with_hb8_p2_global_error}$ and $\ref{fig:rk8_with_hb8_p2_scaled_defects}$ shows the results of using the modification of RK8 with HB8 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb8_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 2 using RK8 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk8_with_hb8_p2_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -918,7 +922,8 @@ Figures $\ref{fig:rk8_with_hb8_p2_global_defect}$, $\ref{fig:rk8_with_hb8_p2_glo
 
 \paragraph{Problem 3 results}
 Figures $\ref{fig:rk8_with_hb8_p3_global_defect}$, $\ref{fig:rk8_with_hb8_p3_global_error}$ and $\ref{fig:rk8_with_hb8_p3_scaled_defects}$ shows the results of using the modification of RK8 with HB8 on Problem 3. 
-We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb8_p3_scaled_defects}$ to see the scaled defect peeking at these points. We note that we successfully control the defect and thus successfully control the error.
+We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb8_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. (The figure shows the shape of the defect in a step over several steps that were taken to solve Problem 3 using RK8 with HB8. All the defects were scaled vertically to be in the range [0, 1] and scaled horizontally so that we can compare several different-sized step as a proportion from [0, 1]. It has two peaks at $0.4h$ and $0.8h$.) We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk8_with_hb8_p3_global_defect}$. 
+
 
 \begin{figure}[H]
 \centering
@@ -948,13 +953,26 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \label{fig:rk8_with_hb8_p3_scaled_defects_small_steps}
 \end{figure}
 
-\subsection{the Vshaped graph and dependence on small alpha}
+\begin{table}[h]
+\caption {Number of steps taken by RK8 when modified to do defect control with HB8} \label{tab:rk8_with_hb8_nsteps}
+\begin{center}
+\begin{tabular}{ c c c } 
+Problem & n. succ. steps & nsteps \\ 
+1       & 18             &        19 \\ 
+2       & 12             &        15 \\
+3       & 24             &        29 \\
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\subsection{The Vshaped graph and dependence on unit weight parameters}
 \label{section:v_shaped_graph}
-As we have shown several times in this report. The maximum order of magnitude of the accuracy depends on the values of the parameter $\alpha$ for the HB6 case and $\alpha$ and $\beta$ in the HB8 case. Furthermore, the accuracy also follows a V-shape as the rounding-off error catches up to the decrease in the truncation error at some point. This is because the derivative of the interpolant uses a term in O($\frac{1}{h})$ where $h$ is the step-size. In this section we will address some of these problems by looking into how much these problems affect us and 
+As we have shown several times in this report, the maximum order of accuracy of an interpolant depends on the value of the parameter $\alpha$ for the HB6 case and $\alpha$ and $\beta$ in the HB8 case. Furthermore, the accuracy also follows a V-shape as the interpolation error for sufficiently small $h$ reaches the round-off error. This is because the derivative of the interpolant uses a term in O($\frac{1}{h})$ where $h$ is the step-size. In this section we will look into how much these issues affect our interpolation. 
 
 \subsubsection{The Problems}
 \paragraph{HB4}
-IN HB4, the error across several problems, across several sampling points, and at different step-sizes is as shown in Figure $\ref{v_shape_across_problems_hb4}$. We note that this is without any parameters and at each h and each point $x$, we sampled at $x$ and $x + h$ to create the interpolant. The scheme suffers from an $O(\frac{1}{h})$ rounding off error inherently.
+In HB4, the error across several problems, across several sampling points, and at different step-sizes is as shown in Figure $\ref{fig:v_shape_across_problems_hb4}$. We note that this is without any parameters and at each h and each point $x$, we sampled at $x$ and $x + h$ to create the interpolant. The scheme suffers from an $O(\frac{1}{h})$ rounding off error inherently.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/v_shape_across_problems_hb4}
@@ -962,11 +980,11 @@ IN HB4, the error across several problems, across several sampling points, and a
 \label{fig:v_shape_across_problems_hb4}
 \end{figure}
 
-We note that there is a clear optimal $h$ at about $10^{-3}$ and that we are able to achieve a tolerance of  $10^{-14}$ with some problems and $10^{-12}$ with almost every other problem. This gives us hope that this scheme can integrate at very sharp tolerances. In this section, we will try several techniques to improve the situation. 
+We note that there is a clear optimal $h$ at about $10^{-3}$ and that we are able to achieve a tolerance of  $10^{-14}$ with some problems and $10^{-12}$ with almost every other problem. This gives us hope that this scheme can be used at very sharp tolerances. In this section, we will try several techniques to improve the situation. 
 
 
 \paragraph{HB6}
-In HB6, the error across several problems, across several sampling points, and at different step-sizes is as shown in Figure $\ref{v_shape_across_problems_hb6}$. We note that that the parameter $\alpha$ is constant at 1 throughout the whole process as we sample at the point, $x$ and the points $x+h$ and $x-h$. This is the ideal case as the interpolation error is thus minimised. Still, the scheme suffers from an $O(\frac{1}{h})$ rounding off error inherently dues to the derivative using a term in $\frac{1}{h}$.
+In HB6, the error across several problems, across several sampling points, and at different step-sizes is as shown in Figure $\ref{v_shape_across_problems_hb6}$. We note that that the parameter $\alpha$ is constant at 1 throughout the whole process as we sample at the point, $x$ and the points $x+h$ and $x-h$. This is the ideal case as the interpolation error is thus minimised.
 
 \begin{figure}[H]
 \centering
@@ -977,11 +995,11 @@ In HB6, the error across several problems, across several sampling points, and a
 
 We note that $\alpha$ was kept at 1 in Figure $\ref{fig:v_shape_across_problems_hb6}$. To see how the parameter $\alpha$ reduces the accuracy as it deviates from 1, see Figure $\ref{fig:hb6_alpha_v_shape}$.
 
-We can see that the optimal $h$ is at around $10^{-2}$. We note that in most cases wew were able to reach an error of $10^{-14}$ but in some cases we were only able to solve at $10^{-12}$. 
+We can see that the optimal $h$ is at around $10^{-2}$. We note that in most cases we were able to reach an error of $10^{-14}$ but in some cases we were only able to solve at $10^{-12}$. 
 
 
 \paragraph{HB8}
-In HB8, the error across several problems, across several sampling points, and at different step-sizes is as shown in Figure $\ref{v_shape_across_problems_hb8}$. We note that that both parameters $\alpha$ and $\beta$ were constant at 1 throughout the whole process as we sample at the point, $x$ and the points $x+h$, $x-h$ and $x-2h$. This is the ideal case as the interpolation error is thus minimised. Still, the scheme suffers from an $O(\frac{1}{h})$ rounding off error inherently dues to the derivative using a term in $\frac{1}{h}$.
+In HB8, the error across several problems, across several sampling points, and at different step-sizes is as shown in Figure $\ref{fig:v_shape_across_problems_hb8}$. We note that that both parameters $\alpha$ and $\beta$ were constant at 1 throughout the whole process as we sample at the point, $x$ and the points $x+h$, $x-h$ and $x-2h$. This is the ideal case as the interpolation error is thus minimised. 
 
 \begin{figure}[H]
 \centering
@@ -995,69 +1013,75 @@ We note that both $\alpha$ and $\beta$ were kept at 1 in Figure $\ref{fig:v_shap
 We can see that the optimal $h$ is at around $10^{-1}$ and $10^{-2}$. We note that in most cases we were able to reach an error of $10^{-14}$ but in some cases we were only able to solve at $10^{-13}$. 
 
 \subsubsection{Horner's and Barycentric interpolants to get to lower tolerances.}
-We note that as from now, we have been using the monomial form of each of the cubic, quintic and septic polynomials that we have derived. Previously we have shown how these were suffering from being eventualy dominated by the rounding-off error as we use smaller and smaller step-sizes. One idea to deal with the loss of accuracy due to the interpolation error being dominated by the rounding-off error as opposed to the numerical error is to use a different representation of the polynomials other than the monomial form in the code. 
+We note that up to this form, we have been using the monomial form of each of the cubic, quintic and septic polynomials that we have derived. In the previous section, we have shown how these were suffering from being eventually dominated by the rounding-off error as we use smaller and smaller step-sizes. One idea to deal with the loss of accuracy due to the interference from the rounding-off error is to use a different representation of the polynomials. 
 
-One idea, borrowed from 8888 Give reference to your paper in the Summer... 8888 is to use the Horner's form of the polynomials. The Horner's form of a polynomial minimises the number of multiplications that need to be undertook during the evaluation. It is faster and also a less prone to rounding-off errors.
+One idea, borrowed from 8888 Give reference to your paper in the Summer... 8888 is to use the Horner's form of the polynomials. The Horner's form of a polynomial minimises the number of multiplications that need to be undertaken during the evaluation. It is faster and also a less prone to rounding-off errors since fewer arithmetic operations are involved.
 
-Another idea is to use a Barycentric interpolant. At the time of the creation of the interpolant, if it is of order $n$ over the interval $[a, b]$, we can find $n$ Chebyshev points in the interval and sample the interpolant to get n data points $(x, y)$ and run a Barycentric interpolation on those data points. A Barycentric interpolant using $n$ data points is of order $n$ and if such an interpolant is used to interpolate a polynomial of order $n$, it perfectly matches the polynomials. The Chebyshev points are used to guarantee the minimum interpolation error. Additionally, as shown in 8888 Reference your paper in the Summer 88888, it reduces the 'noise' in the interpolation and is less prone to rounding-off errors.
+Another idea is to use a Barycentric interpolant. At the time of the creation of the interpolant, if it is of order $n$ over the interval $[a, b]$, we can find $n$ Chebyshev points in the interval and then sample the interpolant at these $n$ points and then fit a Barycentric interpolant to these data points. A Barycentric interpolant using $n$ data points is of order $n$ and if such an interpolant is used to interpolate a polynomial of order $n$, it perfectly matches the polynomial that is, this process gives a different but exact representation of the original polynomial. The Chebyshev points are used to guarantee the minimum interpolation error. Additionally, as shown in 8888 Reference your paper in the Summer 88888, it reduces the 'noise' in the interpolant and this reduces interference from rounding-off errors.
 
-We will use these two interpolation schemes to supplement the Hermite Birkhoff interpolants HB4, HB6 and HB8 at a few different sampling points at different models and report on the improvements they give.
+We will use these two interpolation schemes to supplement the Hermite Birkhoff interpolants HB4, HB6 and HB8 at a few different sampling points at different problems and report on the improvements that they give.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/typical_interp_horner_bary_hb4}
-\caption{Typical plot of the HB4 interpolant monomial form vs the horner form vs the Barycentric form}
+\caption{Typical plot of the HB4 interpolant monomial form vs the Horner form vs the Barycentric form}
 \label{fig:typical_interp_horner_bary_hb4}
 \end{figure}
 
-Figure $\ref{fig:typical_interp_horner_bary_hb4}$ shows the typical plot of HB4 in the monomial form alongside its horner form and Barycentric interpolation forms. We can report that the Horner form almost always matches the accuracy of the interpolant but that the Barycentric form slightly improves the accuracy. The V-shape is inevitable as both forms either themselves suffer from $O(\frac{1}{h})$ rounding-off error or interpolate over an interpolant that suffers from such a rounding-off error.
+Figure $\ref{fig:typical_interp_horner_bary_hb4}$ shows a typical plot of HB4 in the monomial form alongside its Horner form and Barycentric interpolation forms. We can report that the Horner form almost always matches the accuracy of the interpolant but that the Barycentric form slightly improves the accuracy. The V-shape is inevitable as both forms either themselves suffer from $O(\frac{1}{h})$ rounding-off error or interpolate over an interpolant that suffers from such a rounding-off error.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/typical_interp_horner_bary_hb6}
-\caption{Typical plot of the HB6 interpolant monomial form vs the horner form vs the Barycentric form}
+\caption{Typical plot of the HB6 interpolant monomial form vs the Horner form vs the Barycentric form}
 \label{fig:typical_interp_horner_bary_hb6}
 \end{figure}
 
-Figure $\ref{fig:typical_interp_horner_bary_hb6}$ shows the typical plot of HB6 in the monomial form alongside its horner form and Barycentric interpolation forms. We note that the parameter $\alpha$ is kept at 1 in the above plot. We can report that the Horner form almost always matches the accuracy of the interpolant but that the Barycentric form slightly improves the accuracy. The V-shape is inevitable as both forms either themselves suffer from $O(\frac{1}{h})$ rounding-off error or interpolate over an interpolant that suffers from such a rounding-off error.
+Figure $\ref{fig:typical_interp_horner_bary_hb6}$ shows a typical plot of HB6 in the monomial form alongside its Horner form and Barycentric interpolation forms. We note that the parameter $\alpha$ is kept at 1 in the above plot. We can report that the Horner form almost always matches the accuracy of the interpolant but that the Barycentric form slightly improves the accuracy. The V-shape is inevitable as both forms either themselves suffer from $O(\frac{1}{h})$ rounding-off error or interpolate over an interpolant that suffers from such a rounding-off error.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/typical_interp_horner_bary_hb8}
-\caption{Typical plot of the HB8 interpolant monomial form vs the horner form vs the Barycentric form}
+\caption{Typical plot of the HB8 interpolant monomial form vs the Horner form vs the Barycentric form}
 \label{fig:typical_interp_horner_bary_hb8}
 \end{figure}
 
-Figure $\ref{fig:typical_interp_horner_bary_hb8}$ shows the typical plot of HB6 in the monomial form alongside its horner form and Barycentric interpolation forms. We note that the parameters $\alpha$ and $\beta$ are kept at 1 in the above plot. For the case of HB8, the use of the horner method or even the Barycentric method does not improve the situation. The monomial form is as accurate as we can get. The V-shape is inevitable as both forms either themselves suffer from $O(\frac{1}{h})$ rounding-off error or interpolate over an interpolant that suffers from such a rounding-off error.
+Figure $\ref{fig:typical_interp_horner_bary_hb8}$ shows the typical plot of HB6 in the monomial form alongside its Horner form and Barycentric interpolation forms. We note that the parameters $\alpha$ and $\beta$ are kept at 1 in the above plot. For the case of HB8, the use of the Horner method or even the Barycentric method does not improve the situation. The monomial form is as accurate as we can get. The V-shape is inevitable as both forms either themselves suffer from $O(\frac{1}{h})$ rounding-off error or interpolate over an interpolant that suffers from such a rounding-off error.
 
 \subsubsection{Using the previous interpolants to keep the weight parameters at 1}
 \label{section:keeping_alpha_at_1}
-One idea to solve the problem of the loss in accuracy due to deviation of the alpha and beta parameters from 1 is to forcibly integrate at a value of 1 for the parameters. We note that the best accuracy we can hope to get is with a value of 1 and thus integrating with data points spread out as such guarantees the minimum error.
 
-\paragraph{HB6} For the HB6 case, a simple way to guarantee that the value of $\alpha$ is 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$. Say we are at a value $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for both the solution, $y_{i - 1}$, and the derivative $f_{i - 1}$.  We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ stays at 1. We note that we have built interpolants for both the solution and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps.
+============================================
+The static alpha section needs to be redone as the professor wants to make function
+evaluations to get $f_{i-1}$ and $f_{i-2}$ and not just use the interpolant.
+This is because the interpolant is not as accurate as the actual solution values...
+=============================================
 
-This technique works (See Figures $\ref{fig:static_alpha_rk4_with_hb6_p1_global_defec}$ to $\ref{fig:static_alpha_rk4_with_hb6_p3_scaled_defects}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and still be in a range where our interpolants are correctly defined. For example, If we go from $t0$ to $t0 + h$ and the error estimate is much lower than the tolerance, we cannot use a step size of $2h$ as $t0 + h - 2h$ = $t0-h$ but we do not have an interpolant in the region $\leq t0$.
+One idea to solve the problem of the loss in accuracy due to deviation of the alpha and beta parameters from 1 is to construct the interpolant using a value of 1 for the parameters. We note that the best accuracy we can hope to get is with a value of 1 and thus integrating with data points situated at uniform distances apart guarantees the minimum error.
 
-============================
+\paragraph{HB6} For the HB6 case, a simple way to guarantee that the value of $\alpha$ is 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$. Say we are at a value $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for both the solution, $y_{i - 1}$, and the derivative $f_{i - 1}$.  We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ stays at 1. We note that we have built interpolants for the solution approximation and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps.
+
+This technique works (See Figures $\ref{fig:static_alpha_rk4_with_hb6_p1_global_defec}$ to $\ref{fig:static_alpha_rk4_with_hb6_p3_scaled_defects}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and still be in a range where our interpolants are correctly defined. For example, If we go from $t_0$ to $t_0 + h$ and the error estimate is much lower than the tolerance, we cannot use a step size of $2h$ as $t_0 + h - 2h$ = $t_0-h$ because we do not have an interpolant in the region $\leq t_0$. However this is not an issue as we can perform the first few steps with a CRK scheme for example.
+
 \paragraph{Problem 1 results}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p1_global_defect}
-\caption{Global Defect of RK4 with HB6 using alpha = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Defect of RK4 with HB6 using $\alpha$ = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p1_global_error}
-\caption{Global Error of RK4 with HB6 using alpha = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK4 with HB6 using $\alpha$ = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p1_scaled_defects}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK4 with HB6 using $\alpha$ = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p1_scaled_defects}
 \end{figure}
 
@@ -1065,28 +1089,28 @@ This technique works (See Figures $\ref{fig:static_alpha_rk4_with_hb6_p1_global_
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p2_global_defect}
-\caption{Global Defect of RK4 with HB6 using alpha = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Defect of RK4 with HB6 using $\alpha$ = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p2_global_error}
-\caption{Global Error of RK4 with HB6 using alpha = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK4 with HB6 using $\alpha$ = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p2_scaled_defects}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK4 with HB6 using $\alpha$ = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p2_scaled_defects}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p2_scaled_defects_small_steps}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 on small steps on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK4 with HB6 using $\alpha$ = 1 on small steps on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p2_scaled_defects_small_steps}
 \end{figure}
 
@@ -1096,65 +1120,66 @@ This technique works (See Figures $\ref{fig:static_alpha_rk4_with_hb6_p1_global_
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p3_global_defect}
-\caption{Global Defect of RK4 with HB6 using alpha = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Defect of RK4 with HB6 using $\alpha$ = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p3_global_error}
-\caption{Global Error of RK4 with HB6 using alpha = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK4 with HB6 using $\alpha$ = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p3_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p3_scaled_defects}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK4 with HB6 using $\alpha$ = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk4_with_hb6_p3_scaled_defects}
 \end{figure}
-===========================
 
-Showing the problem with intentionally restricting the solvers.
 \begin{table}[h]
-\caption {Number of steps taken by RK4 when modified to do defect control with HB6 when we force alpha to be 1 vs when we do not} \label{tab:rk4_with_hb6_static_vs_variable_alpha}
+\caption {Number of steps taken by RK4 when modified to do defect control with HB6 when we fix $\alpha$ at 1 vs when we allow it to fluctuate during the integration} \label{tab:rk4_with_hb6_static_vs_variable_alpha}
 \begin{center}
 \begin{tabular}{ c c c c c } 
-Problem & variable alpha n. succesfull steps & static alpha n. successful & variable alpha nsteps & static alpha nsteps \\ 
-1       & 26                      &        30               & 31         & 42\\ 
-2       & 36                      &        36               & 66         & 65\\
-3       & 66                      &        63               & 101        & 110\\
+Problem & variable $\alpha$ n. succ. steps & static $\alpha$ n. succ. & variable $\alpha$ nsteps & static $\alpha$ nsteps \\ 
+1       & 27                      &        29               & 27         & 33\\ 
+2       & 36                      &        34               & 40         & 36\\
+3       & 62                      &        65               & 73         & 82\\
 \end{tabular}
 \end{center}
 \end{table}
 
-Table $\ref{tab:rk4_with_hb6_static_vs_variable_alpha}$ shows how the solver with alpha forcibly kept at 1 and the solver with alpha allowed to vary differs in the number of steps that they take. We can see that they are somewhat similar in the number of successful steps but that for Problem 1 and 3, the fact that we have to artificially limit the number of steps for the first few steps introduces some failed steps (instead of artificially reducing the step, we just throw an error and take another step with a smaller step size). The results are very similar because, as we noted before, alpha tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
+Table $\ref{tab:rk4_with_hb6_static_vs_variable_alpha}$ shows how the solver with $\alpha$ fixed at 1 and the solver with $\alpha$ allowed to vary differ in the number of steps that they take. We can see that they are somewhat similar in the number of successful steps but that for Problem 1 and 3, the fact that we have to artificially limit the number of steps for the first few steps introduces some failed steps. The results are very similar because, as we noted before, $\alpha$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
 
+========================================================
+Need to change the following to say that we dont use an interpolant for $f_{i - 1}$ and $f_{i-2}$ but instead actually make function calls.
+==========================================================
 
-\paragraph{HB8} For the HB8 case, a simple way to guarantee that the values of $\alpha$ and $\beta$ are 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$ and $x_{i - 2}$. Say we are at a value $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for both the solution, $y_{i - 1}$, and the derivative $f_{i - 1}$.  We can also use the previous interpolants on $[0, x_i]$ to get the values of the solution, $y_{i-2}$ and the derivative interpolant to get the values of the derivative, $f_{i - 2}$, at $x_{i-2} = x_i - 2h$. We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ and $\beta$ stay at 1. We note that we have built interpolants for both the solution and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps.
+\paragraph{HB8} For the HB8 case, a simple way to guarantee that the values of $\alpha$ and $\beta$ are 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$ and $x_{i - 2}$. Suppose that we are at $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for both the solution, $y_{i - 1}$, and the derivative $f_{i - 1}$.  We can also use the previous interpolants on $[0, x_i]$ to get the values of the solution, $y_{i-2}$ and the derivative interpolant to get the values of the derivative, $f_{i - 2}$, at $x_{i-2} = x_i - 2h$. We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ and $\beta$ stay at 1. We note that we have built interpolants for both the solution and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps.
 
-This technique works (See Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_defect}$ to $\ref{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and/or $x_i - 2h$ and still be in a range where our interpolants are correctly defined. 
+This technique works (see Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_defect}$ to $\ref{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and/or $x_i - 2h$ and still be in a range where our interpolants are correctly defined. 
 
 =========================
 \paragraph{Problem 1 results}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p1_global_defect}
-\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Defect of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p1_global_error}
-\caption{Global Error of RK6 with HB8 using alpha and beta = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p1_scaled_defects}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 1 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p1_scaled_defects}
 \end{figure}
 
@@ -1162,28 +1187,28 @@ This technique works (See Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p2_global_defect}
-\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Defect of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p2_global_error}
-\caption{Global Error of RK6 with HB8 using alpha and beta = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p2_scaled_defects}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p2_scaled_defects}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p2_scaled_defects_small_steps}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 on small steps on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on small steps on problem 2 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p2_scaled_defects_small_steps}
 \end{figure}
 
@@ -1193,47 +1218,50 @@ This technique works (See Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk4_with_hb6_p3_global_defect}
-\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Defect of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p3_global_error}
-\caption{Global Error of RK6 with HB8 using alpha and beta = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p3_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p3_scaled_defects}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p3_scaled_defects}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 on small steps on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Scaled Defects of RK6 with HB8 using $\alpha$ and $\beta$ = 1 on small steps on problem 3 at an absolute tolerance of $10^{-6}$}
 \label{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}
 \end{figure}
 
 =========================
 
 \begin{table}[h]
-\caption {Number of steps taken by RK6 when modified to do defect control with HB8 with alpha and beta forcibly at 1 and variable alpha and beta} \label{tab:rk6_with_hb6_vs_hb8_static_vs_variable}
+\caption {Number of steps taken by RK6 when modified to do defect control with HB8 with $\alpha$ and $\beta$ forcibly at 1 and variable $\alpha$ and $\beta$} \label{tab:rk6_with_hb6_vs_hb8_static_vs_variable}
 \begin{center}
 \begin{tabular}{ c c c c c } 
-Problem & variable params n successful & static params n. successful steps & variable params nsteps & static params nsteps \\ 
-1       & 17                      &        24               & 18         & 38\\ 
-2       & 14                      &        18               & 19         & 28\\
-3       & 24                      &        26               & 28         & 33\\
+Problem & variable params n succ. & static params n. succ. steps & variable params nsteps & static params nsteps \\ 
+1       & 18                      &        23               & 18         & 33\\ 
+2       & 14                      &        18               & 17         & 26\\
+3       & 24                      &        26               & 26         & 31\\
 \end{tabular}
 \end{center}
 \end{table}	
 
+===============================================
+subtract the number of failed steps at the beginning from the above....
+================================================
 
-Table $\ref{tab:rk6_with_hb8_static_vs_variable_alpha}$ shows how the solver with alpha and beta forcibly kept at 1 and the solver with alpha and beta allowed to vary differs in the number of steps that they take. More than was the case with the rk4 with hb6 solver, the number of steps here vary more. This is because we have to keep the step-size smaller for a longer period here as we need to also be able to interpolate values at $x_i - 2h$. We note that instead of artificially reducing the step, we just throw an error and take another step with a smaller step size). The results are somewhat similar because, as we noted before, $\alpha$ and $\beta$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
+Table $\ref{tab:rk6_with_hb8_static_vs_variable_alpha}$ shows how the solver with $\alpha$ and $\beta$ fixed at 1 and the solver with $\alpha$ and $\beta$ allowed to vary differs in the number of steps that they take. More than was the case with the rk4 with hb6 solver, the number of steps here vary more. This is because we have to keep the step-size smaller for a longer period here as we need to also be able to interpolate values at $x_i - h$ and $x_i - (1+\alpha)h$. The results are somewhat similar because, as we noted before, $\alpha$ and $\beta$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
 
 
 	
@@ -1246,38 +1274,37 @@ I think you want me to use the actual function values and not the interpolant of
 \subsection{Final Recommendation to be able to solve at sharp tolerances}
 \label{section:HBs_higher_tol}
 \subsubsection{Recommendations}
-The idea for a final solver will be to start with the optimal h for the respective interpolant as the first step size so that the parameters do not get too bad at the first steps.
+The idea for a final solver will be to start with the optimal h for the respective interpolant as the first step size so that the parameters do not get too bad at the first steps and thus we do not have too many steps that do not satisfy the tolerance. In an ideal case, we would like to keep accepting steps at the start and allow the parameters to be $\frac{1}{2}$ for as long as possible.
 
 From Figure $\ref{fig:v_shape_across_problems_hb4}$, we can assume that the optimal h for HB4 is $10^{-3}$, from Figure $\ref{fig:v_shape_across_problems_hb6}$, we can assume that the optimal h for HB6 is $10^{-2}$ and from Figure $\ref{fig:v_shape_across_problems_hb8}$, we can assume that the optimal h for HB8 is between $10^{-1}$ and $10^{-2}$, we chose $0.03$.
 
-We should solve with a solver with variable alpha at the start and then if the solver fails too many step repeatedly, that is the parameters get too far from 1, we should use the technique of forcing the parameters to be 1 and using the previous interpolants. This, alongside, the first recommendation, guarantees that the first step can be taken at sharp tolerances. We also note that after several failed steps, the value of h is also very small as thus the chances of having to interpolate for values $x_i \leq 0$ is reduced and thus we do not fail steps while both taking an optimal step, the best values for the parameters, and guaranteeing that an interpolant is defined. 
+We should solve with a solver with variable $\alpha$ at the start and then if the solver fails too many step repeatedly, that is, the parameters get too far from 1, we should use the technique of forcing the parameters to be 1 and using the previous interpolants. This, alongside, the first recommendation, guarantees that the first step can be taken at sharp tolerances. We also note that after several failed steps, the value of h is also very small as thus the chances of having to interpolate for values $x_i \leq 0$ is reduced and thus we do not fail steps while both taking an optimal step, the best values for the parameters, and guaranteeing that an interpolant is defined. 
 
 We note that because of the V-shape, there is a high likelihood that we cannot solve any problem at very sharp tolerances (sharper than $10^{-12}$). However, as we will show in the next section, the solvers that were created were able to solve for tolerances of $10^{-12}$. We should thus cap the tolerances and refuse to integrate if the user asks for sharper tolerances.
 
 \subsubsection{Solving at sharp tolerances}
-Using the recommendations above, we show that the scheme can solve at very sharp tolerances for the two optimal solvers rk4 with HB6 and rk6 with HB8. In the plots below, we do not employ the switch from variable parameters to static parameters as they are not needed. The first few steps are all necessarily small and thus do not go out of range. We start with the optimal h and se the static parameters solvers. Also we show a plot of the scaled defects only on small steps, and are thus very noisy as very few steps are big enough to show clear curves.
+Using the recommendations above, we show that the scheme can be used at very sharp tolerances for RK4 with HB6 and RK6 with HB8. In the plots below, we do not employ the switch from variable parameters to static parameters as they are not needed. The first few steps are all necessarily small and thus do not go out of range. We start with the optimal h and use the static parameters solvers. 
 
 \paragraph{rk4 with HB6}
-=======================
 \paragraph{Problem 1 results}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p1_global_defect}
-\caption{Global Defect of RK4 with HB6 using alpha = 1 and optimal h on problem 1 at an absolute tolerance of $10^{-12}$}
+\caption{Global Defect of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 1 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p1_global_error}
-\caption{Global Error of RK4 with HB6 using alpha = 1 and optimal h on problem 1 at an absolute tolerance of $10^{-12}$}
+\caption{Global Error of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 1 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p1_scaled_defects}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h on problem 1 at an absolute tolerance of $10^{-12}$}
+\caption{Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 1 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p1_scaled_defects}
 \end{figure}
 
@@ -1285,21 +1312,21 @@ Using the recommendations above, we show that the scheme can solve at very sharp
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p2_global_defect}
-\caption{Global Defect of RK4 with HB6 using alpha = 1 and optimal h on problem 2 at an absolute tolerance of $10^{-12}$}
+\caption{Global Defect of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 2 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p2_global_error}
-\caption{Global Error of RK4 with HB6 using alpha = 1 and optimal h on problem 2 at an absolute tolerance of $10^{-12}$}
+\caption{Global Error of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 2 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p2_scaled_defects}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h on problem 2 at an absolute tolerance of $10^{-12}$}
+\caption{Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 2 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p2_scaled_defects}
 \end{figure}
 
@@ -1309,61 +1336,59 @@ Using the recommendations above, we show that the scheme can solve at very sharp
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p3_global_defect}
-\caption{Global Defect of RK4 with HB6 using alpha = 1 and optimal h on problem 3 at an absolute tolerance of $10^{-12}$}
+\caption{Global Defect of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 3 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p3_global_error}
-\caption{Global Error of RK4 with HB6 using alpha = 1 and optimal h on problem 3 at an absolute tolerance of $10^{-12}$}
+\caption{Global Error of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 3 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p3_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p3_scaled_defects}
-\caption{Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h on problem 3 at an absolute tolerance of $10^{-12}$}
+\caption{Scaled Defects of RK4 with HB6 using alpha = 1 and optimal h as the starting h value on problem 3 at an absolute tolerance of $10^{-12}$}
 \label{fig:sharp_tolerance_rk4_with_hb6_p3_scaled_defects}
 \end{figure}
 
-=======================
 \begin{table}[h]
-\caption {rk4 with hb6 using static alpha and optimal h at sharp tolerance} \label{tab:rk4_with_hb6_sharp_tolerance}
+\caption {RK4 with HB6 using static alpha and optimal h as the starting h value at sharp tolerance} \label{tab:rk4_with_hb6_sharp_tolerance}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & n successful steps      &       nsteps \\ 
-1       & 593                     &        917              \\ 
-2       & 993                     &        1898             \\
-3       & 1808                    &        2825             \\
+1       & 557                     &        668   \\ 
+2       & 1000                    &        1273  \\
+3       & 1773                    &        2128  \\
 \end{tabular}
 \end{center}
 \end{table}	
 
 
-\paragraph{rk6 with HB8}
-For rk6 with HB8, the sharpest tolerance at which we were able to solve the 3 problems was $2.5*^{-12}$ because the first problem was too hard. Again, we only show the scaled defects on small steps as most of the steps are small. Thus the defects are noisy.
+\paragraph{RK6 with HB8}
+For RK6 with HB8, the sharpest tolerance at which we were able to solve the 3 problems was $2.5*^{-12}$ because the first problem was too hard. Again, we only show the scaled defects on small steps as most of the steps are small. Thus the defects are noisy.
 
-===================
 \paragraph{Problem 1 results}
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p1_global_defect}
-\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 1 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 1 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p1_global_error}
-\caption{Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 1 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 1 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p1_scaled_defects}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 1 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 1 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p1_scaled_defects}
 \end{figure}
 
@@ -1371,57 +1396,54 @@ For rk6 with HB8, the sharpest tolerance at which we were able to solve the 3 pr
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p2_global_defect}
-\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 2 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 2 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p2_global_error}
-\caption{Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 2 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 2 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p2_scaled_defects}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 2 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 2 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p2_scaled_defects}
 \end{figure}
 
 \paragraph{Problem 3 results}
-
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk4_with_hb6_p3_global_defect}
-\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 and sharp tolerance on problem 3 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Global Defect of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 3 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p3_global_error}
-\caption{Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 3 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Global Error of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 3 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p3_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/sharp_tolerance_rk6_with_hb8_p3_scaled_defects}
-\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h on problem 3 at an absolute tolerance of $2.5*10^{-12}$}
+\caption{Scaled Defects of RK6 with HB8 using alpha and beta = 1 and optimal h as the starting h value on problem 3 at an absolute tolerance of $2.5*10^{-12}$}
 \label{fig:sharp_tolerance_rk6_with_hb8_p3_scaled_defects}
 \end{figure}
-====================
 
 \begin{table}[h]
-\caption {rk6 with hb8 using static alpha and beta and optimal h at sharp tolerance} \label{tab:rk6_with_hb8_sharp_tolerance}
+\caption {rk6 with hb8 using static alpha and beta and optimal h as the starting h value at sharp tolerance} \label{tab:rk6_with_hb8_sharp_tolerance}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & n successful steps      &       nsteps    \\ 
-1       & 198                     &        269      \\ 
-2       & 138                     &        248      \\
-3       & 303                     &        574      \\
+1       & 233                     &        384      \\ 
+2       & 151                     &        196      \\
+3       & 319                     &        364      \\
 \end{tabular}
 \end{center}
 \end{table}	
@@ -1429,14 +1451,14 @@ Problem & n successful steps      &       nsteps    \\
 
 \subsection{Future work}
 \label{section:HB_future_work}
-\subsubsection{the first/first and second step}
+\subsubsection{The first few steps}
 One of the main problem that we have not addressed in this report is the issue of taking the first step. Proposed solution is to  take an error control step with a stricter tolerance than the user provided tolerance or we can take an expensive CRK interpolant step 8888 Reference the Wayne Enright 8888.
 
 \subsubsection{HB10}
 We cannot do HB10 with 3 parameters unless we keep them all very close to 1. This is because the interpolant will be extremely sensitive to small deviation of 1 of the solvers.
 Our only recourse is to use the techniques derived to forcibly keep the parameters at 1. 
 
-===================================
+
 Need to Discuss
 The new idea is to use the interpolant from the previous step to generate
 a y value halfway across the previous step. And then we could
@@ -1455,7 +1477,7 @@ based on 5 (y,f)  pairs, and this interpolant could be of 10th order.
 \subsubsection{Doing error control instead of Defect control}
 The main problem we face right now is the V-shape of the accuracy. We know that this is entirely because of the $\frac{1}{h}$ in the derivative definition of the Hermite-Birkhoff interpolants as the interpolant itself does not suffer from rounding-off error but its derivative does.
 
-For all the schemes, the defect is V-shaped but the error itself is not. This is because the Hermite-Birkhoff interpolant does not contain a term in $\frac{1}{h}$ whereas its derivative contain such a term. Figure $\ref{fig:defect_is_v_shape}$ and $\ref{fig:error_is_not_v_shape}$ shows this phenomenon for HB6 but the same can be see for HB4 and HB8. 
+For all the schemes, the defect is V-shaped but the error itself is not. This is because the Hermite-Birkhoff interpolant does not contain a term in $\frac{1}{h}$ whereas its derivative does contain such a term. Figure $\ref{fig:defect_is_v_shape}$ and $\ref{fig:error_is_not_v_shape}$ shows this phenomenon for HB6 but the same can be see for HB4 and HB8. 
 
 \begin{figure}[H]
 \centering
