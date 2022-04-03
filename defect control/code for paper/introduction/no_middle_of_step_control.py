@@ -26,6 +26,8 @@ def experiment(model, y0, t_span, solution, num):
             for t in dense.t: plt.axvline(x=t)
             plt.axhline(y=np.log10(atol), label="abs tol", color="g")
             # plt.title(f"Problem {num} solved with method '{method}' at atol of {atol}")
+            plt.xlabel("t")
+            plt.ylabel("order of magnitude")
             plt.legend()
             plt.show()
 
@@ -35,6 +37,8 @@ def experiment(model, y0, t_span, solution, num):
             # for t in dense.t: plt.axvline(x=t)
             # plt.axhline(y=np.log10(rtol), label="rel tol", color="g")
             # plt.title(f"Problem {num} solved with method '{method}' at rtol of {rtol}")
+            # plt.xlabel("t")
+            # plt.ylabel("order of magnitude")
             # plt.legend()
             # plt.show()
 

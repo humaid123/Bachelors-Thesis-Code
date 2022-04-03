@@ -56,7 +56,7 @@ def experiment(model, y0, t_span, solution, num):
     plt.title(f"Problem {num}")
     plt.xlabel("t")
     plt.ylabel('y(t)')
-    plt.legend()
+    # plt.legend()
     plt.show()
     # ====================================== end figure of rk6 vs rk6_interps vs rk45
 

@@ -12,93 +12,94 @@
 
 \begin{document}
 
-\section{Zero Cost Defect Control for IVODES based on multistep Hermite-Birkhoff interpolants}
+\section{Efficient Defect Control for IVODES based on multistep Hermite-Birkhoff interpolants}
 \subsection{Introduction}
 
-In this chapter, we present a zero-cost defect control technique for use in the numerical solution of initial value ordinary differential equations (ODE). In this chapter, we will assume that the underlying numerical method is a Runge-Kutta (RK) method since the vast majority of the literature on the use of defect control for numerical solution of IVODEs focuses on RK methods. Typically, Runge-Kutta solvers only provide a discrete numerical solution. They effectively adaptively divide the time domain into steps and return an estimate of the solution at the end of each step. To get a continuous solution approximate, the user has to fit an interpolant over the whole region.
+In this chapter, we present an efficient defect control technique for use in the numerical solution of initial value ordinary differential equations (ODE). In this chapter, we will assume that the underlying numerical method is a Runge-Kutta (RK) method since the vast majority of the literature on the use of defect control for numerical solution of IVODEs focuses on RK methods. Solvers based on Runge-Kutta methods only provide a discrete numerical solution. They effectively adaptively divide the time domain into steps and return an estimate of the solution at the end of each step. To get a continuous solution approximate, the user has to fit an interpolant over the whole region.
 
-The issue is that there is no guarantee that the interpolant will be as accurate as the discrete solution calculated by the solver. Thus if the solver returned a solution that satisfied a tolerance of $10^{-i}$, there are no guarantee that in the middle of a step, the interpolant will also deliver approximate solution values whose accuracy is approximately $10^{-i}$. We show in Section $\ref{section:end_of_step_innacurate}$, that even the robust IVODE solvers in Python, that using interpolation does not guarantee an accurate solution. 
+The issue is that there is no guarantee that the interpolant will be as accurate as the discrete solution calculated by the solver. Thus if the solver returned a solution that satisfied a tolerance of $10^{-i}$, there are no guarantee that in the middle of a step, the interpolant will also deliver approximate solution values whose accuracy is approximately $10^{-i}$. 
 
-High quality contemporary IVODE solvers typically have a built-in interpolant that provides a continuous solution approximation. However the solvers typically do not provide any type of explicit control of the accuracy of the continuous solution approximate. There has been some work towards addressing this issue in the area of control of the defect of the continuous solution approximation. The defect is the amount by which the continuous solution approximation fails to satisfy the IVODE. 
+High quality contemporary IVODE solvers typically have a built-in interpolant that provides a continuous solution approximation. However the solvers typically do not provide any type of explicit control of the accuracy of the continuous solution approximate. We show in Section $\ref{section:end_of_step_innacurate}$, that even the robust IVODE solvers in Python, that using interpolation does not guarantee an accurate solution. 
 
-There has been a number of papers on the subject of defect control of the continuous solution and we discuss them in Section $\ref{section:crk_related_work}$. However these methods turn out to be very costly. In this paper we will discuss a zero-cost method for defect control of the continuous solution using Hermite Birkhoff interpolants. We will control an estimate of the maximum defect along a step and show how that yields an interpolant over the whole time domain whose defect is within the tolerance.
 
-We start by discussing the ODE problems we will use to demonstrate our technique in Section $\ref{section:defect_problem_used}$. We then give an overview of the issue with using error control only at the end of the step in Section $\ref{section:end_of_step_innacurate}$. We discuss related work in Section $\ref{section:crk_related_work}$. We give a description of the solvers that we use in this chapter in Section $\ref{section:basic_runge_kutta}$. 
+There has been some work towards addressing this issue in the area of control of the defect of the continuous solution approximation. The defect is the amount by which the continuous solution approximation fails to satisfy the IVODE. There has been a number of papers on the subject of defect control of the continuous solution and we discuss them in Section $\ref{section:crk_related_work}$.Typically, the interpolants employed in algorithms for defect control are based on the use of Continuous Runge-Kutta methods and the computational costs are substantial.
 
-We discuss the numerous multistep interpolants that were built on a Runge-Kutta of order 4 in Section $\ref{section:equipping_rk4_with_HBs}$ and extend them to higher order Runge-Kutta methods in Section $\ref{section:HBs_and_higher_order_RK}$. We then discuss possible solutions to a fundamental problem with this scheme in Section $\ref{section:v_shaped_graph}$ and show that the scheme can solve at very sharp tolerances in Section $\ref{section:HBs_higher_tol}$. We finish with any potential for future work in Section $\ref{section:HB_future_work}$.
+In this paper we will discuss an efficient method for defect control of the continuous solution using Hermite Birkhoff interpolants. We will control an estimate of the maximum defect along a step and show how that yields a continuous solution approximation over the whole time domain whose defect is typically within the tolerance.
+
+We start by discussing the ODE problems we will use to demonstrate our technique in Section $\ref{section:defect_problem_used}$. We then give an overview of the issue with using error control only at the end of the step in Section $\ref{section:end_of_step_innacurate}$. We discuss related work in Section $\ref{section:crk_related_work}$. We give a description of the solvers that we use in Section $\ref{section:basic_runge_kutta}$. 
+
+We discuss several multistep interpolants that we have constructed based on a Runge-Kutta method of order 4 in Section $\ref{section:equipping_rk4_with_HBs}$ and extend them to higher order Runge-Kutta methods in Section $\ref{section:HBs_and_higher_order_RK}$. We then discuss possible solutions to a fundamental issue with our approach in Section $\ref{section:v_shaped_graph}$.
 
 \subsubsection{Test Problems}
 \label{section:defect_problem_used}
 In this section, we discuss the three problems that we use. 
 
-The first problem that we attempt to solve is as follows.
-The ODE is:
+The first problem haa the ODE:
 \begin{equation}
-y'(t, y) = - \frac{y^{3}}{2} 
+y'(t) = - \frac{y^{3}(t)}{2} 
 \end{equation}
-The initial condition are $y(0) = 1$ and the time domain is $[0, 10]$.
+The initial condition is $y(0) = 1$ and the time domain is $[0, 10]$.
 
 The solution to this problem is
 \begin{equation}
-y(t) = \frac{1}{\sqrt{1 + t}}
+y(t) = \frac{1}{\sqrt{1 + t}}.
 \end{equation}
 as shown in Figure $\ref{fig:solution_problem1}$.
-The solution looks like:
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/solution_problem1}
-\caption{Solution to the first ODE problem used in this chapter}
+\caption{Solution to the first ODE problem}
 \label{fig:solution_problem1}
 \end{figure}
 
-The second problem that we attempt to solve is as follows.
-The ODE is:
+The second problem has the ODE:
 \begin{equation}
-y'(t, y) = \frac{y(1 - \frac{y}{20})}{4}.
+y'(t) = \frac{y(t)(1 - \frac{y(t)}{20})}{4}.
 \end{equation}
-The initial condition are $y(0) = 1$ and the time domain is $[0, 10]$.
+The initial condition is $y(0) = 1$ and the time domain is $[0, 10]$.
 
 The solution to this problem is
 \begin{equation}
-y(t) = \frac{20e^{\frac{t}{4}}}{e^{\frac{t}{4}} + 19}.
+y(t) = \frac{20e^{\frac{t}{4}}}{e^{\frac{t}{4}} + 19},
 \end{equation}
-The solution is shown in Figure $\ref{fig:solution_problem2}$.
+as shown in Figure $\ref{fig:solution_problem2}$.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/solution_problem2}
-\caption{Solution to the second ODE problem used in this chapter}
+\caption{Solution to the second ODE problem}
 \label{fig:solution_problem2}
 \end{figure}
 
-The third problem that we attempt to solve is as follows.
-The ODE is:
+The third problem has the ODE:
 \begin{equation}
 y'(t, y) = -0.1y - e^{-0.1t}\sin(t)
 \end{equation}
-The initial condition are $y(0) = 1$ and the time domain is $[0, 10]$.
+The initial condition is $y(0) = 1$ and the time domain is $[0, 10]$.
 
 The solution to this problem is 
 \begin{equation}
-y(t) = e^{-0.1t}\cos(t)
+y(t) = e^{-0.1t}\cos(t),
 \end{equation}
 as shown in Figure $\ref{fig:solution_problem3}$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/solution_problem3}
-\caption{Solution to the third ODE problem used in this chapter}
+\caption{Solution to the third ODE problem}
 \label{fig:solution_problem3}
 \end{figure}
 
-\subsubsection{Absence of Control of the continuous solution approximation in typical IVODE}
+\subsubsection{Absence of control of the continuous solution approximation for typical IVODE solvers}
 \label{section:end_of_step_innacurate}
-In this section, we discuss how conventional solvers employed in popular packages like the Scipy library solve IVODE problems. These libraries will often have the option of using an error control solver based on a Runge-Kutta pair which works as follows. The pair comes with a low order method and a high order method and will solve the problem by taking a sequence of steps. The solver will take each step with both methods and use the difference between the higher order method and the lower order method to generate an error estimate for the discrete numerical solution at the end of the step. If the error estimate is within the user provided tolerance, the solver will accept the step and proceed to the next step. If the error estimate is not within the tolerance, the solver will reduce the step-size and attempt to take the step again. As the error of Runge-Kutta methods depends on the step-size, a smaller step-size will produce a smaller error. The solver will keep reducing the step-size until the user tolerance is satisfied and will then proceed to the next step. In an attempt to improve the efficiency, several solvers will also increase the step-size when the estimated error is significantly smaller than the tolerance.
+In this section, we discuss how conventional solvers employed in popular packages like the Scipy library solve IVODE problems. These libraries will often have the option of using an error control solver based on a Runge-Kutta pair which works as follows. The pair comes with a low order method and a high order method and will solve an ODE by taking a sequence of steps. The solver will take each step with both methods and use the difference between the higher order method and the lower order method to generate an error estimate for the discrete numerical solution at the end of the step. If the error estimate is within the user provided tolerance, the solver will accept the step and proceed to the next step. If the error estimate is not within the tolerance, the solver will reduce the step-size and attempt to take the step again. As the error of Runge-Kutta methods depends on the step-size, a smaller step-size will produce a smaller error. The solver will keep reducing the step-size until the user tolerance is satisfied and will then proceed to the next step. In an attempt to improve the efficiency, solvers will also increase the step-size when the estimated error is significantly smaller than the tolerance.
 
-An issue with this approach is that the error estimate is computed only at the end of a step and thus the error control is only applied at the end of the step. An interpolant that provides a continuous solution approximation across the entire step is typically constructed and it is assumed that the error in the interpolant at a point in the middle of the step is within the user-provided tolerance. However, as we will show below, this is sometimes not the case.
+An issue with this approach is that the error estimate is computed only for the discrete numerical solution computed at the end of a step and thus the error control is only applied at the end of the step. An interpolant that provides a continuous solution approximation across the entire step is typically constructed by the solver and it is assumed that the error of the interpolant at points within the step is within the user-provided tolerance. However, as we will show below, this is sometimes not the case.
 
-For this interpolant to provide a solution within the user provided tolerance, the interpolation error must be less than the error of the data points being fitted. Thus we would ideally use an interpolant of at least order $O(h^{p})$ if the solution is of order $O(h^{p})$. However, for high order methods, it becomes too expensive to construct an interpolant of the appropriate order. These solvers will thus usually compromise and employ a lower order method that is less costly. 
+For this interpolant to provide a solution within the user provided tolerance, the interpolation error must be less than or equal to the error of the data being fitted. Thus we would ideally use an interpolant of at least order $O(h^{p})$ if the discrete solution is of order $O(h^{p})$. However, for high order methods, it becomes too expensive to construct an interpolant of the appropriate order. These solvers will thus usually compromise and employ a lower order interpolant that is less costly. 
 
-Constructing a continuous approximate solution that satisfies the user-provided tolerance is thus a challenge as we are not guaranteed that the approximate solution in the middle of a step is error-controlled and not guaranteed that interpolation error will not affect our solution. Below are some results obtained when Runge-Kutta methods are applied to the 3 test problems introduced in the previous section. The solvers apply error control to the discrete numerical solution at the end of the step but no error control of any type to the continuous numerical solution across the step.
+Constructing a continuous approximate solution that satisfies the user-provided tolerance is thus a challenge as we are not guaranteed that the continuous approximate solution is error-controlled and not guaranteed that the interpolation error will not affect our solution. Below are some results obtained when Runge-Kutta solvers are applied to the 3 test problems introduced in the previous section. The solvers apply error control to the discrete numerical solution at the end of the step but no error control of any type to the continuous numerical solution across the step.
 
 \begin{figure}[H]
 \centering
@@ -114,30 +115,30 @@ Constructing a continuous approximate solution that satisfies the user-provided 
 \label{fig:no_middle_step_error_control_p3_rk45}
 \end{figure}
 
-Figure $\ref{fig:no_middle_step_error_control_p2_dop853}$ and $\ref{fig:no_middle_step_error_control_p3_rk45}$ shows the errors in the middle of each step obtained when applying `DOP853' to problem 2 and `RK45' to problem 3 with an absolute tolerance of $10^{-6}$ and a relative tolerance of $10^{-6}$. We can see that the solution values at the end of each step typically satisfy the tolerance. However we can clearly see that the solution values (obtained from a built-in interpolant) at points within each steps have errors up to one order of magnitude larger than the tolerance. 
+Figure $\ref{fig:no_middle_step_error_control_p2_dop853}$ and $\ref{fig:no_middle_step_error_control_p3_rk45}$ shows the errors in the middle of each step obtained when applying `DOP853' to problem 2 and `RK45' to problem 3 with an absolute tolerance of $10^{-6}$ and a relative tolerance of $10^{-6}$. We can see that the solution values at the end of each step typically satisfy the tolerance. However we can clearly see that the solution values (obtained from the built-in interpolant constructed by the solver) at points within each steps, have errors up to one order of magnitude larger than the tolerance. 
 
-We note that whenever a user asks for a solution within a tolerance of $10^{-i}$, they expect the solution from these solvers to be within that tolerance for the whole time domain. However, the decision to not satisfy the user provided tolerance throughout the step was made in the interest of efficiency and the loss of accuracy in the middle of the step was a tradeoff. The goal of modern IVODE is to provide a continuous solution approximation across the whole time domain. The expectation is that solution approximate across each step is accurate as ODE system solvers can be integral part of larger software packages where their results are differentiated, integrated and manipulated in ways such that a very accurate continuous solution is required. 
+We note that when a user asks for a solution whose estimated error is within a tolerance of $10^{-i}$, they expect the solution to have an estimated error that is within that tolerance for the whole time domain. However, the decision to not satisfy the user provided tolerance throughout the step is made in the interest of efficiency and the loss of accuracy in the middle of the step is the a tradeoff. The goal of modern IVODE solvers is to provide a continuous solution approximation across the whole time domain. The expectation is that the solution approximations across each step is accurate as ODE solvers can be integral part of larger software packages where their approximate solutions are differentiated, integrated and manipulated in ways such that a sufficiently accurate continuous approximate solution is required. 
 
-In this chapter, we attempt to provide a zero-cost way of controlling the error across the step and thus throughout the whole time domain.
+In this chapter, we attempt to provide an efficient way of constructing interpolants that can then be used to control the defect of the continuous approximate solution across the step and thus throughout the whole time domain.
 
 \subsubsection{Defect Control and the cost of traditional Continuous Runge-Kutta method}
 \label{section:crk_related_work}
-In this section we introduce the `defect' of an ODE solution and explain how the control of the defect provides a type of error control of the continuous numerical solution.
+In this section we introduce the `defect' of a continuous approximate solution of an ODE and explain how the control of that defect provides a type of error control of the continuous numerical solution.
 
-In the context of numerical ODEs the defect, denoted by $\delta(t)$,  is the amount by which the continuous numerical solution, $u(t)$, fails to satify the ODE when the ODE is $y'(t) = f(t, y(t))$. The defect is 
+In the context of numerical ODEs, the defect, denoted by $\delta(t)$,  is the amount by which the continuous numerical solution, $u(t)$, fails to satify the ODE. When the ODE is $y'(t) = f(t, y(t))$, the defect is 
 
 \begin{equation}
-\delta(t) = u'(t) - f(t, u(t))
+\delta(t) = |u'(t) - f(t, u(t))|.
 \end{equation}
 
-Calculating the defect requires that the solution computed by the solver be differentiable. The idea of defect control is relatively new as differentiable solutions to ODEs are very expensive to calculate. One such attempt is outlined in 8888 reference to Wayne Enright CRK defect control 8888. In this paper, the defect control method that was discussed employs a continuous RK method for which the number of stages that grows exponentially with the order of the method as shown in Table $\ref{tab:crk_nstages}$. In this paper we will compute a defect controlled continuous solution with no additional cost. A typical Runge-Kutta solver will thus be able to take the usual number of stages as other discrete Runge-Kutta method of the same order and still produce an accurate continuous solution.
+Calculating the defect requires that the continuous approximate solution computed by the solver to also be differentiable. The idea of defect control is relatively new as differentiable solutions to ODEs can be expensive to calculate. One such attempt is outlined in 8888 reference to Wayne Enright CRK defect control 8888. In this paper, the defect control method employs a continuous RK method for which the number of stages grows exponentially with the order of the method as shown in Table $\ref{tab:crk_nstages}$. In this paper we will compute a defect controlled continuous solution with no additional cost. A typical Runge-Kutta solver will thus be able to employ the usual number of stages required for the discrete Runge-Kutta method and still produce an accurate continuous solution.
 
 \begin{table}[h]
 \caption {Number of stages for discrete vs continuous RK method} 
 \label{tab:crk_nstages}
 \begin{center}
 \begin{tabular}{ c c c c} 
-order   & discrete & continuous & continuous asymptotic \\ 
+order   & discrete & continuous & asymptotically correct defect \\ 
 4 & 4  & 4   & 8 \\ 
 5 & 5  & 6   & 12 \\ 
 6 & 6  & 7   & 15 \\ 
@@ -147,23 +148,18 @@ order   & discrete & continuous & continuous asymptotic \\
 \end{center}
 \end{table}
 
-Discussion of Enright's work
-https://www.cs.toronto.edu/~enright/recentMSc.html
+Though the defect is defined for the whole step, the estimation of the maximum defect within a step is what is important. If the maximum defect is within the tolerance, then the defect of the whole solution within the given step is within the tolerance. The key problem is to find the maximum defect within the step. An idea would be to sample the defect at several points and use the maximum value sampled. The problem with this approach is that each sampling of the defect requires an additional function evaluation. Thus we should not do too many samples. Enright's work involves constructing special interpolants that guarantee that the asymptotically maximum defect is at the same location within a step. This way only one function evaluation is required to sample the defect to obtain an estimate of the maximum defect. This is referred to as asymptotically correct defect control.
 
-=========
-Is there more related work that you want to talk about?
-========
-
-Though the defect is defined for the whole step, the concept of the maximum defect within a step is what is more important. The maximum defect within a step is the biggest absolute difference between the derivative of the computed solution at the user provided model within a step. Thus if the maximum defect is within the tolerance, the whole solution within the given step is within the tolerance. The key problem is thus to find the maximum defect within the step. An idea would be to sample the defect at several points and use the maximum value sampled. The problem with this approach is that given a discrete solution, each sampling of the defect requires an additional function evaluation. Thus we cannot do too many samples. The work above solves this problem by defining interpolants that guarantees that the maximum defect is at the same location within a step. This way only one function evaluation is required to sample the defect. In the approach outlined in this paper, the defect will tend to appear at one of two locations within the step. This way only two samplings must be done to get the maximum defect. Though we make an additional function evaluation, using less stages guarantees that our method is faster especially for higher orders.
+In the approach outlined in this chapter, we have observed experimentally that the maximum defect will tend to appear at one of two locations within the step. Thus in our approach, only two defect samplings must be done to get the maximum defect. Though we make an additional function evaluation compared to the asymptotically correct defect control, using less stages to construct the interpolant guarantees that our method is more efficient especially for higher orders.
 
 
-\subsubsection{Overview of the proof of concept built for this chapter}
+\subsubsection{Overview of our approach}
 \label{section:basic_runge_kutta}
-In this chapter, we will discuss simple IVODE solvers based on each of 3 Runge-Kutta methods and show that they can produce an accurate continuous solution without having to compute any additional stages. In this section, we give an outline of the modifications that were made.
+In this chapter, we will discuss simple IVODE solvers based on discrete Runge-Kutta methods of order 4, 6 and 8 and show that we can provide accurate continuous interpolant to augment the discrete solution computed by these RK methods without having to compute any additional stages. In this section, we give an outline of the approach.
 
-The first Runge-Kutta method upon which we build a defect control solver is the classical $4^{th}$ order method that uses 4 stages, the second method is a Verner $6^{th}$ order method, taken from his 6(5) pair 8888 need to look for a reference 8888, that uses 9 stages and the last method is a VErner $8^{th}$ order method from an 8(7) pair that uses 13 stages, 8888 Need a reference for that as well 8888. 
+The first Runge-Kutta method upon which we build a defect control solver is the classical $4^{th}$ order method that uses 4 stages, the second method is a Verner $6^{th}$ order method, taken from his 6(5) pair 8888 need to look for a reference 8888, that uses 9 stages and the last method is a Verner $8^{th}$ order method from an 8(7) pair that uses 13 stages, 8888 Need a reference for that as well 8888. 
 
-The solver that was coded uses a simple step selection strategy. If the estimated maximum defect is greater than $tol$, the solver rejects the step and attempts to retake it again with half the step-size. If the estimated maximum defect is less than $0.1tol$, the solver accepts the step and doubles the step-size for the next step. We will elaborate on the initial step-size used by each modification later in the chapter.
+The solvers that we have written use a simple step selection strategy. If the estimated maximum defect is greater than $tol$, the solver rejects the step and attempts to retake it again with half the step-size. If the estimated maximum defect is less than $0.1tol$, the solver accepts the step and doubles the step-size for the next step. We will elaborate on the initial step-size used by each solver later in the chapter.
 
 We now note that the solver is not optimised. A more thorough analysis of how the solver behaves and thus a more refined step selection algorithm will produce a faster solver in practice. The code we consider in this chapter only serves as a proof of concept for a more elaborate solver. 
 
@@ -1050,16 +1046,9 @@ Figure $\ref{fig:typical_interp_horner_bary_hb8}$ shows the typical plot of HB6 
 
 \subsubsection{Using the previous interpolants to keep the weight parameters at 1}
 \label{section:keeping_alpha_at_1}
-
-============================================
-The static alpha section needs to be redone as the professor wants to make function
-evaluations to get $f_{i-1}$ and $f_{i-2}$ and not just use the interpolant.
-This is because the interpolant is not as accurate as the actual solution values...
-=============================================
-
 One idea to solve the problem of the loss in accuracy due to deviation of the alpha and beta parameters from 1 is to construct the interpolant using a value of 1 for the parameters. We note that the best accuracy we can hope to get is with a value of 1 and thus integrating with data points situated at uniform distances apart guarantees the minimum error.
 
-\paragraph{HB6} For the HB6 case, a simple way to guarantee that the value of $\alpha$ is 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$. Say we are at a value $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for both the solution, $y_{i - 1}$, and the derivative $f_{i - 1}$.  We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ stays at 1. We note that we have built interpolants for the solution approximation and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps.
+\paragraph{HB6} For the HB6 case, a simple way to guarantee that the value of $\alpha$ is 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$. Say we are at a value $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for the solution approximate, $y_{i - 1}$, and then we can use this $y_{i-1}$ value to compute $f(t_{i-1}, y_{i-1})$ to get the derivative $f_{i - 1}$.  We could thus create the new interpolant using these data points to guarantee that $\alpha$ stays at 1. We note that we have built interpolants for the solution approximation and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps. This technique costs one extra function evaluation to obtain $f_{i-1}$. We also note that we cannot use the interpolant of the derivative on the previous step to get $f_{i - 1}$ without making any function call as the derivative will be of lower order and thus the interpolant will not be of higher order than the numerical solution.
 
 This technique works (See Figures $\ref{fig:static_alpha_rk4_with_hb6_p1_global_defec}$ to $\ref{fig:static_alpha_rk4_with_hb6_p3_scaled_defects}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and still be in a range where our interpolants are correctly defined. For example, If we go from $t_0$ to $t_0 + h$ and the error estimate is much lower than the tolerance, we cannot use a step size of $2h$ as $t_0 + h - 2h$ = $t_0-h$ because we do not have an interpolant in the region $\leq t_0$. However this is not an issue as we can perform the first few steps with a CRK scheme for example.
 
@@ -1142,7 +1131,7 @@ This technique works (See Figures $\ref{fig:static_alpha_rk4_with_hb6_p1_global_
 \caption {Number of steps taken by RK4 when modified to do defect control with HB6 when we fix $\alpha$ at 1 vs when we allow it to fluctuate during the integration} \label{tab:rk4_with_hb6_static_vs_variable_alpha}
 \begin{center}
 \begin{tabular}{ c c c c c } 
-Problem & variable $\alpha$ n. succ. steps & static $\alpha$ n. succ. & variable $\alpha$ nsteps & static $\alpha$ nsteps \\ 
+Problem & n. succ. steps & $\alpha$=1 n. succ. & nsteps & $\alpha$=1 nsteps \\ 
 1       & 27                      &        29               & 27         & 33\\ 
 2       & 36                      &        34               & 40         & 36\\
 3       & 62                      &        65               & 73         & 82\\
@@ -1150,17 +1139,12 @@ Problem & variable $\alpha$ n. succ. steps & static $\alpha$ n. succ. & variable
 \end{center}
 \end{table}
 
-Table $\ref{tab:rk4_with_hb6_static_vs_variable_alpha}$ shows how the solver with $\alpha$ fixed at 1 and the solver with $\alpha$ allowed to vary differ in the number of steps that they take. We can see that they are somewhat similar in the number of successful steps but that for Problem 1 and 3, the fact that we have to artificially limit the number of steps for the first few steps introduces some failed steps. The results are very similar because, as we noted before, $\alpha$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
+Table $\ref{tab:rk4_with_hb6_static_vs_variable_alpha}$ shows how the solver with $\alpha$ fixed at 1 and the solver with $\alpha$ allowed to vary differ in the number of steps that they take. The results are very similar because, as we noted before, $\alpha$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
 
-========================================================
-Need to change the following to say that we dont use an interpolant for $f_{i - 1}$ and $f_{i-2}$ but instead actually make function calls.
-==========================================================
+\paragraph{HB8} For the HB8 case, a simple way to guarantee that the values of $\alpha$ and $\beta$ are 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$ and $x_{i - 2}$. Suppose that we are at $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for the solution, $y_{i - 1}$, and then evaluate $f(t_{i-1}, y_{i-1})$ to get the derivative $f_{i - 1}$.  We can also use the previous interpolants on $[0, x_i]$ to get the values of the solution, $y_{i-2}$ and use it to evaluate $f(t_{i-2}, y_{i-2})$ to get the values of the derivative, $f_{i-2}$, at $x_{i-2} = x_i - 2h$. We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ and $\beta$ stay at 1. We note that we have built interpolants for both the solution and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps. This scheme uses two more function evaluations.
 
-\paragraph{HB8} For the HB8 case, a simple way to guarantee that the values of $\alpha$ and $\beta$ are 1 is by using the previous interpolants to get the correct values at $x_{i - 1}$ and $x_{i - 2}$. Suppose that we are at $x_i$ and we took a step of size $h$ to get to the value $x_{i + 1}$ where the function evaluation was $f_{i + 1}$ and the solution was $y_{i + 1}$. We could get the values of the solution and the derivative by using the previous interpolants defined on the range $[0, x_i]$ to get the value at exactly $x_i - h$ for both the solution, $y_{i - 1}$, and the derivative $f_{i - 1}$.  We can also use the previous interpolants on $[0, x_i]$ to get the values of the solution, $y_{i-2}$ and the derivative interpolant to get the values of the derivative, $f_{i - 2}$, at $x_{i-2} = x_i - 2h$. We could thus create create the new interpolant using the data points defined as such to guarantee that $\alpha$ and $\beta$ stay at 1. We note that we have built interpolants for both the solution and the derivative that  can interpolate up to $x_i$ for all cases except for the case $x_i = 0$ or for the first few steps.
+This technique works (See Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_defect}$ to $\ref{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and/or $x_i - 2h$ and still be in a range where our interpolants are correctly defined. 
 
-This technique works (see Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_defect}$ to $\ref{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}$ to see the defect being controlled) but will require that the step-size is artificially limited on the first few steps so that we can interpolant back $x_i - h$ and/or $x_i - 2h$ and still be in a range where our interpolants are correctly defined. 
-
-=========================
 \paragraph{Problem 1 results}
 \begin{figure}[H]
 \centering
@@ -1243,33 +1227,19 @@ This technique works (see Figures $\ref{fig:static_alpha_rk6_with_hb8_p1_global_
 \label{fig:static_alpha_rk6_with_hb8_p3_scaled_defects_small_steps}
 \end{figure}
 
-=========================
-
 \begin{table}[h]
 \caption {Number of steps taken by RK6 when modified to do defect control with HB8 with $\alpha$ and $\beta$ forcibly at 1 and variable $\alpha$ and $\beta$} \label{tab:rk6_with_hb6_vs_hb8_static_vs_variable}
 \begin{center}
 \begin{tabular}{ c c c c c } 
-Problem & variable params n succ. & static params n. succ. steps & variable params nsteps & static params nsteps \\ 
-1       & 18                      &        23               & 18         & 33\\ 
-2       & 14                      &        18               & 17         & 26\\
-3       & 24                      &        26               & 26         & 31\\
+Problem & n succ. & params=1 n. succ. steps & nsteps & params=1 nsteps \\ 
+1       & 18                      &        23               & 18         & 31\\ 
+2       & 14                      &        18               & 17         & 21\\
+3       & 24                      &        26               & 26         & 27\\
 \end{tabular}
 \end{center}
 \end{table}	
 
-===============================================
-subtract the number of failed steps at the beginning from the above....
-================================================
-
-Table $\ref{tab:rk6_with_hb8_static_vs_variable_alpha}$ shows how the solver with $\alpha$ and $\beta$ fixed at 1 and the solver with $\alpha$ and $\beta$ allowed to vary differs in the number of steps that they take. More than was the case with the rk4 with hb6 solver, the number of steps here vary more. This is because we have to keep the step-size smaller for a longer period here as we need to also be able to interpolate values at $x_i - h$ and $x_i - (1+\alpha)h$. The results are somewhat similar because, as we noted before, $\alpha$ and $\beta$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
-
-
-	
-=============
-Some cost to do derivative evals of new solution values
-Isn't it no cost => need to talk with professor.
-I think you want me to use the actual function values and not the interpolant of the derivative but I am not sure?
-===============
+Table $\ref{tab:rk6_with_hb8_static_vs_variable_alpha}$ shows how the solver with $\alpha$ and $\beta$ fixed at 1 and the solver with $\alpha$ and $\beta$ allowed to vary differs in the number of steps that they take. The results are somewhat similar because, as we noted before, $\alpha$ and $\beta$ tends to stay close to 1 and rarely deviates to a value smaller than $\frac{1}{4}$ or larger than 4.
 
 \subsection{Final Recommendation to be able to solve at sharp tolerances}
 \label{section:HBs_higher_tol}
