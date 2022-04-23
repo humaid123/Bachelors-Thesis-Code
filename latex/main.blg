@@ -1,0 +1,80 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 21 items.
+A level-1 auxiliary file: ode_introduction.aux
+Reallocating 'name_of_file' (item size: 1) to 20 items.
+A level-1 auxiliary file: ode_timeProblem.aux
+Reallocating 'name_of_file' (item size: 1) to 21 items.
+A level-1 auxiliary file: ode_stateProblem.aux
+Reallocating 'name_of_file' (item size: 1) to 22 items.
+A level-1 auxiliary file: ode_investigation.aux
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+A level-1 auxiliary file: ode_summary.aux
+Reallocating 'name_of_file' (item size: 1) to 13 items.
+A level-1 auxiliary file: pde_main.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: defect_control_main.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: plain.bst
+Reallocating 'name_of_file' (item size: 1) to 4 items.
+Reallocating 'name_of_file' (item size: 1) to 29 items.
+A level-1 auxiliary file: defect_control_sharp_tol.aux
+Database file #1: ref.bib
+Warning--to sort, need author or key in thisThesisGithub
+Warning--to sort, need author or key in hairerWebsite
+Warning--to sort, need author or key in scilabGithub
+Warning--to sort, need author or key in deSolveGithub
+Warning--to sort, need author or key in JimVernerRepo
+Warning--empty journal in pdeModel
+Warning--empty booktitle in MR996053
+Warning--empty publisher in MR996053
+Warning--empty booktitle in MR1803189
+Warning--can't use both volume and number fields in MR1803189
+Warning--empty publisher in MR1803189
+Warning--empty booktitle in MR1950917
+Warning--can't use both volume and number fields in MR1950917
+Warning--empty publisher in MR1950917
+Warning--empty journal in osti7318812
+You've used 34 entries,
+            2118 wiz_defined-function locations,
+            733 strings with 10663 characters,
+and the built_in function-call counts, 11596 in all, are:
+= -- 1145
+> -- 550
+< -- 9
++ -- 228
+- -- 188
+* -- 835
+:= -- 1890
+add.period$ -- 113
+call.type$ -- 34
+change.case$ -- 192
+chr.to.int$ -- 0
+cite$ -- 49
+duplicate$ -- 414
+empty$ -- 903
+format.name$ -- 188
+if$ -- 2413
+int.to.chr$ -- 0
+int.to.str$ -- 34
+missing$ -- 34
+newline$ -- 178
+num.names$ -- 58
+pop$ -- 228
+preamble$ -- 1
+purify$ -- 162
+quote$ -- 0
+skip$ -- 283
+stack$ -- 0
+substring$ -- 730
+swap$ -- 77
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 126
+warning$ -- 15
+while$ -- 102
+width$ -- 36
+write$ -- 372
+(There were 15 warnings)

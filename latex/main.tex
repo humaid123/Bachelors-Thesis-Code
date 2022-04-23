@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{report}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{caption}
@@ -7,62 +7,163 @@
 \usepackage{float} %figure inside minipage
 \graphicspath{ {./images/} }
 \usepackage[export]{adjustbox}
-\usepackage{apacite}
+\usepackage{cite}
 \usepackage{amsmath}
+\usepackage{hyperref}
+
+% gives the \cites command for multiple citations
+\makeatletter
+\newcommand{\citecomment}[2][]{\citen{#2}#1\citevar}
+\newcommand{\citeone}[1]{\citecomment{#1}}
+\newcommand{\citetwo}[2][]{\citecomment[,~#1]{#2}}
+\newcommand{\citevar}{\@ifnextchar\bgroup{;~\citeone}{\@ifnextchar[{;~\citetwo}{]}}}
+\newcommand{\citefirst}{\@ifnextchar\bgroup{\citeone}{\@ifnextchar[{\citetwo}{]}}}
+\newcommand{\cites}{[\citefirst}
+\makeatother
+
+\title{Performance Analysis on Covid-19 Models with Discontinuities and Efficient Defect Control for Initial Value ODE solvers}
+
+\author{
+	By\\
+	Humaid M. Agowun \\}
+
+\date{\today, Halifax, Nova Scotia\endgraf\smallskip
+	Copyright \textcopyright \ Humaid M. Agowun\endgraf\smallskip\endgraf\bigskip
+	\hfill Approved: \endgraf\bigskip\endgraf\smallskip
+	\endgraf\smallskip\endgraf\smallskip
+	\hfill Supervisor\endgraf\smallskip\endgraf\smallskip
+	\hfill Approved:  \endgraf\bigskip\endgraf\bigskip
+	\endgraf\smallskip\endgraf\smallskip
+	\hfill Reader\endgraf\smallskip\endgraf\smallskip
+	\hfill Approved:  \endgraf\bigskip\endgraf\bigskip
+	\endgraf\smallskip\endgraf\smallskip
+	\hfill Reader\endgraf\smallskip\endgraf\smallskip
+	\hfill Date: \today }
 
 \begin{document}
-\section{Abstract}
-In this paper, we consider the problems of solving ordinary differential equation (ODE) models and partial differential equation (PDE) models with discontinuities. We then tackle the issues of providing continuous solutions to ODE problems through an efficient `defect control' scheme using multistep interpolants. 
+	\thispagestyle{empty}
+	\maketitle
+	\thispagestyle{empty}
+	
+\begin{abstract}
+In this thesis, we consider the problems of numerically solving ordinary differential equation (ODE) and partial differential equation (PDE) Covid-19 models with discontinuities. We then tackle the issue of computing accurate continuous solutions to ODE problems through an efficient defect control scheme using multistep interpolants. The defect is the amount by which a continuous approximate solution fails to satisfy the ODE.
 
-Using a Covid-19 ODE model with discontinuities and the R, Python, Scilab and Matlab programming environment and discuss how to handle problems with time- and state-dependent discontinuities. Using a Covid-19 PDE model with a PDE solver with event detection capabilities, BACOLIKR, we discuss the issues and solutions to PDE models with time- and state-dependent discontinuities. 
+Using a Covid-19 ODE model with discontinuities and the R, Python, Scilab and Matlab programming environment, we discuss how to handle issues with time- and state-dependent discontinuities. Solving a Covid-19 PDE model with an error control PDE solver with event detection capabilities, BACOLIKR \cite{bacolikr}, we discuss issues associated with solving PDE models with time- and state-dependent discontinuities. 
 
-Using multistep interpolants (Hermite-Birkhoff interpolants), we provide free $4^{th}$, $6^{th}$ and $8^{th}$ order interpolants that can be used to perform defect control. We tackle several of the issues of such an approach and show how we obtain effective defect controlled continuous solutions. 
+Using the framework of multistep interpolants (Hermite-Birkhoff interpolants), we derive efficient $4^{th}$, $6^{th}$ and $8^{th}$ order interpolants that can be used to perform defect control. We investigate several questions with this approach and show how to obtain effective defect controlled continuous approximate solutions to ODEs. 
 
-\section{Introduction}
-This thesis considers three projects. The first two chapters address the problems of solving Covid-19 ordinary differential equations (ODE) with discontinuities and Covid-19 partial differential equations (PDE) models with discontinuities, respectively. The last chapter discusses an efficient approach for controlling the size of the defect of a continuous approximate solution to an ODE. The defect is the amount by which the continuous approximate solution fails to satisfy the ODE. 
+\end{abstract}
 
+\chapter{Introduction}
+This thesis considers three projects, all associated with the numerical solution of differential equations. The first two chapters address the effective numerical solution to Covid-19 ordinary differential equations (ODE) with discontinuities and Covid-19 partial differential equations (PDE) models with discontinuities, respectively. The last chapter discusses an efficient approach for controlling the size of the defect of a continuous approximate solution to an ODE. The defect is the amount by which the continuous approximate solution fails to satisfy the ODE. 
+
+The general form of an ODE considered in this thesis is 
+\begin{equation}
+y'(t) = f(t, y(t)),
+\end{equation}
+and the general form of a PDE considered in this thesis is 
+\begin{equation}
+u_t(x, t) = f(x, t, u(x,t), u_x(x,t), u_{xx}(x,t)).
+\end{equation}
+
+All the code for this thesis can be found at the link provided in \cite{thisThesisGithub}.
+
+\section{Performance analysis of ODE solvers on Covid-19 ODE models with discontinuities}
+In Chapter $\ref{chapter:ode}$, we discuss issues associated with computing solutions to discontinuous Covid-19 models as they arise in the ODE case. The mathematical theories that underlie modern numerical ODE solvers are built on the requirement that the function that defines the ODE model, $f(t, y(t))$, and some of its higher derivatives are continuous. Therefore, discontinuities that are introduced into an ODE problem can drastically change the performance of an ODE solver. In this chapter, we will analyse the performance of ODE software on a Covid-19 ODE model to which we will introduce (i) a time-dependent discontinuity and (ii) a state-dependent discontinuity. We will show that with a sufficiently sharp tolerance, the time-dependent discontinuity problem can be solved by most solvers with reasonable accuracy but that using a form of discontinuity handling significantly improves the efficiency. We will then show that special care needs to be taken to solve state-dependent discontinuity problems and show how event detection allows for efficient and accurate results to be obtained. Event detection is the capability of modern solvers to detect when a given condition that depends in the solution being computed is satisfied. 
+
+\section{Performance analysis of PDE solvers on Covid-19 PDE models with discontinuities}
+In Chapter $\ref{chapter:pde}$, we discuss the numerical solution of discontinuous Covid-19 PDE problems. As was the case with ODEs, PDE solvers are not expected to perform well when faced with a discontinuous PDE problem. Using a Covid-19 PDE model to which we introduce a time-dependent or a state-dependent discontinuity, we will show that BACOLIKR \cite{bacolikr}, the only PDE solver that, to our knowledge, can do event detection, can solve time-dependent discontinuity problems using a sufficiently sharp tolerance but that it does so more efficiently with discontinuity handling. We will then show that its `event detection' capability allows it to solve the state-dependent discontinuity problem which it otherwise cannot solve.
+
+\section{Efficient defect control using multistep interpolants}
+In Chapter $\ref{chapter:defect_control}$, we consider the concept of `defect control'. We discuss its importance and the efficiency issues associated with ODE solvers based on Runge-Kutta methods \cite{MR3822086} that control the maximum defect of a continuous approximate solution. Standard approaches typically makes use of continuous Runge-Kutta methods \cite{MR3822086} to perform defect control which typically involves performing several evaluations of the right hand side function of the ODE, $f(t, y(t))$. In this chapter, we consider an approach to perform defect control using a multistep Hermite interpolant \cite{MR3822086} that requires no additional function evaluations. We will augment $4^{th}$, $6^{th}$ and $8^{th}$ order Runge Kutta methods with a Hermite cubic, with a sixth order Hermite-Birkhoff interpolant and an eighth order Hermite-Birkhoff interpolant and show that high quality interpolants can be obtained using no extra function evaluations. (In its simplest form, a numerical method typically solves an ODE by stepping from the initial time to the final time, using stepsize $h$. It computes a solution approximation at the end of each step. A method is said to be of order $p$, if the error associated with the solution approximations it computes behaves like O($h^p$)) We will discuss challenges associated with this approach and how these challenges can be addressed. We then conclude with suggestions for additional work that can be done on this project.
+
+
+\include{ode_introduction}
+\include{ode_timeProblem}
+\include{ode_stateProblem}
+\include{ode_investigation}
+\include{ode_summary}
+
+\include{pde_main}
+
+\include{defect_control_main}
+
+
+\chapter{Conclusions and Future Work}
+\section{Conclusions}
 \subsection{Performance analysis of ODE solvers on Covid-19 ODE models with discontinuities}
-In this chapter, we discuss the solution to discontinuous models as they arise in the ODE case. The mathematical theories that underlie modern numerical ODE solvers are built on the requirement that the function that defines the ODE model, $f(t, y(t))$, and some of its higher derivatives are continuous. Therefore, discontinuities that are introduced into ODE problems, even through simple if-statements, can drastically change performance of an ODE solver. In this chapter, we will analyse the performance of ODE software on a Covid-19 ODE model to which we will introduce (i) a time-dependent discontinuity of (ii) a state-dependent discontinuity. We will show that with a sufficiently sharp tolerance, the time-dependent discontinuity problem can be solved by most solvers but that using a form of discontinuity handling drastically improves the efficiency. We will then show that special care needs to be taken to solve state-dependent discontinuity problems and show how `event detection' allows for efficient and accurate results to be obtained. Event detection or root-finding is the capabilities of modern solvers to detect roots of the solution being computed. The user provides a root-definition function which returns 0 when a root is present and an `event detection' solver will additionally check for such a root as it integrates through a problem.
+In this chapter, we discussed issues associated with Covid-19 ODE modeling including stability issues and discontinuity issues as measures are introduced. We also discussed some issues with the ODE solvers provided in some widely used programming environments. Using several solvers from across 4 different programming environments, we have shown that time-dependent discontinuity problems can be solved with a sufficiently sharp tolerance but that discontinuity handling with cold starts significantly improves the efficiency of the computations. We then showed that state-dependent discontinuity problems cannot be solved using a simple approach even at sharp tolerances and discussed why this was the case. We then discussed event detection and how to use it to efficiently solve state-dependent problems. We have shown that event detection can provide efficient and accurate solutions to state-dependent discontinuity problems.
 
 \subsection{Performance analysis of PDE solvers on Covid-19 PDE models with discontinuities}
-In this chapter, we discuss the solution to discontinuous Covid-19 PDE problems. As was the case with ODEs, PDE solvers are not expected to perform well when faced with a discontinuous PDE problem. Using a Covid-19 PDE model to which we introduce a time-dependent or a state-dependent discontinuity, we will show that BACOLIKR, 8888 Reference to BACOLIRK 8888, the only PDE solver which to our knowledge can do event detection, can solve time-dependent discontinuity problems without additional precautions using a sufficiently sharp tolerance but that it does so more efficiently with discontinuity handling. We will then show that its `event detection' capability allows it to solve the state-dependent discontinuity problem which it otherwise cannot.
+In this chapter, we discussed Covid-19 PDE problems with time-dependent and state-dependent discontinuities and showed the efficiency and accuracy of BACOLIKR when solving these problems. We have shown that BACOLIKR can solve the time-dependent problem using a straightforward approach but that discontinuity handling through cold starts can improve the efficiency. We have shown that BACOLIKR cannot solve the state-dependent discontinuity problem using a simple approach and how the use of event detection allows it to solve the problem more accurately snd efficiently.  
 
 \subsection{Efficient defect control using multistep interpolants}
-In this chapter we discuss the concept of `defect control'. We discuss its importance and the efficiency issues associated with writing efficient solvers that can control the `maximum defect' of a continuous approximate solution. Standard approaches typically makes use of continuous Runge-Kutta methods to perform defect control which typically involves performing several function evaluations of the right hand side function of the ODE, $f(t, y(t))$. In this chapter, we consider an approach to perform defect control using a multistep Hermite-Birkhoff interpolant that requires no additional function evaluations. We will augment $4^{th}$, $6^{th}$ and $8^{th}$ order Runge Kutta methods with a Hermite cubic, with a sixth order Hermite-Birkhoff interpolant and then with an eighth order Hermite-Birkhoff interpolant and show that these interpolants can be obtained using no extra function evaluations. We will discuss the challenges associated with this approach and how these challenges can be addressed. We then conclude with suggestions for additional work that can be done on this project.
+In this chapter, we discussed the importance of defect control and the challenges that the standard approach faces in implementing it. We then derived $4^{th}$, $6^{th}$ and $8^{th}$ order Hermite-Birkhoff interpolants (HB4, HB6, HB8) that were used to augment the Classical $4^{th}$ order Runge-Kutta method (RK4). We showed that HB4 is not an appropriate way to provide an interpolant for defect control of RK4 as the interpolation error of the derivative is of a lower order than the numerical solution computed by RK4. We then showed that HB6 provides reliable and efficient defect control and that HB8 does not provide much of an improvement over HB6. We next showed how the HB6 and HB8 interpolants can be used to augment $6^{th}$ and $8^{th}$ order Runge-Kutta methods to allow them to provide efficient defect control. We also noted throughout the chapter that the multistep interpolants HB6 and HB8 have accuracies that rely on their step-size parameters, $\alpha$ and $\beta$, being close to 1. We then discussed an interpolant that forces these parameters to be 1 by using the evaluations of previous interpolants.
 
-\section{Conclusions and Future Work}
-\subsection{Conclusions}
-\subsubsection{Performance analysis of ODE solvers on Covid-19 ODE models with discontinuities}
-In this chapter, we discussed issues associated with Covid-19 ODE modeling including stability issues and discontinuity issues as measures are introduced. We also discussed some of the issues with some of the programming environments. Using several solvers from across 4 different programming environments, we have shown that time-dependent discontinuity problems can be solved with a sufficiently sharp tolerance but that discontinuity handling with cold starts drastically improves the efficiency of the computations. We then showed that state-dependent discontinuity problems cannot be solved naively even at sharp tolerances and discussed why this was the case. We then discussed event detection and how to use it to efficiently solve state-dependent problems. We have shown that event detection can provide efficient and accurate solutions to state-dependent discontinuity problems.
-
-\subsubsection{Performance analysis of PDE solvers on Covid-19 PDE models with discontinuities}
-In this chapter, we have discussed Covid-19 PDE problems with time-dependent and state-dependent discontinuities and showed the efficiency and accuracy of BACOLIKR when solving these problems. We have shown that BACOLIKR can solve the time-dependent problem naively but that discontinuity handling through cold starts can improve the efficiency. We have shown that BACOLIKR cannot solve the state-dependent discontinuity problem naively and how the use of event detection allows it to solve the problem at a reasonable tolerance.  
-
-\subsubsection{Efficient defect control using multistep interpolants}
-In this chapter, we discussed the importance of defect control and the challenges that the standard approach faces in implementing it. We then introduced and derived a $4^{th}$, $6^{th}$ and $8^{th}$ order Hermite-Birkhoff interpolants (HB4, HB6, HB8) that was used to augment the Classical $4^{th}$ order Runge-Kutta method. We showed that HB4 is not an appropriate way to provide an interpolant for defect control of RK4 as the interpolation error in the derivative is of a lower order than the numerical solution. We then showed that HB6 provides reliable and efficient defect control and that HB8 does not provide much of an improvement over HB6 for defect control of RK4. We next showed how the HB6 and HB8 interpolants can be used to augment $6^{th}$ and $8^{th}$ order Runge-Kutta methods to allow them to provide efficient defect control. We then discussed the major issue with this scheme in that the derivative formula contains an $O(\frac{1}{h})$ term and thus the accuracy forms a V-shape with the step-size, $h$. We tried to remedy the rounding-off problem using the Horner and Barycentric form of the interpolants instead of using the monomial forms. We showed how the Horner's method does not improve the accuracy by much but that the Barycentric method has some significant improvements. We also noted that at an experiment optimal step-size, $h$, we have seen that the solvers do reach machine round-off. We also noted throughout the chapter that the multistep interpolants HB6 and HB8 have accuracies that rely on their step-size parameters, $\alpha$ and $\beta$, being close to 1. We then discussed an interpolant that forces these parameters to be 1 by using the evaluations of previous interpolants.
-
-\subsection{Future Work}
-\subsubsection{Performance analysis of ODE solvers on Covid-19 ODE models with discontinuities}
-In this chapter, we have identified an issue with the method of obtaining output points that some of the solvers apply. We have shown how this leads to a decrease in efficiency. Potential future work in this area is to develop/use newer and less computationally expensive interpolants so that the solver uses an interpolant of sufficiently high order.
+\section{Future Work}
+\subsection{Performance analysis of ODE solvers on Covid-19 ODE models with discontinuities}
+In this chapter, we have identified an issue with the method of obtaining output points that some of the solvers in some programming environments employ. We have shown how this leads to a decrease in efficiency. Potential future work in this area is to develop newer and less computationally expensive interpolants so that these solver can use an interpolant of sufficiently high order.
 
 We have also discovered an issue with the RADAU5 algorithm since several environments and the Fortran code itself failed to provide a reasonable solution to the state-dependent discontinuity problem. As future work, we could look to investigate this issue. 
 
-\subsubsection{Performance analysis of PDE solvers on Covid-19 PDE models with discontinuities}
-In this section, we have identified that event detection has allowed us to solve the state-dependent discontinuity problem when even sharp tolerances did not allow us to solve the problem with the naive approach. Event detection is relatively new in the context of PDEs and identifying and understanding other problems that it now allows us to solve could be potential future work.
+We also need to perform a further analysis on why the Scilab `lsodar' solver comes up with a solution with 13 peaks when the other solvers provide a solution with 18 peaks for the state-dependent discontinuity problem.
 
-Another important future work is to promote and write wrappers for BACOLIKR across several programming environments so that it is easier to use. This will allow more people to access event detection for PDE problems and could potentially allow them to solve harder problems. 
+\subsection{Performance analysis of PDE solvers on Covid-19 PDE models with discontinuities}
+In this section, we have identified that event detection has allowed us to solve the state-dependent discontinuity problem when even sharp tolerances did not allow us to solve the problem with a simple approach. Event detection is relatively new in the context of PDEs and identifying and understanding other problems that it now allows us to solve could be potential future work.
 
-=======================================
-As we have noted in this chapter, the current implementation had the root location at different places due to using the same tolerance for the root-finding algorithm as it did for the numerical PDE solution. A sharper tolerances than the user-provided tolerance could potentially be used for the root-finding algorithm at some cost in efficiency. Another potential future work is to analyse how using a sharper tolerance for the root-finding algorithm reduces the efficiency of the solver.
-=======================================
+Another important direction for future work is to write wrappers for BACOLIKR across several programming environments so that it is easier to use. This will allow more people to access event detection for PDE problems and could potentially allow them to solve harder problems. 
 
-\subsubsection{Efficient defect control using multistep interpolants}
-Throughout this chapter we have used the exact solution values for the first few steps in order to allow us to create the first interpolant. Another important research project in this area is to try different techniques including but not limited to the CRK, error control with a sharper tolerance than the user provided tolerance, and possibly other methods to perform the first step.
+As we have noted in this chapter, the current implementation of BACOLIKR uses the same tolerance for the root-finding algorithm as is used for the numerical solution of the PDE. A sharper tolerances than the user-provided tolerance could potentially be used for the root-finding algorithm at some cost in efficiency. Another potential direction for future work is to analyse how using a sharper tolerance for the root-finding algorithm reduces the efficiency of the solver.
 
-We can also look into developing interpolants that could lead to asymptotically correct defect control. This would guarantee that the maximum defect is always at a specific spot within each step and would thus only require one function evaluation to sample the defect.
+\subsection{Efficient defect control using multistep interpolants}
+\label{section:HB_future_work}
 
-In the section where we considered the development of HB8, we have shown how having two weight parameters on the same side and thus aggregating in the error term (as in $\alpha + \beta$), will lead to innacurate results as this scheme only provided an accurate result when all the weight parameters were equal to 1. Even a slight deviation from that value lead to poor accuracy and thus the scheme was unusable in an adaptive algorithm as we expect the step-size to change multiple times. An idea for future work is to derive a $10^{th}$ order interpolant. Such an interpolant will be forced to use 3 step-size parameters but an idea is to fix one or more of the parameters at 1. This can be done by using the technique that we employed in Section 8888 reference to section about static alpha 88888 or by using another technique such as computing a solution value in the middle of the step $[x_{i-1}, x_i]$ using the previous interpolant and performing an additional function evaluation at that data point to obtain the two values required to build an interpolant. Thus we get to use just two parameters $\alpha$ and $\beta$ for the step from $x_i$ to $x_{i+1}$ and the step from $x_{i-2}$ to $x_{i+1}$.  This will give the required 10 data points to produce such an interpolant which could then be used to augment RK8 to provide a more efficient defect control scheme for the $8^{th}$ order case. 
+\paragraph{The first few steps}
+Throughout this chapter we have used the exact solution values for the first few steps in order to allow us to create the first interpolant. Another important research project in this area is to try different techniques including but not limited to the use of CRK methods, error control with a sharper tolerance than the user provided tolerance, and possibly other methods to perform the first few steps.
 
-Another idea is to do error control instead of defect control. We would thus need a way to create two interpolants, one of a higher order and one of a lower order and sample the difference between these two interpolants to estimate the error of the continuous solution approximation. A step-size selection algorithm based on that error estimate could provide an effective error controlled solution.
+\paragraph{Asymptotically correct defect control with multistep interpolants}
+We can also look into developing interpolants that could lead to asymptotically correct defect control. This would guarantee that the maximum defect is always at the same relative location within each step and would thus only require one function evaluation to sample the defect.
+
+\paragraph{HB10}
+An idea for future work is to derive a $10^{th}$ order interpolant. Such an interpolant will be forced to use 3 step-size parameters but an idea is to fix one or more of the parameters at 1. This can be done by using the technique that we employed in Section $\ref{section:keeping_alpha_at_1}$ or by using another technique such as computing a solution value in the middle of the step $[x_{i-1}, x_i]$ using the interpolant from that step and performing an additional function evaluation at that data point to obtain the two values required to build an interpolant. Thus we get to use just two parameters $\alpha$ and $\beta$ for the step from $x_i$ to $x_{i+1}$ and the step from $x_{i-2}$ to $x_{i-1}$.  This will give the required 10 data points to produce such an interpolant which could then be used to augment RK8 to provide a more efficient defect control scheme for the $8^{th}$ order case. 
+
+Early explorations into creating an HB10 interpolants seem to be promising. See Figure $\ref{fig:future_work_hb10_v_shape}$ to see how an HB10 derived by `breaking the middle step' is resilient to changes to its parameters $\alpha$ and $\beta$. We note that the interpolant was built with step-size $[\alpha h, \frac{h}{2}, \frac{h}{2}, \beta h]$ and thus $\alpha$ and $\beta$ is usually 2 when there are no step-size changes. We also note that $\theta$ was allowed to vary between $-2-\alpha$ to $\beta$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/future_work_hb10_v_shape}
+\caption{V-shape of HB10 created by `breaking the middle step'}
+\label{fig:future_work_hb10_v_shape}
+\end{figure}
+
+
+\paragraph{Error control instead of defect control}
+Another idea is to consider error control instead of defect control for the continuous approximate solution. We would thus need a way to create two interpolants, one of a higher order and one of a lower order and sample the difference between these two interpolants to estimate the error of the continuous solution approximation. A step-size selection algorithm based on that error estimate could provide an effective error controlled solution.
+
+An issue with defect control is the V-shape of the defect. We know that this is entirely because of the $\frac{1}{h}$ in the derivative definition of the Hermite-Birkhoff interpolants as the interpolant itself does not suffer from round-off error but its derivative does.
+
+For all the schemes, the defect is V-shaped but the error itself is not. This is because the Hermite-Birkhoff interpolant does not contain a term in $\frac{1}{h}$ whereas its derivative does contain such a term. Figure $\ref{fig:defect_is_v_shape}$ and $\ref{fig:error_is_not_v_shape}$ shows this phenomenon for HB6 but the same can be see for HB4 and HB8. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/further_work_defect_is_v_shape_hb6}
+\caption{Defect has V-shape}
+\label{fig:defect_is_v_shape}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/further_work_error_is_not_v_shape_hb6}
+\caption{Error does not have V-shape}
+\label{fig:error_is_not_v_shape}
+\end{figure}
+
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\chapter{Appendix}
+\input{ebolaPaper}
+\include{defect_control_sharp_tol}
 
 \end{document}

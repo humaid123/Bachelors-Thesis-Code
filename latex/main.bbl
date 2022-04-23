@@ -1,0 +1,213 @@
+\begin{thebibliography}{10}
+
+\bibitem{deSolveGithub}
+Desolve github.
+\newblock \url{https://github.com/cran/deSolve}.
+\newblock Accessed: 2021-08-01.
+
+\bibitem{hairerWebsite}
+Hairer's website.
+\newblock \url{http://www.unige.ch/~hairer/software.html}.
+\newblock Accessed: 2021-08-01.
+
+\bibitem{JimVernerRepo}
+Jim verner's refuge for runge-kutta pairs.
+\newblock \url{https://www.sfu.ca/~jverner/}.
+\newblock Accessed: 2021-11-01.
+
+\bibitem{scilabGithub}
+Scilab github.
+\newblock \url{https://github.com/scilab/scilab}.
+\newblock Accessed: 2021-08-01.
+
+\bibitem{thisThesisGithub}
+Software produced github.
+\newblock \url{https://github.com/humaid123/Bachelors-Thesis-Code}.
+\newblock Accessed: 2022-04-10.
+
+\bibitem{althaus2014estimating}
+Christian~L Althaus.
+\newblock Estimating the reproduction number of ebola virus (ebov) during the
+  2014 outbreak in west africa.
+\newblock {\em PLoS currents}, 6, 2014.
+
+\bibitem{MR1025845}
+P.~Bogacki and L.~F. Shampine.
+\newblock A {$3(2)$} pair of {R}unge-{K}utta formulas.
+\newblock {\em Appl. Math. Lett.}, 2(4):321--325, 1989.
+
+\bibitem{MR1298625}
+Peter~N. Brown, Alan~C. Hindmarsh, and Linda~R. Petzold.
+\newblock Using {K}rylov methods in the solution of large-scale
+  differential-algebraic systems.
+\newblock {\em SIAM J. Sci. Comput.}, 15(6):1467--1488, 1994.
+
+\bibitem{MR1618796}
+Peter~N. Brown, Alan~C. Hindmarsh, and Linda~R. Petzold.
+\newblock Consistent initial condition calculation for differential-algebraic
+  systems.
+\newblock {\em SIAM J. Sci. Comput.}, 19(5):1495--1512, 1998.
+
+\bibitem{campbell2010modeling}
+Stephen~L Campbell, Jean-Philippe Chancelier, and Ramine Nikoukhah.
+\newblock Modeling and simulation in scilab.
+\newblock In {\em Modeling and Simulation in Scilab/Scicos with ScicosLab 4.4},
+  pages 73--106. Springer, 2010.
+
+\bibitem{MR3406651}
+Florinda Capone, Valentina De~Cataldis, and Roberta De~Luca.
+\newblock Influence of diffusion on the stability of equilibria in a
+  reaction-diffusion system modeling cholera dynamic.
+\newblock {\em J. Math. Biol.}, 71(5):1107--1131, 2015.
+
+\bibitem{pdeModel}
+Christina~C. Christara.
+\newblock Christina c. christara private communications.
+\newblock 2021.
+
+\bibitem{MR3822086}
+John~R. Dormand.
+\newblock {\em Numerical methods for differential equations}.
+\newblock CRC Revivals. CRC Press, Boca Raton, FL; CRC Press, Boca Raton, FL,
+  2018.
+\newblock A computational approach, Reprint of the 1996 original [ MR1383317],
+  Library of Engineering Mathematics.
+
+\bibitem{MR997658}
+W.~H. Enright.
+\newblock Analysis of error control strategies for continuous {R}unge-{K}utta
+  methods.
+\newblock {\em SIAM J. Numer. Anal.}, 26(3):588--599, 1989.
+
+\bibitem{MR996053}
+W.~H. Enright.
+\newblock A new error-control for initial value solvers.
+\newblock volume~31, pages 288--301. 1989.
+\newblock Numerical ordinary differential equations (Albuquerque, NM, 1986).
+
+\bibitem{MR1239829}
+W.~H. Enright.
+\newblock The relative efficiency of alternative defect control schemes for
+  high-order continuous {R}unge-{K}utta formulas.
+\newblock {\em SIAM J. Numer. Anal.}, 30(5):1419--1445, 1993.
+
+\bibitem{MR1803189}
+W.~H. Enright.
+\newblock Continuous numerical methods for {ODE}s with defect control.
+\newblock volume 125, pages 159--170. 2000.
+\newblock Numerical analysis 2000, Vol. VI, Ordinary differential equations and
+  integral equations.
+
+\bibitem{MR1950917}
+W.~H. Enright.
+\newblock The design and implementation of usable {ODE} software.
+\newblock volume~31, pages 125--137. 2002.
+\newblock Numerical methods for ordinary differential equations (Auckland,
+  2001).
+
+\bibitem{MR2600928}
+W.~H. Enright and Li~Yan.
+\newblock The reliability/cost trade-off for a class of {ODE} solvers.
+\newblock {\em Numer. Algorithms}, 53(2-3):239--260, 2010.
+
+\bibitem{MR1439506}
+E.~Hairer and G.~Wanner.
+\newblock {\em Solving ordinary differential equations. {II}}, volume~14 of
+  {\em Springer Series in Computational Mathematics}.
+\newblock Springer-Verlag, Berlin, second edition, 1996.
+\newblock Stiff and differential-algebraic problems.
+
+\bibitem{heath2018scientific}
+Michael~T Heath.
+\newblock {\em Scientific computing: an introductory survey, revised second
+  edition}.
+\newblock SIAM, 2018.
+
+\bibitem{MR751604}
+Alan~C. Hindmarsh.
+\newblock O{DEPACK}, a systematized collection of {ODE} solvers.
+\newblock In {\em Scientific computing ({M}ontreal, {Q}ue., 1982)}, IMACS
+  Trans. Sci. Comput., I, pages 55--64. IMACS, New Brunswick, NJ, 1983.
+
+\bibitem{bacolikr}
+Paul~Muir Jack~Pew, Connor~Tannahill.
+\newblock Error control b-spline gaussian collocation pde software with
+  time-space event detection.
+\newblock {\em Saint Mary's University, Dept. of Mathematics and Computing
+  Science Technical Report, \url{http://cs.smu.ca/tech_reports/}}, 2020.
+
+\bibitem{MR4200336}
+Comfort Ohajunwa, Kirthi Kumar, and Padmanabhan Seshaiyer.
+\newblock Mathematical modeling, analysis, and simulation of the {COVID}-19
+  pandemic with explicit and implicit behavioral changes.
+\newblock {\em Comput. Math. Biophys.}, 8:216--232, 2020.
+
+\bibitem{papageorgiou1997continuous}
+George Papageorgiou and Ch~Tsitouras.
+\newblock Continuous extensions to high order runge-kutta methods.
+\newblock {\em International journal of computer mathematics},
+  65(3-4):273--291, 1997.
+
+\bibitem{MR1421071}
+L.~F. Shampine, R.~C. Allen, Jr., and S.~Pruess.
+\newblock {\em Fundamentals of numerical computing}.
+\newblock John Wiley \& Sons, Inc., New York, 1997.
+
+\bibitem{osti7318812}
+L~F Shampine and H~A Watts.
+\newblock Practical solution of ordinary differential equations by runge--kutta
+  methods. [writing a high-quality code; description of rkf45, in fortran for
+  cdc 6600 computer].
+\newblock 12 1976.
+
+\bibitem{MR1261869}
+Lawrence~F. Shampine.
+\newblock {\em Numerical solution of ordinary differential equations}.
+\newblock Chapman \& Hall, New York, 1994.
+
+\bibitem{shampine1997matlab}
+Lawrence~F Shampine and Mark~W Reichelt.
+\newblock The matlab ode suite.
+\newblock {\em SIAM journal on scientific computing}, 18(1):1--22, 1997.
+
+\bibitem{soetaert2010solving}
+Karline Soetaert, Thomas Petzoldt, and R~Woodrow Setzer.
+\newblock Solving differential equations in r: package desolve.
+\newblock {\em Journal of statistical software}, 33(1):1--25, 2010.
+
+\bibitem{tsitouras1990runge}
+Ch~Tsitouras and George Papageorgiou.
+\newblock Runge-kutta interpolants based on values from two successive
+  integration steps.
+\newblock {\em Computing}, 43(3):255--266, 1990.
+
+\bibitem{MR1379682}
+Peter~E. Van~Keken, David~A. Yuen, and Linda~R. Petzold.
+\newblock D{ASPK}: a new high order and adaptive time-integration technique
+  with applications to mantle convection with strongly temperature- and
+  pressure-dependent rheology.
+\newblock {\em Geophys. Astrophys. Fluid Dynam.}, 80(1-2):57--74, 1995.
+
+\bibitem{MR4126357}
+Alex Viguerie, Guillermo Lorenzo, Ferdinando Auricchio, Davide Baroli, Thomas
+  J.~R. Hughes, Alessia Patton, Alessandro Reali, Thomas~E. Yankeelov, and
+  Alessandro Veneziani.
+\newblock Simulating the spread of {COVID}-19 {\it via} a spatially-resolved
+  susceptible-exposed-infected-recovered-deceased ({SEIRD}) model with
+  heterogeneous diffusion.
+\newblock {\em Appl. Math. Lett.}, 111:Paper No. 106617, 9, 2021.
+
+\bibitem{2020SciPy-NMeth}
+Pauli Virtanen, Ralf Gommers, Travis~E. Oliphant, Matt Haberland, Tyler Reddy,
+  David Cournapeau, Evgeni Burovski, Pearu Peterson, Warren Weckesser, Jonathan
+  Bright, St{\'e}fan~J. {van der Walt}, Matthew Brett, Joshua Wilson, K.~Jarrod
+  Millman, Nikolay Mayorov, Andrew R.~J. Nelson, Eric Jones, Robert Kern, Eric
+  Larson, C~J Carey, {\.I}lhan Polat, Yu~Feng, Eric~W. Moore, Jake
+  {VanderPlas}, Denis Laxalde, Josef Perktold, Robert Cimrman, Ian Henriksen,
+  E.~A. Quintero, Charles~R. Harris, Anne~M. Archibald, Ant{\^o}nio~H. Ribeiro,
+  Fabian Pedregosa, Paul {van Mulbregt}, and {SciPy 1.0 Contributors}.
+\newblock {{SciPy} 1.0: Fundamental Algorithms for Scientific Computing in
+  Python}.
+\newblock {\em Nature Methods}, 17:261--272, 2020.
+
+\end{thebibliography}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.21)  14 FEB 2022 20:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12.10) (preloaded format=pdflatex 2022.1.21)  7 APR 2022 11:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -304,7 +304,7 @@ ine 205.
 File: ./figures/pde_time_disc_bacolikr_naive_tol.png Graphic file (type png)
 <use ./figures/pde_time_disc_bacolikr_naive_tol.png>
 Package pdftex.def Info: ./figures/pde_time_disc_bacolikr_naive_tol.png  used o
-n input line 223.
+n input line 221.
 (pdftex.def)             Requested size: 241.49895pt x 186.08173pt.
 <./figures/pde_time_disc_bacolikr_disc_hand_tol.png, id=49, 511.6716pt x 396.76
 23pt>
@@ -312,17 +312,17 @@ File: ./figures/pde_time_disc_bacolikr_disc_hand_tol.png Graphic file (type png
 )
 <use ./figures/pde_time_disc_bacolikr_disc_hand_tol.png>
 Package pdftex.def Info: ./figures/pde_time_disc_bacolikr_disc_hand_tol.png  us
-ed on input line 230.
+ed on input line 228.
 (pdftex.def)             Requested size: 241.49895pt x 187.26534pt.
  [9 <./figures/pde_time_disc_bacolikr_naive_tol.png>] [10 <./figures/pde_time_d
 isc_bacolikr_disc_hand_tol.png>]
 [11]
-Overfull \hbox (57.00409pt too wide) in paragraph at lines 309--310
+Overfull \hbox (57.00409pt too wide) in paragraph at lines 305--306
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 284--320
+Overfull \hbox (15.0pt too wide) in paragraph at lines 280--316
 []$[]$ 
  []
 
@@ -331,7 +331,7 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 284--320
 File: ./figures/pde_state_disc_naive_400vs1000.png Graphic file (type png)
 <use ./figures/pde_state_disc_naive_400vs1000.png>
 Package pdftex.def Info: ./figures/pde_state_disc_naive_400vs1000.png  used on 
-input line 325.
+input line 321.
 (pdftex.def)             Requested size: 241.49895pt x 182.5pt.
  [13]
 <./figures/pde_state_disc_naive_1000vs10000.png, id=70, 489.2679pt x 363.5181pt
@@ -339,26 +339,26 @@ input line 325.
 File: ./figures/pde_state_disc_naive_1000vs10000.png Graphic file (type png)
 <use ./figures/pde_state_disc_naive_1000vs10000.png>
 Package pdftex.def Info: ./figures/pde_state_disc_naive_1000vs10000.png  used o
-n input line 338.
+n input line 334.
 (pdftex.def)             Requested size: 241.49895pt x 179.42892pt.
  [14 <./figures/pde_state_disc_naive_400vs1000.png>] [15 <./figures/pde_state_d
 isc_naive_1000vs10000.png>]
-Overfull \hbox (57.00409pt too wide) in paragraph at lines 361--362
+Overfull \hbox (57.00409pt too wide) in paragraph at lines 357--358
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (57.00409pt too wide) in paragraph at lines 369--370
+Overfull \hbox (57.00409pt too wide) in paragraph at lines 365--366
 [][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (33.00385pt too wide) in paragraph at lines 389--390
+Overfull \hbox (33.00385pt too wide) in paragraph at lines 385--386
 [][][][][][][][][][] 
  []
 
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 353--394
+Overfull \hbox (15.0pt too wide) in paragraph at lines 349--390
 []$[]$ 
  []
 
@@ -367,14 +367,14 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 353--394
 File: ./figures/pde_state_disc_event_tol_6.png Graphic file (type png)
 <use ./figures/pde_state_disc_event_tol_6.png>
 Package pdftex.def Info: ./figures/pde_state_disc_event_tol_6.png  used on inpu
-t line 399.
+t line 395.
 (pdftex.def)             Requested size: 241.49895pt x 179.37347pt.
  [17]
 <./figures/pde_state_disc_event_tol_9.png, id=86, 477.7047pt x 362.0727pt>
 File: ./figures/pde_state_disc_event_tol_9.png Graphic file (type png)
 <use ./figures/pde_state_disc_event_tol_9.png>
 Package pdftex.def Info: ./figures/pde_state_disc_event_tol_9.png  used on inpu
-t line 411.
+t line 407.
 (pdftex.def)             Requested size: 241.49895pt x 183.0414pt.
  [18 <./figures/pde_state_disc_event_tol_6.png>] [19 <./figures/pde_state_disc_
 event_tol_9.png>]
@@ -384,7 +384,7 @@ File: ./figures/pde_state_disc_tol_bacolikr_naive_1000.png Graphic file (type p
 ng)
 <use ./figures/pde_state_disc_tol_bacolikr_naive_1000.png>
 Package pdftex.def Info: ./figures/pde_state_disc_tol_bacolikr_naive_1000.png  
-used on input line 447.
+used on input line 443.
 (pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
 <./figures/pde_state_disc_tol_bacolikr_naive_10000.png, id=97, 462.528pt x 346.
 896pt>
@@ -392,14 +392,14 @@ File: ./figures/pde_state_disc_tol_bacolikr_naive_10000.png Graphic file (type
 png)
 <use ./figures/pde_state_disc_tol_bacolikr_naive_10000.png>
 Package pdftex.def Info: ./figures/pde_state_disc_tol_bacolikr_naive_10000.png 
- used on input line 454.
+ used on input line 450.
 (pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
  [20 <./figures/pde_state_disc_tol_bacolikr_naive_1000.png>]
 <./figures/pde_state_disc_tol_event.png, id=102, 462.528pt x 346.896pt>
 File: ./figures/pde_state_disc_tol_event.png Graphic file (type png)
 <use ./figures/pde_state_disc_tol_event.png>
 Package pdftex.def Info: ./figures/pde_state_disc_tol_event.png  used on input 
-line 466.
+line 460.
 (pdftex.def)             Requested size: 241.49895pt x 181.12799pt.
  [21 <./figures/pde_state_disc_tol_bacolikr_naive_10000.png>]
 
@@ -409,11 +409,11 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Here is how much of TeX's memory you used:
  6837 strings out of 478659
  114253 string characters out of 2845920
- 606109 words of memory out of 3000000
+ 606378 words of memory out of 3000000
  24876 multiletter control sequences out of 15000+600000
  407328 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,10n,74p,1224b,1537s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,10n,74p,1277b,1537s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\huago
 \AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/
 huago/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><
@@ -427,7 +427,7 @@ MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/huago/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/huago/AppData
 /Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/huago
 /AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on main.pdf (23 pages, 913083 bytes).
+Output written on main.pdf (23 pages, 912950 bytes).
 PDF statistics:
  161 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
