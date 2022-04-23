@@ -1,0 +1,18 @@
+\frametitle{Solving the state-dependent discontinuity problem}
+\begin{lstlisting}[language=Python]
+res = array(); t0 = 0; y0 = (S0, E0, I0, R0)
+while t0 < 180:
+    tspan = [t0, ..., 180]
+    if (measures_implemented):
+        sol = ode(f_measures, tspan,
+            y0, events=root_10000)
+        measures_implemented = False
+    else:
+        sol = ode(f_no_measures, tspan,
+            y0, events=root_25000)
+        measures_implemented = True
+    t0 = extract_last_t(sol)
+    y0 = extract_last_row(sol)
+    res = concatenate(res, sol)
+\end{lstlisting}
+In this way, each call to the solver involves a continuous subproblem.

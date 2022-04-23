@@ -1,0 +1,15 @@
+\beamer@slide {fig:SEIR}{4}
+\beamer@slide {fig:ode_thrashing}{7}
+\beamer@slide {fig:time_discontinuity_matlab}{8}
+\beamer@slide {tab:time_discontinuity_Py}{10}
+\beamer@slide {fig:solve_time_discontinuity_matlab}{11}
+\beamer@slide {fig:state_discontinuity_sharp_py}{13}
+\beamer@slide {fig:solve_state_discontinuity_py}{16}
+\beamer@slide {tab:state_discontinuity_Py}{17}
+\beamer@slide {fig:no_middle_step_error_control_p3_rk45}{19}
+\beamer@slide {tab:crk_nstages}{21}
+\beamer@slide {eqn:HB4}{22}
+\beamer@slide {eqn:HB4_theta}{22}
+\beamer@slide {fig:rk4_with_hb4_p1_global_defect}{23}
+\beamer@slide {fig:rk4_with_hb6_p1_global_defect}{26}
+\beamer@slide {fig:rk4_with_hb8_p1_global_defect}{29}
