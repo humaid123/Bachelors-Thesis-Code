@@ -73,8 +73,7 @@ colors <- c("lsoda" = "green",
             "ode45" = "pink",
             "radau" = "yellow",
             "bdf"   = "brown",
-            "adams" = "red",
-            "ans" = "black")
+            "adams" = "red")
 
 p <- ggplot(final, aes(x=time)) + 
     geom_line(aes(y=I_lsoda, color="lsoda"), size=1.2) + 

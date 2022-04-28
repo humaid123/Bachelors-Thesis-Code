@@ -180,19 +180,15 @@ In all the previous subsections, we have maintained that even the sharp toleranc
 \label{fig:comparison_state_default_sharp_event}
 \end{figure}
 
-\subsection{Why the solvers fail even with sharp tolerances}
+\subsection{Discussion on the reasons for inaccurate solutions when using the simple treatment}
 \label{subsection:state_sharp_tol_failed}
 In this section we discuss why sharp tolerances were not enough to force the solvers to accurately solve the problem in the simple way it is coded, i.e, using global variables and if-statements. 
 
 Whenever there is a change in the value of $\beta$, the step where the discontinuity is first encountered will always be a failed step. As discussed in Section $\ref{subsection:effect_of_discontinuity}$, the step-size at a discontinuity will always have to be much smaller than the step-size being used on the continuous region to the left of the discontinuity. Thus the first encounter of a solver with any discontinuity will always be in the context of a failed step.
 
-During this failed step, the value of E(t) will cross the threshold. The global variables will thus be toggled. But then, when the solver attempts to retake the step using a smaller step-size, to the left of the discontinuity, it will be using the wrong $\beta$ value. 
+During this failed step, the value of E(t) will cross the threshold. The global variables will thus be toggled. But then, when the solver attempts to retake the step using a smaller step-size, to the left of the discontinuity, it will be using the wrong $\beta$ value. This observation is crucial as it allows us to conclude that once a failed step has occurred due to the solver encountering a discontinuity, the function evaluations made to the left of the discontinuity should be based on the previous $\beta$ value but they are in fact obtained using the new $\beta$ value. There is no straightforward way to address this behavior in the ODE function, $f(t, y(t))$, since we do not know the time of the discontinuity. 
 
-This observation is crucial as it allows us to conclude that once a failed step has occurred due to the solver encountering a discontinuity, the function evaluations made to the left of the discontinuity should be based on the previous $\beta$ value but they are in fact obtained using the new $\beta$ value. There is no straightforward way to address this behavior in the ODE function, $f(t, y(t))$, since we do not know the time of the discontinuity. 
-
-The issue, in summary, is that the solvers need to figure out how to step up to the discontinuity such that to the left of the time when E(t) reaches a threshold value, the solver employs function evaluations that use the previous $\beta$, and then after the time of the discontinuity, the solver employs function evaluations that use the new $\beta$ value.
-
-In the next few sections, we will present a better approach for treating problems with state-dependent discontinuities that will allow us to get reasonably accurate solutions in an efficient manner.
+The issue, in summary, is that the solvers need to figure out how to step up to the discontinuity such that to the left of the time when E(t) reaches a threshold value, the solver employs function evaluations that use the previous $\beta$, and then after the time of the discontinuity, the solver employs function evaluations that use the new $\beta$ value. In the next few sections, we will present a better approach for treating problems with state-dependent discontinuities that will allow us to get reasonably accurate solutions in an efficient manner.
 
 \subsection{Event detection}
 \label{subsection:intro_event_detection}
@@ -202,7 +198,7 @@ To integrate continuous sub-problems, we need a way to detect that a threshold h
 
 To perform event detection, an ODE solver requires two functions from the user: the usual ODE right-hand side function, $f(t, y(t))$ and another function, the root function (commonly denoted by $g(t, y(t))$), that defines the events.
 
-The root function is a function that, given the value of the solution $y(t)$ at the end of the current step will return a number. The root function, $g(t, y(t))$, is said to have a root whenever the value of the root function is zero. The key idea is that each event must be written so that it occurs at a root of $g(t, y(t))$.
+The root function is a function that, given the value of the solution $y(t)$ at the end of the current step, will return a number. The root function, $g(t, y(t))$, is said to have a root whenever the value of the root function is zero. The key idea is that each event must be written so that it occurs at a root of $g(t, y(t))$.
 
 The solver calls the root function at the end of each successful step that it takes and will record its value. It will then compare the value of the root function with the value from the previous step to see if there has been a change of sign. If the value of the root-function has changed sign, the solver will then run a root-finding algorithm on that step to find the point where the root-function equals zero. Most solvers will then return, allowing us to perform a cold start.
 
@@ -270,9 +266,9 @@ Some programming environments, such as Python, by default, do not stop the integ
 \caption{Solving the state dependent discontinuity model in R using event detection.}
 \label{fig:solve_state_discontinuity_R}
 \end{figure}
-Several of the solvers in R have event detection capabilities. These are: `adams', `bdf', `lsoda', `Radau', and they will be used in this section to solve the state dependent discontinuity model using the approach described in the previous subsection. From Figure $\ref{fig:solve_state_discontinuity_R}$, we can see that all the solvers give solutions that are in agreement except `Radau'. This is in contrast with what happened previously when we were zttempting to solve this discontinuous problem, even at sharp tolerances. 
+Several of the solvers in R have event detection capabilities. These are: `adams', `bdf', `lsoda', `Radau', and they will be used in this section to solve the state dependent discontinuity model using the approach described in the previous subsection. From Figure $\ref{fig:solve_state_discontinuity_R}$, we can see that all the solvers give solutions that are in agreement except `Radau'. This is in contrast with what happened previously when we were attempting to solve this discontinuous problem, even at sharp tolerances. 
 
-The case of `Radau' is interesting as it was giving a poor quality solution at the default tolerances, without event detection but it is now giving at least a solution that is exhibiting a correct pattern. We note that at sharp tolerances `Radau' with event detection gives results that approach the results from the other solvers, as shown in Figure $\ref{fig:solve_state_discontinuity_sharp_R}$. We will also note the poor performance of Radau in Table $\ref{tab:state_discontinuity_R}$. We also note that `Radau' Fortran solver does not have built-in detection and that the event detection has been added through the C interface, which may explain the disparity in performance that we see for that solver.
+The case of `Radau' is interesting as it was giving a poor quality solution at the default tolerances, without event detection but it is now giving at least a solution that is exhibiting a correct pattern. We note that at sharp tolerances `Radau' with event detection gives results that approach the results from the other solvers, as shown in Figure $\ref{fig:solve_state_discontinuity_sharp_R}$.
 
 \begin{figure}[H]
 \centering
@@ -286,7 +282,7 @@ We will show in Table $\ref{tab:state_discontinuity_R}$ that introducing event d
 We note that it is unfair to compare the efficiency of the solvers with no event detection and with default tolerances with the efficiency of the solvers when they use event detection as the results for the former are inaccurate.
 
 \begin{table}[h]
-\caption {Efficiency data for R state-dependent discontinuity model - number of function evaluations} 
+\caption {Efficiency data for R state-dependent discontinuity model - number of function evaluations.} 
 \label{tab:state_discontinuity_R}
 \begin{center}
 \begin{tabular}{ c c c c c } 
@@ -299,9 +295,7 @@ adams & 1368 & 3467 & 817 & 2689\\
 \end{center}
 \end{table}
 
-We can see from Table $\ref{tab:state_discontinuity_R}$ that with event detection we are gaining an improvement of around 1000 function evaluations for `lsoda', 7000 in `Radau' (sharp tol comparison), 2000 in `bdf', and 500 in `adams' while obtaining more accuracy. This significant decrease in the number of function evaluations will lead to much faster CPU times, especially when the right-hand side function, $f(t, y)$ is more complex.
-
-Also, we can see from Table $\ref{tab:state_discontinuity_R}$ that the solvers use fewer function evaluations compared with event detection than without event detection at the default tolerances. When comparing the values at the sharp tolerances, the use of event detection also decreased the respective number of function evaluations.
+We can see from Table $\ref{tab:state_discontinuity_R}$ that with event detection we are gaining an improvement of around 1000 function evaluations for `lsoda', 7000 in `Radau' (sharp tol comparison), 2000 in `bdf', and 500 in `adams' while obtaining more accuracy. This significant decrease in the number of function evaluations will lead to much faster CPU times, especially when the right-hand side function, $f(t, y)$ is more complex. Also, we can see from Table $\ref{tab:state_discontinuity_R}$ that the solvers use fewer function evaluations compared with event detection than without event detection at the default tolerances. When comparing the values at the sharp tolerances, the use of event detection also decreased the respective number of function evaluations.
 
 \subsubsection{Solving the state-dependent discontinuity model in Python using event detection}
 \begin{figure}[H]
@@ -317,7 +311,7 @@ Again, Figure $\ref{fig:solve_state_discontinuity_py}$ shows that all the solver
 As is the case with R, we cannot compare the default tolerance efficiency data to the event detection efficiency data as the former corresponds to inaccurate results. So, in Table $\ref{tab:state_discontinuity_Py}$, we compare the sharp tolerance efficiency data with the data from the event detection computation.
 
 \begin{table}[h]
-\caption {Efficiency data for Python state-dependent discontinuity model - number of function evaluations} \label{tab:state_discontinuity_Py}
+\caption {Efficiency data for Python state-dependent discontinuity model - number of function evaluations.} \label{tab:state_discontinuity_Py}
 \begin{center}
 \begin{tabular}{ c c c c } 
 method & no event & no event with sharp tol. & with event detection \\ 
@@ -343,7 +337,7 @@ Table $\ref{tab:state_discontinuity_Py}$ shows that the number of function evalu
 There is only one solver with root functionality in Scilab; it is `lsodar', the root-finding version of `lsoda'. The solution we obtain is unusual. Though it correctly oscillates and goes sharply between 10000 and 25000, the number of peaks the solution has, is different from the number of peaks found in the other programming environments (13 in Scilab as opposed to 18 everywhere else). Further work needs to be done to determine why the Scilab solver is not giving accurate results.
 
 \begin{table}[h]
-\caption {Efficiency data for Scilab state-dependent discontinuity model - number of function evaluations} \label{tab:state_discontinuity_scilab}
+\caption {Efficiency data for Scilab state-dependent discontinuity model - number of function evaluations.} \label{tab:state_discontinuity_scilab}
 \begin{center}
 \begin{tabular}{ c c c c } 
 method & no event & no event with sharp tol. & with event detection \\ 
@@ -361,10 +355,10 @@ From Table $\ref{tab:state_discontinuity_scilab}$, we can see that the root-find
 \caption{Solving state discontinuity model in Matlab using event detection.}
 \label{fig:solve_state_discontinuity_matlab}
 \end{figure}
-Both $ode45$ and $ode15s$ have an event detection capability. (The root functions need to set an input parameter to indicate that the root is terminal in order to allow a cold start to be performed. The root function signature in Matlab is 'function [value,isterminal,direction]] = g(t, y)', where the function returns an isterminal flag. This flag must be set to 1.) We applied event detection to solve the problem with the solvers in the Matlab environment and the results are shown in Figure $\ref{fig:solve_state_discontinuity_matlab}$. We remember that the solutions in Matlab without event detection were surprisingly accurate but were in disagreement with each other at points further in time. We can see that with event detection, the solutions are all in agreement at the default tolerances even at points further in time. We also see, in Table $\ref{tab:state_discontinuity_matlab}$, that the use of event detection is also more efficient than the computation without event detection.
+Both $ode45$ and $ode15s$ have an event detection capability. The root functions need to set an input parameter to indicate that the root is terminal in order to allow a cold start to be performed. The root function signature in Matlab is 'function [value,isterminal,direction]] = g(t, y)', where the function returns an isterminal flag. This flag must be set to 1. We applied event detection to solve the problem with the solvers in the Matlab environment and the results are shown in Figure $\ref{fig:solve_state_discontinuity_matlab}$. We remember that the solutions in Matlab without event detection were surprisingly accurate but were in disagreement with each other at points further in time. We can see that with event detection, the solutions are all in agreement at the default tolerances even at points further in time. We also see, in Table $\ref{tab:state_discontinuity_matlab}$, that the use of event detection is also more efficient than the computation without event detection.
 
 \begin{table}[h]
-\caption {Efficiency data for Matlab state-dependent discontinuity model - number of function evaluations} \label{tab:state_discontinuity_matlab}
+\caption {Efficiency data for Matlab state-dependent discontinuity model - number of function evaluations.} \label{tab:state_discontinuity_matlab}
 \begin{center}
 \begin{tabular}{ c c c c } 
 method & no event & no event with sharp tol. & with event detection \\ 
@@ -389,14 +383,14 @@ In this section, we use the R version of LSODA at multiple tolerances. We set bo
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_lsoda_no_event_R}
-\caption{State dependent discontinuity model tolerance study on the R version of LSODA without event detection}
+\caption{State dependent discontinuity model tolerance study on the R version of LSODA without event detection.}
 \label{fig:tolerance_state_lsoda_no_event_R}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_lsoda_with_event_R}
-\caption{State dependent discontinuity model tolerance study on the R version of LSODA with event detection}
+\caption{State dependent discontinuity model tolerance study on the R version of LSODA with event detection.}
 \label{fig:tolerance_state_lsoda_with_event_R}
 \end{figure}
 
@@ -405,7 +399,7 @@ Figure $\ref{fig:tolerance_state_lsoda_no_event_R}$ shows that LSODA without eve
 From Figure $\ref{fig:tolerance_state_lsoda_with_event_R}$, we can see the clear advantage of using event detection. Event detection allows us to use tolerances of $10^{-3}$ and sharper to get reasonable results while the computation without event detection failed to yield reasonably accurate results even at a tolerance of $10^{-13}$. We also analyze the differences in efficiency between the two modes of operation of LSODA in Table $\ref{tab:tolerance_state_discontinuity_lsoda_R}$.
 
 \begin{table}[h]
-\caption {The R version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_lsoda_R} 
+\caption {The R version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_lsoda_R} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no event detection & with event detection \\
@@ -429,14 +423,14 @@ In this section, we use the Python version of LSODA at multiple tolerances to se
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_lsoda_no_event_py}
-\caption{State dependent discontinuity model tolerance study on the Python version of LSODA without event detection}
+\caption{State dependent discontinuity model tolerance study on the Python version of LSODA without event detection.}
 \label{fig:tolerance_state_lsoda_no_event_py}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_lsoda_with_event_py}
-\caption{State dependent discontinuity model tolerance study on the Python version of LSODA with event detection}
+\caption{State dependent discontinuity model tolerance study on the Python version of LSODA with event detection.}
 \label{fig:tolerance_state_lsoda_with_event_py}
 \end{figure}
 
@@ -447,7 +441,7 @@ From Figures $\ref{fig:tolerance_state_lsoda_with_event_py}$ and $\ref{fig:toler
 We analyse the efficiency of the computations in Table $\ref{tab:tolerance_state_discontinuity_lsoda_py}$. We must note that this analysis is unfair as the computation without event detection does not give an accurate solution to the problem. Still, we will see that the event detection computation uses fewer function evaluations while getting a more accurate answer.
 
 \begin{table}[h]
-\caption {The Python version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_lsoda_py} 
+\caption {The Python version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_lsoda_py} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no event detection & with event detection \\
@@ -470,14 +464,14 @@ We perform the same experiment in Scilab. We set the absolute and relative toler
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_lsoda_no_event_sci}
-\caption{State dependent discontinuity model tolerance study on the Scilab version of LSODA without event detection}
+\caption{State dependent discontinuity model tolerance study on the Scilab version of LSODA without event detection.}
 \label{fig:tolerance_state_lsoda_no_event_sci}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_lsoda_with_event_sci}
-\caption{State dependent discontinuity model tolerance study on the Scilab version of LSODA with event detection}
+\caption{State dependent discontinuity model tolerance study on the Scilab version of LSODA with event detection.}
 \label{fig:tolerance_state_lsoda_with_event_sci}
 \end{figure}
 
@@ -486,7 +480,7 @@ Again, Figure $\ref{fig:tolerance_state_lsoda_no_event_sci}$ exposes the behavio
 From Figure $\ref{fig:tolerance_state_lsoda_with_event_sci}$, we can see that the use of the event detection allows us to obtain a correctly oscillating solution. We note however that the solution still has 13 peaks as opposed to 18 peaks at all the different tolerances and thus that they are not the same as the ones obtained in the other platforms. As mentioned previously, we leave this issue for investigation as future work.
 
 \begin{table}[h]
-\caption {The Scilab version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_lsoda_scilab} 
+\caption {The Scilab version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_lsoda_scilab} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no event detection & with event detection \\
@@ -515,14 +509,14 @@ The R version of DOPRI5 does not have event detection but we still perform the e
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_no_event_R}
-\caption{State dependent discontinuity model tolerance study on the R version of DOPRI5 without event detection}
+\caption{State dependent discontinuity model tolerance study on the R version of DOPRI5 without event detection.}
 \label{fig:tolerance_state_rk45_no_event_R}
 \end{figure}
 
 From Figure $\ref{fig:tolerance_state_rk45_no_event_R}$, we see that DOPRI5 applied to the same problem with different tolerances, gives significantly different solutions. We then report the efficiency data for this case in Table $\ref{tab:tolerance_state_discontinuity_rk45_R}$. Table $\ref{tab:tolerance_state_discontinuity_rk45_R}$ shows the number of function evaluations the `ode45' solver uses. As it does not have event detection, unlike the equivalent solvers in Python and Matlab, we cannot compare how the number of function evaluations differs with and without event detection. However, looking at the efficiency data of the Runge-Kutta pairs in the other environments and with R's LSODA solver, we can argue that it too will use fewer function evaluations with event detection (should this be provided at some point) than without.
 
 \begin{table}[h]
-\caption {The R version of DOPRI5 applied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_rk45_R} 
+\caption {The R version of DOPRI5 applied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_rk45_R} 
 \begin{center}
 \begin{tabular}{ c c }
 tolerance & no event detection \\
@@ -544,21 +538,21 @@ We perform the same experiment in Python. The Python version of DOPRI5 does have
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_no_event_py}
-\caption{State dependent discontinuity model tolerance study on the Python version of DOPRI5 without event detection}
+\caption{State dependent discontinuity model tolerance study on the Python version of DOPRI5 without event detection.}
 \label{fig:tolerance_state_rk45_no_event_py}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_with_event_py}
-\caption{State dependent discontinuity model tolerance study on the Python version of DOPRI5 with event detection}
+\caption{State dependent discontinuity model tolerance study on the Python version of DOPRI5 with event detection.}
 \label{fig:tolerance_state_rk45_with_event_py}
 \end{figure}
 
 In Figure $\ref{fig:tolerance_state_rk45_no_event_py}$ corresponding to the case with no event detection, we can see that even at sharp tolerances, the solver is not able to compute a reasonably accurate solution. In contrast, in Figure $\ref{fig:tolerance_state_rk45_with_event_py}$, which corresponds to the case when we use event detection, the code can use very coarse tolerances. We can see that a tolerance of $10^{-4}$ is sharp enough to solve the given problem accurately; the blurring that occurs is due to the coarser tolerances. We present the efficiency data in Table $\ref{tab:tolerance_state_discontinuity_rk45_py}$ to show how the code with event detection is also far more efficient.
 
 \begin{table}[h]
-\caption {The Python version of DOPRI5 apllied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_rk45_py} 
+\caption {The Python version of DOPRI5 apllied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_rk45_py} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no event detection & with event detection \\
@@ -582,12 +576,12 @@ The Scilab version of `rkf' can only integrate up to time 90 as it has a hard ca
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_no_event_sci}
-\caption{State dependent discontinuity model tolerance study on the Scilab version of RKF45 without event detection}
+\caption{State dependent discontinuity model tolerance study on the Scilab version of RKF45 without event detection.}
 \label{fig:tolerance_state_rk45_no_event_sci}
 \end{figure}
 
 \begin{table}[h]
-\caption {The Scilab version of RKF45 applied to state-dependent discontinuity model tolerance study - number of function evaluations} \label{tab:tolerance_state_discontinuity_rk45_scilab} 
+\caption {The Scilab version of RKF45 applied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_rk45_scilab} 
 \begin{center}
 \begin{tabular}{ c c }
 tolerance & no event detection \\ 
@@ -608,7 +602,7 @@ We apply different tolerances to the state problem with and without event detect
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_no_event_matlab}
-\caption{State dependent discontinuity model tolerance study on the Matlab version of DOPRI5 without event detection}
+\caption{State dependent discontinuity model tolerance study on the Matlab version of DOPRI5 without event detection.}
 \label{fig:tolerance_state_rk45_no_event_matlab}
 \end{figure}
 
@@ -617,13 +611,13 @@ From Figure $\ref{fig:tolerance_state_rk45_no_event_matlab}$, we can see that th
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/tolerance_state_rk45_with_event_matlab}
-\caption{State dependent discontinuity model tolerance study on the Matlab version of DOPRI5 with event detection}
+\caption{State dependent discontinuity model tolerance study on the Matlab version of DOPRI5 with event detection.}
 \label{fig:tolerance_state_rk45_with_event_matlab}
 \end{figure}
 In Figure $\ref{fig:tolerance_state_rk45_with_event_matlab}$, when event detection is employed, we can see that the computations corresponding to most tolerances give solutions that are in agreement. A tolerance of 0.1 now follows the correct pattern but is not in agreement with the other tolerances at further points in time. For tolerances of $10^{-2}$ and sharper, we get accurate solutions.
 
 \begin{table}[h]
-\caption {The Matlab version of DOPRI5 applied to state-dependent discontinuity model tolerance study - number of function evaluations} 
+\caption {The Matlab version of DOPRI5 applied to state-dependent discontinuity model tolerance study - number of function evaluations.} 
 \label{tab:tolerance_state_discontinuity_rk45_matlab} 
 \begin{center}
 \begin{tabular}{ c c c }
@@ -642,3 +636,5 @@ tolerance & no event detection & with event detection \\
 
 Table $\ref{tab:tolerance_state_discontinuity_rk45_matlab}$, although being an unfair comparison since the solver without event detection did not give accurate solutions, shows that solving the problem without event detection is also less efficient. At the tolerance of 0.1, the smaller number of function evaluations for the solver without event detection is not relevant since the solution at a tolerance of 0.1 is very inaccurate. At all the other tolerances, the code with event detection is both more accurate and more efficient, usually using less than half the number of function evaluations.
 
+\subsection{Summary for the state-dependent discontinuity Covid-19 ODE model}
+In this section, we have seen that the ODE solvers were not able to solve the state-dependent discontinuity Covid-19 ODE model even at sharp tolerance. However we have shown that we can use event detection to perform cold starts at the discontinuities. Using event detection improved both the accuracy and the efficiency of the solvers.

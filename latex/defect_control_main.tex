@@ -50,7 +50,7 @@ as shown in Figure $\ref{fig:solution_problem1}$.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/solution_problem1}
-\caption{Solution to the first ODE problem}
+\caption{Solution to the first ODE problem.}
 \label{fig:solution_problem1}
 \end{figure}
 
@@ -69,7 +69,7 @@ as shown in Figure $\ref{fig:solution_problem2}$.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/solution_problem2}
-\caption{Solution to the second ODE problem}
+\caption{Solution to the second ODE problem.}
 \label{fig:solution_problem2}
 \end{figure}
 
@@ -88,7 +88,7 @@ as shown in Figure $\ref{fig:solution_problem3}$.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/solution_problem3}
-\caption{Solution to the third ODE problem}
+\caption{Solution to the third ODE problem.}
 \label{fig:solution_problem3}
 \end{figure}
 
@@ -100,7 +100,7 @@ An issue with this approach is that the error estimate is computed only for the 
 
 For this interpolant to provide a solution within the user provided tolerance, the theoritical interpolation error must be less than or equal to the error of the data being fitted. Thus we would ideally use an interpolant of at least order $O(h^{p})$ if the discrete solution is of order $O(h^{p})$. However, for high order methods, it becomes too expensive to construct an interpolant of the appropriate order. IVODE solvers will thus usually compromise and employ a lower order interpolant, that is less costly, but deliver less accuracy. 
 
-Therefore, we are not guaranteed that the continuous approximate solution is error-controlled and not guaranteed that the interpolation error will not affect the continuous solution approximation. Below are some results obtained when Runge-Kutta solvers are applied to the 3 test problems introduced in the previous section. The solvers apply error control to the discrete numerical solution at the end of the step but no error control of any type to the continuous numerical solution across the step.
+Therefore, we are not guaranteed that the continuous approximate solution is error-controlled and not guaranteed that the interpolation error will not affect the continuous solution approximation. Figures $\ref{fig:no_middle_step_error_control_p2_dop853}$ and $\ref{fig:no_middle_step_error_control_p3_rk45}$ show some results obtained when Runge-Kutta solvers are applied to some of the test problems introduced in the previous section. In these figures, we plot the global error of the numerical solution, this is the difference between the exact solution and the computed solution over the time domain. The solvers apply error control to the discrete numerical solution at the end of the step but no error control of any type to the continuous numerical solution across the step.
 
 \begin{figure}[H]
 \centering
@@ -126,16 +126,16 @@ In this chapter, we attempt to provide an efficient way of constructing interpol
 \label{section:crk_related_work}
 In this section we introduce the `defect' of a continuous approximate solution of an ODE and explain how the control of that defect provides a type of error control of the continuous numerical solution.
 
-In the context of numerical ODEs, the defect, denoted by $\delta(t)$,  is the amount by which the continuous numerical solution, $u(t)$, fails to satify the ODE. When the ODE is $y'(t) = f(t, y(t))$, the defect is 
+In the context of numerical ODEs, the defect, denoted by $\delta(t)$,  is the amount by which the continuous numerical solution, $u(t)$, fails to satisfy the ODE. When the ODE is $y'(t) = f(t, y(t))$, the defect is 
 
 \begin{equation}
 \delta(t) = |u'(t) - f(t, u(t))|.
 \end{equation}
 
-Calculating the defect requires that the continuous approximate solution computed by the solver to also be differentiable. The idea of defect control is relatively new as differentiable solutions to ODEs can be expensive to calculate. Several investigations in this direction are outlined in \cites{MR2600928}{MR1950917}{MR1803189}{MR1239829}{MR997658}{MR996053}. In this work, the defect control method employs a continuous RK method for which the number of stages grows exponentially with the order of the method as shown in Table $\ref{tab:crk_nstages}$. In this paper we will compute a defect controlled continuous solution with no additional cost. A typical Runge-Kutta solver will thus be able to employ the usual number of stages required for the discrete Runge-Kutta method and still produce an accurate continuous solution.
+Calculating the defect requires that the continuous approximate solution computed by the solver to also be differentiable. The idea of defect control is relatively new as differentiable solutions to ODEs can be expensive to calculate. Several investigations in this direction are outlined in \cites{MR2600928}{MR1950917}{MR1803189}{MR1239829}{MR997658}{MR996053}. In this work, the defect control method employs a continuous RK method for which the number of stages grows exponentially with the order of the method as shown in Table $\ref{tab:crk_nstages}$. In this chapter, we will compute a defect controlled continuous solution with no additional cost. A typical Runge-Kutta solver will thus be able to employ the usual number of stages required for the discrete Runge-Kutta method and still produce an accurate continuous solution.
 
 \begin{table}[h]
-\caption {Number of stages for discrete vs continuous RK method} 
+\caption {Number of stages for discrete vs continuous RK method.} 
 \label{tab:crk_nstages}
 \begin{center}
 \begin{tabular}{ c c c c} 
@@ -290,7 +290,7 @@ Figures $\ref{fig:rk4_with_hb4_p3_global_defect}$, $\ref{fig:rk4_with_hb4_p3_glo
 We now present the number of steps that were taken by the solver to solve each problem along with the number of successful steps.
 
 \begin{table}[h]
-\caption {Number of steps taken by RK4 using defect control with HB4} \label{tab:rk4_with_hb4_nsteps}
+\caption {Number of steps taken by RK4 using defect control with HB4.} \label{tab:rk4_with_hb4_nsteps}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & successful steps & total steps \\ 
@@ -422,7 +422,7 @@ Figures $\ref{fig:rk4_with_hb6_p3_global_defect}$, $\ref{fig:rk4_with_hb6_p3_glo
 We note that the defects are not as clean they were in the case with HB4. There are two peaks most of the time at around $0.4h$ and $0.8h$ but as was the case in the third problem, the peak sometimes appears at $0.6h$. However, we can see that the defect is still being controlled. We will also see that it is twice as fast as it uses around half the number of steps as HB4.
 
 \begin{table}[h]
-\caption {Number of steps taken by RK4 when modified to do defect control with HB6 vs HB4} \label{tab:rk4_with_hb6_nsteps}
+\caption {Number of steps taken by RK4 when modified to do defect control with HB6 vs HB4.} \label{tab:rk4_with_hb6_nsteps}
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & succ. steps HB4 & succ. steps HB6 & nsteps HB4  & nsteps HB6 \\ 
@@ -443,7 +443,7 @@ In Figure $\ref{fig:hb6_alpha_v_shape}$, we show the results of a simple experim
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/hb6_alpha_v_shape}
-\caption{HB6 maximum defect based on different values of alpha}
+\caption{HB6 maximum defect based on different values of $\alpha$.}
 \label{fig:hb6_alpha_v_shape}
 \end{figure}
 
@@ -545,7 +545,7 @@ We now perform a simple experiment to show that the resultant interpolant is mor
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/hb8_second_scheme_alpha_beta_test}
-\caption{HB8 Second Scheme - maximum order of accuracy based on different values of alpha and beta}
+\caption{HB8 Second Scheme - maximum order of accuracy based on different values of alpha and beta.}
 \label{fig:hb8_second_scheme_alpha_beta_test}
 \end{figure}
 
@@ -562,14 +562,14 @@ Figures $\ref{fig:rk4_with_hb8_p1_global_defect}$, $\ref{fig:rk4_with_hb8_p1_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb8_p1_global_defect}
-\caption{Defect across the entire domain for RK4 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK4 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk4_with_hb8_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb8_p1_global_error}
-\caption{Global Error for RK4 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK4 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk4_with_hb8_p1_global_error}
 \end{figure}
 
@@ -586,14 +586,14 @@ Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb8_p2_global_defect}
-\caption{Defect across the entire domain for RK4 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK4 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk4_with_hb8_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb8_p2_global_error}
-\caption{Global Error for RK4 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK4 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk4_with_hb8_p2_global_error}
 \end{figure}
 
@@ -611,14 +611,14 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb8_p3_global_defect}
-\caption{Defect across the entire domain of RK4 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain of RK4 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk4_with_hb8_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb8_p3_global_error}
-\caption{Global Error of RK4 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error of RK4 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk4_with_hb8_p3_global_error}
 \end{figure}
 
@@ -632,7 +632,7 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 We note that the defects are not as clean they were in the case with HB4. There are two peaks most of the time at around $0.3h$ and $0.8h$ but as was the case for the third problem in the previous tests, the peak sometimes appears at $0.6h$. However, we can see that the defect is still being controlled and thus that the error is still being controlled. We will also see that it is twice as fast as it uses around half the number of steps as HB4.
 
 \begin{table}[h]
-\caption {Number of steps taken by RK4 when modified to do defect control with HB8 vs when modified with HB6} \label{tab:rk4_with_hb8_nsteps}
+\caption {Number of steps taken by RK4 when modified to do defect control with HB8 vs when modified with HB6.} \label{tab:rk4_with_hb8_nsteps}
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & succ. steps HB8 & succ. steps HB6 & nsteps HB8 & nsteps HB6 \\ 
@@ -661,14 +661,14 @@ Figures $\ref{fig:rk6_with_hb6_p1_global_defect}$, $\ref{fig:rk6_with_hb6_p1_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_p1_global_defect}
-\caption{Defect across the entire domain for RK6 with HB6 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK6 with HB6 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb6_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_p1_global_error}
-\caption{Global Error for RK6 with HB6 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK6 with HB6 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb6_p1_global_error}
 \end{figure}
 
@@ -685,14 +685,14 @@ Figures $\ref{fig:rk6_with_hb6_p2_global_defect}$, $\ref{fig:rk6_with_hb6_p2_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_p2_global_defect}
-\caption{Defect across the entire domain for RK6 with HB6 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK6 with HB6 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb6_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_p2_global_error}
-\caption{Global Error for RK6 with HB6 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK6 with HB6 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb6_p2_global_error}
 \end{figure}
 
@@ -717,14 +717,14 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_p3_global_defect}
-\caption{Defect across the entire domain for RK6 with HB6 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK6 with HB6 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb6_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_p3_global_error}
-\caption{Global Error for RK6 with HB6 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK6 with HB6 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb6_p3_global_error}
 \end{figure}
 
@@ -750,14 +750,14 @@ Figures $\ref{fig:rk6_with_hb8_p1_global_defect}$, $\ref{fig:rk6_with_hb8_p1_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb8_p1_global_defect}
-\caption{Defect across the entire domain for RK6 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK6 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb8_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb8_p1_global_error}
-\caption{Global Error for RK6 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK6 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb8_p1_global_error}
 \end{figure}
 
@@ -775,14 +775,14 @@ Figures $\ref{fig:rk6_with_hb8_p2_global_defect}$, $\ref{fig:rk6_with_hb8_p2_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb8_p2_global_defect}
-\caption{Defect across the entire domain for RK6 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK6 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb8_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb8_p2_global_error}
-\caption{Global Error for RK6 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK6 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb8_p2_global_error}
 \end{figure}
 
@@ -808,14 +808,14 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb8_p3_global_defect}
-\caption{Defect across the entire domain for RK6 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK6 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb8_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb8_p3_global_error}
-\caption{Global Error for RK6 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK6 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk6_with_hb8_p3_global_error}
 \end{figure}
 
@@ -834,7 +834,7 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK6 when modified to do defect control with HB8 vs when modified with HB6} \label{tab:rk6_with_hb6_vs_hb8_nsteps}
+\caption {Number of steps taken by RK6 when modified to do defect control with HB8 vs when modified with HB6.} \label{tab:rk6_with_hb6_vs_hb8_nsteps}
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & succ. steps HB8 & succ. steps HB6 & nsteps HB8 & nsteps HB6 \\ 
@@ -859,14 +859,14 @@ Figures $\ref{fig:rk8_with_hb8_p1_global_defect}$, $\ref{fig:rk8_with_hb8_p1_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_p1_global_defect}
-\caption{Defect across the entire domain for RK8 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK8 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk8_with_hb8_p1_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_p1_global_error}
-\caption{Global Error for RK8 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK8 with HB8 on problem 1 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk8_with_hb8_p1_global_error}
 \end{figure}
 
@@ -883,14 +883,14 @@ Figures $\ref{fig:rk8_with_hb8_p2_global_defect}$, $\ref{fig:rk8_with_hb8_p2_glo
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_p2_global_defect}
-\caption{Defect across the entire domain for RK8 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK8 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk8_with_hb8_p2_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_p2_global_error}
-\caption{Global Error for RK8 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK8 with HB8 on problem 2 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk8_with_hb8_p2_global_error}
 \end{figure}
 
@@ -916,14 +916,14 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_p3_global_defect}
-\caption{Defect across the entire domain for RK8 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Defect across the entire domain for RK8 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk8_with_hb8_p3_global_defect}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_p3_global_error}
-\caption{Global Error for RK8 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$}
+\caption{Global Error for RK8 with HB8 on problem 3 at an absolute tolerance of $10^{-6}$.}
 \label{fig:rk8_with_hb8_p3_global_error}
 \end{figure}
 
@@ -942,7 +942,7 @@ We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK8 when modified to do defect control with HB8} \label{tab:rk8_with_hb8_nsteps}
+\caption {Number of steps taken by RK8 when modified to do defect control with HB8.} \label{tab:rk8_with_hb8_nsteps}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & succ. steps & nsteps \\ 
@@ -1041,7 +1041,7 @@ Figures $\ref{fig:static_alpha_rk4_with_hb6_p3_global_defect}$, $\ref{fig:static
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK4 when modified to do defect control with HB6 when we fix $\alpha$ at 1 vs when we allow it to fluctuate during the integration} \label{tab:rk4_with_hb6_static_vs_variable_alpha}
+\caption {Number of steps taken by RK4 when modified to do defect control with HB6 when we fix $\alpha$ at 1 vs when we allow it to fluctuate during the integration.} \label{tab:rk4_with_hb6_static_vs_variable_alpha}
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & succ. steps & $\alpha$=1 succ. & nsteps & $\alpha$=1 nsteps \\ 
@@ -1143,7 +1143,7 @@ Figures $\ref{fig:static_alpha_rk6_with_hb8_p3_global_defect}$, $\ref{fig:static
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK6 when modified to do defect control with HB8 with $\alpha$ and $\beta$ forcibly at 1 and variable $\alpha$ and $\beta$} \label{tab:rk6_with_hb8_static_vs_variable}
+\caption {Number of steps taken by RK6 when modified to do defect control with HB8 with $\alpha$ and $\beta$ forcibly at 1 and variable $\alpha$ and $\beta$.} \label{tab:rk6_with_hb8_static_vs_variable}
 \begin{center}
 \begin{tabular}{ c c c c c } 
 Problem & succ. & params=1 succ. steps & nsteps & params=1 nsteps \\ 

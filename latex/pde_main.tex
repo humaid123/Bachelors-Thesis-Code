@@ -33,7 +33,7 @@ Thus, when a PDE solver integrates through a discontinuity, it repeatedly reduce
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_thrashing}
-\caption{Thrashing in the PDE context}
+\caption{Thrashing in the PDE context.}
 \label{fig:thrashing_pde}
 \end{figure}
 
@@ -102,7 +102,7 @@ where the diffusivity parameters $maxD_s$ and $minD_s$ are 0.8 and 0.01, respect
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_D_s}
-\caption{Plot of the diffusion coefficient $D_S(x)$}
+\caption{Plot of the diffusion coefficient $D_S(x)$.}
 \label{fig:pde_D_s}
 \end{figure}
 
@@ -121,7 +121,7 @@ These initial conditions represent the case where there is a relatively small gr
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_I_0}
-\caption{Plot of the initial condition I(x, 0)}
+\caption{Plot of the initial condition I(x, 0).}
 \label{fig:pde_I_0}
 \end{figure}
 
@@ -164,7 +164,7 @@ This change in the $\beta$ parameter introduces a discontinuity in the model, wh
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_time_disc_naive}
-\caption{Simple treatment of the time dependent discontinuity Covid-19 Model (with a tolerance of $10^{-6}$)}
+\caption{Simple treatment of the time dependent discontinuity Covid-19 Model (with a tolerance of $10^{-6}$).}
 \label{fig:pde_time_disc_naive}
 \end{figure}
 
@@ -204,7 +204,7 @@ pde_solver(solution, model_after, tspan_after)
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_time_disc_disc_hand}
-\caption{Discontinuity handling for time discontinuity problem (with a tolerance of $10^{-6}$)}
+\caption{Discontinuity handling for time discontinuity problem (with a tolerance of $10^{-6}$).}
 \label{fig:pde_time_disc_disc_hand}
 \end{figure}
 
@@ -234,7 +234,7 @@ Figures $\ref{fig:pde_time_disc_bacolikr_naive_tol}$ shows the solutions obtaine
 We note that both for the case with discontinuity handling and for the case without discontinuity handling, the solutions computed using a tolerance of $10^{-1}$ are inaccurate. We note that surprisingly, the discontinuity handling solution at a tolerance of $10^{-3}$ is more accurate without discontinuity handling than with. We explain this fact by noting that the step-size at a tolerance of $10^{-3}$ was much smaller than required in the case without discontinuity handling than in the case with discontinuity handling. Thus, although the solution is more accurate, the solver without discontinuity handling is inefficient as it could have satisfied this tolerance with a much larger step-size. This can be seen in Table $\ref{tab:pde_time_nfev}$ where we can see that the solver without discontinuity handling performs about 2500 more function evaluations than required. For all tolerances sharper than $10^{-3}$, the solutions are all reasonably accurate.
 
 \begin{table}[h]
-\caption {PDE time discontinuity tolerance study - number of function evaluations} 
+\caption {PDE time discontinuity tolerance study - number of function evaluations.} 
 \label{tab:pde_time_nfev}
 \begin{center}
 \begin{tabular}{ c c c } 
@@ -320,7 +320,7 @@ Figure $\ref{fig:pde_state_disc_naive_400vs1000}$ shows the integral value of $E
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_naive_400vs1000}
-\caption{Integral value of $E(x, t)$ from a simple treatment of the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 400 and 1000 time intervals, compared with a high accuracy solution}
+\caption{Integral value of $E(x, t)$ from a simple treatment of the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 400 and 1000 time intervals, compared with a high accuracy solution.}
 \label{fig:pde_state_disc_naive_400vs1000}
 \end{figure}
 
@@ -333,7 +333,7 @@ One idea to address this issue would be to use an exceedingly large number of ti
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_naive_1000vs10000}
-\caption{Integral value of $E(x, t)$ from a simple treatment of the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 1000 and 10000 time intervals, compared with a high accuracy solution}
+\caption{Integral value of $E(x, t)$ from a simple treatment of the state-dependent discontinuity problem with a tolerance of $10^{-6}$ using 1000 and 10000 time intervals, compared with a high accuracy solution.}
 \label{fig:pde_state_disc_naive_1000vs10000}
 \end{figure}
 
@@ -394,7 +394,7 @@ Figure $\ref{fig:pde_state_disc_event_tol_6}$ shows the solution we obtain using
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_event_tol_6}
-\caption{Integral value plot of the event detection solution to state-dependent discontinuity problem with a tolerance of $10^{-6}$}
+\caption{Integral value plot of the event detection solution to state-dependent discontinuity problem with a tolerance of $10^{-6}$.}
 \label{fig:pde_state_disc_event_tol_6}
 \end{figure}
 
@@ -406,14 +406,14 @@ Figure $\ref{fig:pde_state_disc_event_tol_9}$ shows the result of solving this p
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_event_tol_9}
-\caption{Integral value plot of the event detection solution to state-dependent discontinuity problem with a tolerance of $10^{-9}$}
+\caption{Integral value plot of the event detection solution to state-dependent discontinuity problem with a tolerance of $10^{-9}$.}
 \label{fig:pde_state_disc_event_tol_9}
 \end{figure}
 
 We now note that both solutions with event detection, even the one computed using a tolerance of $10^{-6}$ are much more accurate than the simple solutions that were computed using manual selection of the time intervals. Table $\ref{tab:pde_state_nfev}$ shows the number of function evaluations. 
 
 \begin{table}[h]
-\caption {PDE state discontinuity model - number of function evaluations} 
+\caption {PDE state discontinuity model - number of function evaluations.} 
 \label{tab:pde_state_nfev}
 \begin{center}
 \begin{tabular}{ c c } 
@@ -442,14 +442,14 @@ In this section, we perform a tolerance study on the different solutions to the 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_bacolikr_naive_1000}
-\caption{Integral value plot of simple treatment of the state-dependent discontinuity problem at several tolerances using 1000 time intervals}
+\caption{Integral value plot of simple treatment of the state-dependent discontinuity problem at several tolerances using 1000 time intervals.}
 \label{fig:pde_state_disc_tol_bacolikr_naive_1000}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_bacolikr_naive_10000}
-\caption{Integral value plot of simple treatment of the state-dependent discontinuity problem at several tolerances using 10000 time intervals}
+\caption{Integral value plot of simple treatment of the state-dependent discontinuity problem at several tolerances using 10000 time intervals.}
 \label{fig:pde_state_disc_tol_bacolikr_naive_10000}
 \end{figure}
 
@@ -459,7 +459,7 @@ Figures $\ref{fig:pde_state_disc_tol_bacolikr_naive_1000}$ and $\ref{fig:pde_sta
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/pde_state_disc_tol_event}
-\caption{Integral value plot of event detection solutions to state-dependent discontinuity problem at several tolerances}
+\caption{Integral value plot of event detection solutions to state-dependent discontinuity problem at several tolerances.}
 \label{fig:pde_state_disc_tol_event}
 \end{figure}
 
@@ -467,7 +467,7 @@ With event detection, the solutions oscillate correctly between 10000 and 30000 
 
 \paragraph{Efficiency of the solvers}
 \begin{table}[h]
-\caption {State-dependent discontinuity model tolerance study - number of function evaluations} 
+\caption {State-dependent discontinuity model tolerance study - number of function evaluations.} 
 \label{tab:pde_state_tol_study}
 \begin{center}
 \begin{tabular}{ c c c c } 
@@ -483,7 +483,7 @@ tolerance & simple 1000 & simple 10000 & with event detection \\
 \end{table}
 
 \begin{table}[h]
-\caption {Number of times the integration routine is called using event detection for the state-dependent discontinuity problem} 
+\caption {Number of times the integration routine is called using event detection for the state-dependent discontinuity problem.} 
 \label{tab:pde_state_tol_num_integrations}
 \begin{center}
 \begin{tabular}{ c c } 
