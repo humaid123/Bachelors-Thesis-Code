@@ -1,4 +1,5 @@
 
+from cProfile import label
 from HB8_second_scheme import HB
 from math import exp, log10, sqrt, sin, cos
 import matplotlib.pyplot as plt
@@ -79,25 +80,33 @@ def perfect_convergence(alpha, beta, model, solution, model_num):
         hs = [-log10(convergence[0]) for convergence in convergences]
         max_defects = [log10(abs(convergence[1])) for convergence in convergences]
         max_defects_horner = [log10(abs(convergence[2])) for convergence in convergences]
-        plt.figure()
-        plt.plot(hs, max_defects, label="h vs max_defect")
-        plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
-        plt.ylabel("log of defect")
-        plt.xlabel("log of hs")
-        plt.legend()
-        plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, beta={beta}, model={model_num}")
-        plt.show()
-
-        monitor.print()
+        # plt.figure()
+        # plt.plot(hs, max_defects, label="h vs max_defect")
+        # plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
+        # plt.ylabel("log of defect")
+        # plt.xlabel("log of hs")
+        # plt.legend()
+        # plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, beta={beta}, model={model_num}")
+        # plt.show()
+        # monitor.print()
 
         # print("h", "\t\t", "max_defect", "\t\t", "log(h)", "\t\t", "log(defect)")
         # for (h, max_defect) in convergences:
         #    print(h, "\t\t", max_defect, "\t\t", log10(h), "\t\t", log10(max_defect)) 
+        return (hs, max_defects)
 
 def experiments(model, solution, model_num):
-    for alpha in [1, 2, 1/2, 2**8, 1/(2**8)]:
-        for beta in [1, 2, 1/2, 2**8, 1/(2**8)]:
-            perfect_convergence(alpha, beta, model, solution, model_num)
+    plt.figure()
+    for alpha in [1, 2, 1/2, 4]:
+        for beta in [1, 2, 1/2, 4]:
+            hs, max_defects = perfect_convergence(alpha, beta, model, solution, model_num)
+            plt.plot(hs, max_defects, label=f"alpha={alpha}, beta={beta}")
+    plt.ylabel("log of defect")
+    plt.xlabel("-log of hs")
+    plt.legend(loc="lower right")
+    plt.title(f"h vs max defect")
+    plt.show()
+
 
 def model1(t, y):
     return [(-1/2) * y**3]

@@ -22,7 +22,7 @@ class ContinuousSolution:
         first_hb = self.interps[0]
         if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
             return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
+        print(f"ERROR in eval: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
         return -1
 
     def prime(self, x) -> float:
@@ -34,7 +34,7 @@ class ContinuousSolution:
         if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
             return first_hb.prime(x)
         
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
+        print(f"ERROR in prime: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
         return -1
     
     def append(self, interp) -> None:

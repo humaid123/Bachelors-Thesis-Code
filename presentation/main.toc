@@ -1,4 +1,0 @@
-\beamer@sectionintoc {1}{Covid19 modelling}{2}{0}{1}
-\beamer@subsectionintoc {1}{1}{time-dependent discontinuity}{5}{0}{1}
-\beamer@subsectionintoc {1}{2}{State-dependent discontinuity}{12}{0}{1}
-\beamer@sectionintoc {2}{Efficient Defect control using multistep interpolants}{19}{0}{2}

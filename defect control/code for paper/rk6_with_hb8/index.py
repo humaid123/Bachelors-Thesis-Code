@@ -2,7 +2,7 @@
 from math import sin, sqrt, exp, cos
 import matplotlib.pyplot as plt
 from rk6 import (
-    rk_defect_control_static_alpha_beta, 
+    rk_defect_control_static_alpha_beta_func_call, 
     # rk_defect_control_perfect_first_step_smooth, 
     rk_defect_control_perfect_first_step
 )
@@ -20,12 +20,11 @@ def create_t_eval(start, end, num_points = 100):
 # %%
 def experiment(model, y0, t_span, solution):
     t_eval = create_t_eval(t_span[0], t_span[1])
-    tol = 1e-12
-    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
+    tol = 1e-6
+    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
     # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
-    # (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha_beta(model, t_span, y0[0], tol, solution)
+    (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha_beta_func_call(model, t_span, y0[0], tol, solution)
     print("integration complete")
-"""
     # ====================================== figure of rk6 vs rk6_interps vs rk45
     # plt.figure()
     xs = [x[0] for x in res]
@@ -128,18 +127,17 @@ def experiment(model, y0, t_span, solution):
     # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
     plt.ylabel('scaled defects')
     plt.show()
-"""
 # %%
-t_span_1 = [0, 10]
-y0_1 = [1]
+# t_span_1 = [0, 10]
+# y0_1 = [1]
 
-def model1(t, y):
-    return [(-1/2) * y**3]
+# def model1(t, y):
+#     return [(-1/2) * y**3]
 
-def solution1(t):
-    return [1/sqrt(1+x) for x in t]
+# def solution1(t):
+#     return [1/sqrt(1+x) for x in t]
 
-experiment(model1, y0_1, t_span_1, solution1)
+# experiment(model1, y0_1, t_span_1, solution1)
 
 # # %%
 # t_span_2 = [0, 10]
@@ -154,16 +152,16 @@ experiment(model1, y0_1, t_span_1, solution1)
 # experiment(model2, y0_2, t_span_2, solution2)
 
 # %%
-t_span_3 = [0, 10]
-y0_3 = [1]
+# t_span_3 = [0, 10]
+# y0_3 = [1]
 
-def model3(t, y):
-    return [(1/4)*y*(1 - y/20)]
+# def model3(t, y):
+#     return [(1/4)*y*(1 - y/20)]
 
-def solution3(t):
-    return [20 / ( 1 + 19 * exp(-x/4) ) for x in t]
+# def solution3(t):
+#     return [20 / ( 1 + 19 * exp(-x/4) ) for x in t]
 
-experiment(model3, y0_3, t_span_3, solution3)
+# experiment(model3, y0_3, t_span_3, solution3)
 
 # # %%
 # t_span_4 = [0, 10]

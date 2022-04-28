@@ -25,7 +25,6 @@ def experiment(model, y0, t_span, solution):
     # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
     # (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha(model, t_span, y0[0], tol, solution)
     print("integration complete")
-"""
     # ====================================== figure of rk6 vs rk6_interps vs rk45
     # plt.figure()
     xs = [x[0] for x in res]
@@ -128,7 +127,6 @@ def experiment(model, y0, t_span, solution):
     # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
     plt.ylabel('scaled defects')
     plt.show()
-"""
 
 # %%
 t_span_1 = [0, 10]

@@ -1,0 +1,100 @@
+
+
+time disc
+======
+    naive
+    =====
+ BACOLIKR_TIME_2_a_-6_r_-6                                                                           nfev =       417505
+
+
+ BACOLIKR_TIME_2_a_-1_r_-1                                                                           nfev =        46650
+ BACOLIKR_TIME_2_a_-3_r_-3                                                                           nfev =        79220
+ BACOLIKR_TIME_2_a_-5_r_-5                                                                           nfev =       206980
+ BACOLIKR_TIME_2_a_-7_r_-7                                                                           nfev =       733210
+ BACOLIKR_TIME_2_a_-9_r_-9                                                                           nfev =      1904080
+ BACOLIKR_TIME_2_a_-11_r_-11                                                                         nfev =      7140875
+
+    with disc hand
+    =====
+     BACOLIKR_TIME_EVENT_2_a_-6_r_-6 nfev =       359755
+
+ BACOLIKR_TIME_EVENT_2_a_-1_r_-1 nfev =        55400
+ BACOLIKR_TIME_EVENT_2_a_-3_r_-3 nfev =        76750
+ BACOLIKR_TIME_EVENT_2_a_-5_r_-5 nfev =       208870
+ BACOLIKR_TIME_EVENT_2_a_-7_r_-7 nfev =       543850
+ BACOLIKR_TIME_EVENT_2_a_-9_r_-9 nfev =      1653830
+ BACOLIKR_TIME_EVENT_2_a_-11_r_-1nfev =      4979555
+
+
+state
+======
+    naive
+    =====
+    ntout = 200
+    =====
+ BACOLI_STATE_200_a_-6_rtol_-6                                                                       nfev =      1018455
+
+BACOLI_STATE_200_a_-1_rtol_-1                                                                       nfev =       103250
+ BACOLI_STATE_200_a_-3_rtol_-3                                                                       nfev =       259270
+ BACOLI_STATE_200_a_-5_rtol_-5                                                                       nfev =       746560
+ BACOLI_STATE_200_a_-7_rtol_-7                                                                       nfev =      1803130
+ BACOLI_STATE_200_a_-9_rtol_-9                                                                       nfev =      4912085
+ BACOLI_STATE_200_a_-11_rtol_-11                                                                     nfev =     15403350
+
+    ntout = 400
+    ====
+ BACOLI_STATE_400_a_-6_rtol_-6                                                                       nfev =      1,184,880
+
+ BACOLI_STATE_400_a_-1_rtol_-1                                                                       nfev =       104700
+ BACOLI_STATE_400_a_-3_rtol_-3                                                                       nfev =       239445
+ BACOLI_STATE_400_a_-5_rtol_-5                                                                       nfev =       736360
+ BACOLI_STATE_400_a_-7_rtol_-7                                                                       nfev =      2032330
+ BACOLI_STATE_400_a_-9_rtol_-9                                                                       nfev =      5236500
+ BACOLI_STATE_400_a_-11_rtol_-11                                                                     nfev =     16845765
+
+    ntout = 1000
+    ====
+ BACOLIKR_STATE_1000_a_-6_rtol_-6                                                                    nfev =      1,280,080
+
+ BACOLIKR_STATE_1000_a_-1_rtol_-1                                                                    nfev =       101250
+ BACOLIKR_STATE_1000_a_-3_rtol_-3                                                                    nfev =       290600
+ BACOLIKR_STATE_1000_a_-5_rtol_-5                                                                    nfev =       848080
+ BACOLIKR_STATE_1000_a_-7_rtol_-7                                                                    nfev =      2217610
+ BACOLIKR_STATE_1000_a_-9_rtol_-9                                                                    nfev =      6040485
+ BACOLIKR_STATE_1000_a_-11_rtol_-11                                                                  nfev =     16402140
+
+
+   ntout = 10000
+   ====
+    BACOLIKR_STATE_10000_a_-6_rtol_-6                                                                   nfev =      1272030
+    
+    BACOLIKR_STATE_10000_a_-1_rtol_-1                                                                   nfev =       112600
+    BACOLIKR_STATE_10000_a_-3_rtol_-3                                                                   nfev =       343410
+    BACOLIKR_STATE_10000_a_-5_rtol_-5                                                                   nfev =       862960
+    BACOLIKR_STATE_10000_a_-7_rtol_-7                                                                   nfev =      2215690
+    BACOLIKR_STATE_10000_a_-9_rtol_-9                                                                   nfev =      5811165
+    BACOLIKR_STATE_10000_a_-11_rtol_-11                                                                 nfev =     18508725
+
+with event
+===========
+
+ BACOLIKR_EVENT_STATE_a_-6_r_-6                                                                      nfev =      1, 937, 730
+
+ BACOLIKR_EVENT_STATE_a_-1_r_-1                                                                      nfev =       137300
+ BACOLIKR_EVENT_STATE_a_-3_r_-3                                                                      nfev =       376855
+ BACOLIKR_EVENT_STATE_a_-5_r_-5                                                                      nfev =      1052920
+ BACOLIKR_EVENT_STATE_a_-7_r_-7                                                                      nfev =      3217450
+ BACOLIKR_EVENT_STATE_a_-9_r_-9                                                                      nfev =      7915085
+ BACOLIKR_EVENT_STATE_a_-11_r_-11                                                                    nfev =     21256400
+
+with event with the number of times integration /root routine called
+======
+   BACOLIKR_EVENT_STATE_a_-6_r_-6                                                                      nfev =      1937730 n_times_called        2149
+
+   BACOLIKR_EVENT_STATE_a_-1_r_-1                                                                      nfev =       137300 n_times_called         420
+   BACOLIKR_EVENT_STATE_a_-3_r_-3                                                                      nfev =       376855 n_times_called         940
+   BACOLIKR_EVENT_STATE_a_-5_r_-5                                                                      nfev =      1052920 n_times_called        1634
+   BACOLIKR_EVENT_STATE_a_-7_r_-7                                                                      nfev =      3217450 n_times_called        3405
+   BACOLIKR_EVENT_STATE_a_-9_r_-9                                                                      nfev =      7915085 n_times_called        5059
+   BACOLIKR_EVENT_STATE_a_-11_r_-11                                                                    nfev =     21256400 n_times_called        9753
+

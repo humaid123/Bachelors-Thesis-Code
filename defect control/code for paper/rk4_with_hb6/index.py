@@ -2,7 +2,7 @@
 from math import sin, sqrt, exp, cos
 import matplotlib.pyplot as plt
 from rk4 import (
-    rk_defect_control_static_alpha, 
+    rk_defect_control_static_alpha_func_call, 
     # rk_defect_control_perfect_first_step_smooth, 
     rk_defect_control_perfect_first_step
 )
@@ -20,13 +20,13 @@ def create_t_eval(start, end, num_points = 100):
 # %%
 def experiment(model, y0, t_span, solution):
     t_eval = create_t_eval(t_span[0], t_span[1])
-    tol = 1e-12
-    (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
+    tol = 2.5e-12
+    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
     # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step_smooth(model, t_span, y0[0], tol, solution)
-    # (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha(model, t_span, y0[0], tol, solution)
+    (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha_func_call(model, t_span, y0[0], tol, solution)
     # print("derivs", derivs)
-    print("integration complete")
-"""
+    print("integration complete\n======================================================\n")
+
     # ====================================== figure of rk6 vs rk6_interps vs rk45
     # plt.figure()
     xs = [x[0] for x in res]
@@ -129,7 +129,7 @@ def experiment(model, y0, t_span, solution):
     # plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
     plt.ylabel('scaled defects')
     plt.show()
-"""
+
 
 # %%
 t_span_1 = [0, 10]

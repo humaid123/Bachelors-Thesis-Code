@@ -73,29 +73,50 @@ def perfect_convergence(alpha, model, solution, model_num):
 
         hs = [-log10(convergence[0]) for convergence in convergences]
         max_defects = [log10(abs(convergence[1])) for convergence in convergences]
-        max_defects_horner = [log10(abs(convergence[2])) for convergence in convergences]
-        plt.figure()
-        plt.plot(hs, max_defects, label="h vs max_defect")
-        plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
-        plt.ylabel("log of defect")
-        plt.xlabel("log of hs")
-        plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, model={model_num}")
-        plt.legend()
-        plt.show()
-
-        monitor.print()
+        # max_defects_horner = [log10(abs(convergence[2])) for convergence in convergences]
+        # plt.figure()
+        # plt.plot(hs, max_defects, label="h vs max_defect")
+        # plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
+        # plt.ylabel("log of defect")
+        # plt.xlabel("log of hs")
+        # plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, model={model_num}")
+        # plt.legend()
+        # plt.show()
+        # monitor.print()
 
         # print("h", "\t\t", "max_defect", "\t\t", "log(h)", "\t\t", "log(defect)")
         # for (h, max_defect) in convergences:
         #    print(h, "\t\t", max_defect, "\t\t", log10(h), "\t\t", log10(max_defect)) 
+        return (hs, max_defects)
 
 def experiments(model, solution, model_num):
-    perfect_convergence(1, model, solution, model_num)
-    perfect_convergence(2, model, solution, model_num)
-    perfect_convergence(1/2, model, solution, model_num)
+    (hs_1, max_defects_1) = perfect_convergence(1, model, solution, model_num)
+    (hs_2, max_defects_2) = perfect_convergence(2, model, solution, model_num)
+    (hs_1_2, max_defects_1_2) = perfect_convergence(1/2, model, solution, model_num)
+    (hs_4, max_defects_4) = perfect_convergence(4, model, solution, model_num)
+    (hs_1_4, max_defects_1_4) = perfect_convergence(1/4, model, solution, model_num)
     # ALPHA IS NOT ALLOWED TO BE TOO LARGE => the closer alpha is to 1, the better the codes...
-    perfect_convergence(2**8, model, solution, model_num)
-    perfect_convergence(1/(2**8), model, solution, model_num)
+    (hs_256, max_defects_256) = perfect_convergence(2**8, model, solution, model_num)
+    (hs_1_256, max_defects_1_256) = perfect_convergence(1/(2**8), model, solution, model_num)
+
+    plt.figure()
+
+    plt.plot(hs_1, max_defects_1, label="alpha=1")
+    
+    plt.plot(hs_2, max_defects_2, label="alpha=2")
+    plt.plot(hs_1_2, max_defects_1_2, label="alpha=1/2")
+
+    plt.plot(hs_4, max_defects_4, label="alpha=4")
+    plt.plot(hs_4, max_defects_1_4, label="alpha=1/4")
+
+    plt.plot(hs_1, max_defects_256, label="alpha=256")
+    plt.plot(hs_1, max_defects_1_256, label="alpha=1/256")
+
+    plt.ylabel("log of defect")
+    plt.xlabel("- log of hs")
+    plt.title(f"h vs max defect")
+    plt.legend(loc="lower right")
+    plt.show()
 
 
 def model1(t, y):
