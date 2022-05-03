@@ -67,8 +67,9 @@ res = [1 1 1 1];
 y_initial = y0;
 t_initial = t0;
 measures_implemented = 0;
+t_span_plot = [0];
 while t_initial < t_final
-    tspan = [t_initial:1:t_final];
+    tspan = [t_initial:0.5:t_final];
     if (measures_implemented == 0)
         [y, rd] = ode("root", y_initial, t_initial, tspan, f_no_measures, ng, g_25000);
         measures_implemented = 1;
@@ -77,17 +78,20 @@ while t_initial < t_final
         measures_implemented = 0;
     end 
     y = y';
-    t_change = length(y(:, 1));
-    t_initial = t_initial + t_change;
-    y_initial = y(t_change, :)';
+    y_initial = y( length(y(:, 1)) , :)';
+    t_stopped = rd(1);
     res = cat(1, res, y);
+    try, t_span_solved = [t_initial:0.5:t_stopped, t_stopped]; 
+        t_span_plot = cat(2, t_span_plot, t_span_solved);
+    end;
+    t_initial = t_stopped;
 end
-E = res(:, 2);
-t_span = (0:t_final);
 
+E = res(:, 2);
+t_span_plot = cat(2, t_span_plot, tspan); // add remaining times from last call
 
 xset("thickness",2);
-plot(t_span, E);
+plot(t_span_plot, E);
 legends(["root"], [1], font_size=4);
 xlabel("time", "fontsize", 4)
 ylabel("E(t)", "fontsize", 4)
