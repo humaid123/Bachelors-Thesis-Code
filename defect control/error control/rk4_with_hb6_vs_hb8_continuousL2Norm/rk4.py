@@ -152,7 +152,7 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
         )
 
         ratio = (error_estimate / exact_error)
-        print(f"RATIO: {ratio} should be close to 1")
+        # print(f"RATIO: {ratio} should be close to 1")
         
 
         if error_estimate < tol:
@@ -175,11 +175,11 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
         else:
             h /= 2
 
-    print("tolerance=", tol)
-    print("Monitor8\n===================================")
-    monitor8.print()
-    print("\n\nMonitor6\n===============================")
-    monitor6.print()
+    # print("tolerance=", tol)
+    # print("Monitor8\n===================================")
+    # monitor8.print()
+    # print("\n\nMonitor6\n===============================")
+    # monitor6.print()
 
     print("================================\n")
     continuous_sol = ContinuousSolution()
@@ -189,7 +189,8 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
         continuous_sol.eval,
         continuous_sol.prime,
         continuous_sol.create_error_samplings(),
-        ratios
+        ratios,
+        monitor8
     )
 
 # =================================================================================
