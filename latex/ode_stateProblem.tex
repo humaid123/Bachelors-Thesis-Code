@@ -334,14 +334,14 @@ Table $\ref{tab:state_discontinuity_Py}$ shows that the number of function evalu
 \caption{Solving state discontinuity model in Scilab using event detection.}
 \label{fig:solve_state_discontinuity_scilab}
 \end{figure}
-There is only one solver with root functionality in Scilab; it is `lsodar', the root-finding version of `lsoda'. The solution we obtain is unusual. Though it correctly oscillates and goes sharply between 10000 and 25000, the number of peaks the solution has, is different from the number of peaks found in the other programming environments (13 in Scilab as opposed to 18 everywhere else). Further work needs to be done to determine why the Scilab solver is not giving accurate results.
+There is only one solver with root functionality in Scilab; it is `lsodar', the root-finding version of `lsoda'. Figure $\ref{fig:solve_state_discontinuity_scilab}$ shows that it produces a solution similar to that of the other programming environments. The computed solution correctly oscillates and goes sharply between 10000 and 25000 and has 18 peaks in the time domain.
 
 \begin{table}[h]
 \caption {Efficiency data for Scilab state-dependent discontinuity model - number of function evaluations.} \label{tab:state_discontinuity_scilab}
 \begin{center}
 \begin{tabular}{ c c c c } 
 method & no event & no event with sharp tol. & with event detection \\ 
-lsoda & 2794 & 4636 & 1327 \\
+lsoda & 2794 & 4636 &   1804 \\
 \end{tabular}
 \end{center}
 \end{table}
@@ -477,21 +477,21 @@ We perform the same experiment in Scilab. We set the absolute and relative toler
 
 Again, Figure $\ref{fig:tolerance_state_lsoda_no_event_sci}$ exposes the behavior whereby the same solver applied to the same problem at different tolerances gives substantially different results. We would expect the code at the sharper tolerances to give very similar curves but clearly, LSODA, even at sharp tolerances, does not.
 
-From Figure $\ref{fig:tolerance_state_lsoda_with_event_sci}$, we can see that the use of the event detection allows us to obtain a correctly oscillating solution. We note however that the solution still has 13 peaks as opposed to 18 peaks at all the different tolerances and thus that they are not the same as the ones obtained in the other platforms. As mentioned previously, we leave this issue for investigation as future work.
+From Figure $\ref{fig:tolerance_state_lsoda_with_event_sci}$, we can see that the use of the event detection allows us to obtain a correctly oscillating solution. The solutions are lined up at the different tolerances and it seems that we can get reasonable accuracy even at a tolerance of $10^{-2}$.
 
 \begin{table}[h]
 \caption {The Scilab version of LSODA applied to state-dependent discontinuity model tolerance study - number of function evaluations.} \label{tab:tolerance_state_discontinuity_lsoda_scilab} 
 \begin{center}
 \begin{tabular}{ c c c }
 tolerance & no event detection & with event detection \\
-1e-1 & 1141 & 287 \\
-1e-2 & 1606 & 262 \\
-1e-4 & 1968 & 523 \\
-1e-6 & 2122 & 983 \\
-1e-7 & 2684 & 1307 \\
-1e-8 & 2730 & 1567 \\
-1e-10 & 3380 & 1963 \\
-1e-11 & 3603 & 2331 \\
+1e-1 & 1141 & 295 \\
+1e-2 & 1606 & 364 \\
+1e-4 & 1968 & 680 \\
+1e-6 & 2122 & 1288 \\
+1e-7 & 2684 & 1784 \\
+1e-8 & 2730 & 2060 \\
+1e-10 & 3380 & 2576 \\
+1e-11 & 3603 & 3068 \\
 \end{tabular}
 \end{center}
 \end{table}
