@@ -1,0 +1,73 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Report.aux
+Reallocating 'name_of_file' (item size: 1) to 17 items.
+A level-1 auxiliary file: introduction.aux
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+A level-1 auxiliary file: timeProblem.aux
+Reallocating 'name_of_file' (item size: 1) to 17 items.
+A level-1 auxiliary file: stateProblem.aux
+Reallocating 'name_of_file' (item size: 1) to 22 items.
+A level-1 auxiliary file: exponentialChange.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: investigation.aux
+Reallocating 'name_of_file' (item size: 1) to 12 items.
+A level-1 auxiliary file: summary.aux
+Reallocating 'name_of_file' (item size: 1) to 9 items.
+The style file: IEEEtran.bst
+Reallocating 'name_of_file' (item size: 1) to 4 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: ref.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in pdeModel
+Warning--empty journal in osti7318812
+
+Done.
+You've used 15 entries,
+            4087 wiz_defined-function locations,
+            941 strings with 10862 characters,
+and the built_in function-call counts, 10895 in all, are:
+= -- 865
+> -- 302
+< -- 74
++ -- 157
+- -- 59
+* -- 551
+:= -- 1698
+add.period$ -- 32
+call.type$ -- 15
+change.case$ -- 18
+chr.to.int$ -- 165
+cite$ -- 17
+duplicate$ -- 769
+empty$ -- 857
+format.name$ -- 68
+if$ -- 2492
+int.to.chr$ -- 0
+int.to.str$ -- 15
+missing$ -- 151
+newline$ -- 84
+num.names$ -- 13
+pop$ -- 368
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 835
+stack$ -- 0
+substring$ -- 393
+swap$ -- 608
+text.length$ -- 19
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 15
+warning$ -- 2
+while$ -- 45
+width$ -- 17
+write$ -- 183
+(There were 2 warnings)

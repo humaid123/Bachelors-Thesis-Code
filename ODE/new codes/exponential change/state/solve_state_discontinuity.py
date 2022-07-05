@@ -6,8 +6,7 @@ from timeit import default_timer as timer
 
 with_measures = 0.005
 without_measures = 0.9
-time_measures_implemented = 27
-steepness_of_change = 1 # smaller means that the change is smoother
+steepness_of_change = 10 # smaller means that the change is smoother
 
 def sigmoid(x, time_start_increase):
     return (without_measures - with_measures) * ( 1 / (1 + exp(-steepness_of_change*(x - time_start_increase)))) + with_measures
@@ -73,7 +72,7 @@ def experiment(method):
     measures_implemented = False
     count_number_evaluations = 0
     time_elapsed = 0
-    t_final = 300
+    t_final = 180
     while t_initial < t_final:
         tspan = [t_initial, t_final]
         sol, start, end = None, None, None
@@ -88,7 +87,7 @@ def experiment(method):
             end = timer()
             measures_implemented = True
         t_event = t_final if len(sol.t_events[0]) == 0 else sol.t_events[0][0]
-        t_calc = np.arange(t_initial, t_event, 1)
+        t_calc = np.arange(t_initial, t_event, 0.25)
         y_cal = sol.sol(t_calc)
         res = np.concatenate((res, y_cal), axis=1)
         times = np.concatenate((times, t_calc))
@@ -117,7 +116,7 @@ def high_accuracy(method):
     measures_implemented = False
     count_number_evaluations = 0
     time_elapsed = 0
-    t_final = 300
+    t_final = 180
     while t_initial < t_final:
         tspan = [t_initial, t_final]
         sol, start, end = None, None, None
@@ -154,18 +153,18 @@ def high_accuracy(method):
 (times_rk23, res_rk23, nfev_rk23, elapsed_rk23) = experiment('RK23')
 (times_high, res_high, nfev_high, elapsed_high, time_changes) = high_accuracy("LSODA")
 
-plt.plot(times_lsoda, res_lsoda[1])
-plt.plot(times_bdf, res_bdf[1])
-plt.plot(times_radau, res_radau[1])
-plt.plot(times_rk45, res_rk45[1])
-plt.plot(times_dop853, res_dop853[1])
-plt.plot(times_rk23, res_rk23[1])
-plt.plot(times_high, res_high[1])
-for time in time_changes:
-    plt.axvline(x=time)
-plt.ylabel("E(t)")
+plt.plot(times_bdf, res_bdf[1], label="bdf")
+plt.plot(times_lsoda, res_lsoda[1], label="lsoda")
+plt.plot(times_rk45, res_rk45[1], label="rk45")
+plt.plot(times_dop853, res_dop853[1], label="dop853")
+plt.plot(times_rk23, res_rk23[1], label="rk23")
+plt.plot(times_radau, res_radau[1], label="radau")
+# plt.plot(times_high, res_high[1], label="high")
+# for time in time_changes:
+#     plt.axvline(x=time)
 plt.xlabel('time')
-plt.legend(['lsoda', 'bdf', 'radau', 'rk45', 'dop853', 'rk23', "high"], shadow=True, loc="lower left")
+plt.ylabel("E(t)")
+plt.legend()
 plt.show()
 
 

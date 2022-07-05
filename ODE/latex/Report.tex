@@ -1,0 +1,86 @@
+
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{float} %figure inside minipage
+\graphicspath{ {./images/} }
+\usepackage[export]{adjustbox}
+\usepackage{cite}
+
+
+
+
+\begin{document}
+\begin{titlepage}
+\author{Humaid Agowun and Paul Muir} 
+\title{Performance Analysis of ODE Solvers on Covid-19 Models with Discontinuities 
+} 
+\date{\today} 
+\maketitle
+\end{titlepage}
+
+\begin{center}
+    \textbf{Abstract}
+\end{center}
+
+In this report, we consider the numerical solution of two challenging
+Covid-19 ordinary differential equation (ODE) 
+models that have discontinuities. 
+The discontinuities are associated with modeling
+the introduction of measures to slow the spread of the virus.
+One of the models has a 
+time-dependent discontinuity; this means that at a given point in time, a discontinuity is introduced
+into the model. The second type of discontinuity is a state-dependent discontinuity;
+in this case, the time at which the discontinuity arises depends on the
+value of one or more of the solution components, and thus it is not known apriori.
+These discontinuities make the models quite challenging for standard ODE solvers to solve.
+Furthermore, the presence of exponentially growing solution components adds 
+to the difficulties faced by standard ODE solvers when they are used to try to solve these types of 
+problems.
+
+In this report, we present an investigation of performance of a collection of ODE solvers (we
+consider 21 solvers) available in four popular software environments: R, Python, 
+Scilab, and Matlab, when applied to solve these Covid-19 models.
+
+We first focus on straightforward implementations of the models 
+where the user employs the solver to attempt to solve the problems using default settings, e.g., default tolerances, and simple implementations for the
+discontinuities, i.e., the introduction of `if' statements into the functions that 
+define the right-hand sides of the ODE systems. {\it Such implementations of the models
+and usage of the solvers are typical of what Covid-19 researchers might employ 
+in attempting to solve their models.}
+
+We follow with an investigation of an approach for the solution of the models that uses slightly more
+advanced treatments of the models; the approach 
+involves making better use of the capabilities of the solvers and 
+better implementations of the models themselves.
+
+We also highlight a number of issues with the way that some of the solvers are implemented
+in some of the software environments. For example, the treatment of output points, i.e.,  
+the points in the domain where solution values should be provided,
+is an issue for some of the solvers in some of the software environments. 
+
+{\it We show that the standard use of ODE solvers available within  widely used software 
+environments, applied to simple implementations of these Covid-19 models, will
+frequently deliver numerical solutions that have no significant digits of accuracy.
+Furthermore, the solvers give no indication that the returned solutions
+may be inaccurate. We also show that these straightforward treatments of the models 
+are always less efficient than the slightly more advanced treatments.
+We show that the slightly more advanced treatments of the models can 
+result in more efficient computations while at the same time providing
+more accurate approximate solutions.}
+
+\include{introduction}
+\include{timeProblem}
+\include{stateProblem}
+\include{exponentialChange}
+\include{investigation}
+\include{summary}
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+
+\end{document}

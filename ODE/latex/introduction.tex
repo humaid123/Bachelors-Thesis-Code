@@ -1,34 +1,52 @@
 \section{Introduction}
 \label{section:intro}
-In this report, we will discuss the results of a careful investigation of the performance of a variety of software packages applied to typical initial value ordinary differential equation (IVODEs) encountered in Covid-19 models. 
+In this report, we describe a detailed investigation of the performance of a variety of software packages applied to  initial value ordinary 
+differential equation (IVODEs) encountered in Covid-19 models (see, e.g., \cite{MR4200336}). Our study considers Covid-19 models with discontinuities associated with the introduction of measures to slow the
+spread of the virus.
 
-For any mathematical model, the accuracy requirements of the numerical solution should be determined by the quality of the model and the accuracy of the parameters that appear in the model. Numerical errors associated with the computational techniques that are used to obtain the approximate solution must always be negligible compared to the accuracy to which the model is defined. \emph{Researchers deserve to obtain numerically accurate solutions to the models that they are studying}. In this report, \emph{we will show that the straightforward use of standard IVODE solvers on typical Covid-19 models can lead to numerical solutions that have large errors, sometimes of the same order of magnitude as the solution itself.} Most of the IVODE solvers that we consider in this report allow the user to specify a parameter called a tolerance. The solvers use adaptive algorithms to attempt to compute an approximate solution with a corresponding error estimate that is approximately equal to the tolerance.
+{\it For any mathematical model, the accuracy requirements requested for the numerical solution of the model should be determined by the quality of the model and the accuracy of the parameters that appear in the model. Numerical errors associated with the computational techniques that are used to obtain the approximate solution must always be negligible compared to the accuracy of the model itself.}
+Most IVODE solvers allow the user to specify a parameter called a tolerance. The solvers use adaptive algorithms to attempt to compute an approximate solution with a corresponding error estimate that is approximately equal to the tolerance.
+\emph{Researchers deserve to obtain accurate solutions to the models that they are studying.}
 
-In Section $\ref{subsection:research_papers}$, we review examples of how IVODEs are used in epidemiology. In Section $\ref{subsection:SEIR_model}$, we define the SEIR models which we will consider throughout this report. In Section $\ref{subsection:exponential_growth}$, we discuss the numerical stability issues that arise in problems (such as Covid-19 modelling) with exponentially growing solutions. In Section $\ref{subsection:fixed_vs_control}$, we explain the difference between fixed step-size and error-controlled IVODE solvers. The IVODE software packages from programming environments that are typically used by researchers are described in Section $\ref{subsection:numerical_software_used}$. We also make a note of issues with evaluation of approximate solutions at output points that lead to inefficiencies for some of these solvers in Section $\ref{subsection:solution_output_points_impl}$. In Section $\ref{subsection:effect_of_discontinuity}$, we discuss the effects of problem discontinuities on the performance of these solvers.
+\emph{In this report, we will show that the straightforward use of standard IVODE solvers on Covid-19 models with discontinuities can lead to numerical solutions that have large errors, sometimes of the same order of magnitude as the solution itself. We also show that 
+these computations can be substantially less efficient than necessary.} 
 
-In Section $\ref{subsection:naive_time_problem}$, we apply the solvers to a Covid-19 problem with a time-dependent discontinuity and show how, in some cases, this results in numerical solutions with relative errors of the same magnitude as the solution being computed. In Section $\ref{subsection:time_disc_handling}$, we will use discontinuity handling to accurately solve the time-dependent discontinuity problem. In Section $\ref{subsection:time_tolerance_study}$, we will use a range of tolerances to discuss the effects of tolerance on the accuracy and efficiency of some of the solvers.
 
-In Section $\ref{subsection:naive_state_problem}$, we apply the solvers to a Covid-19 problem with a state-dependent discontinuity and show how, when using a straightforward implementation of the problem, none of the solvers are able to obtain accurate solutions. We will explain how even the use of very sharp tolerances is not sufficient to improve the computed solutions in Section $\ref{subsection:state_sharp_tol_failed}$ and show that a more effective way to solve this problem is through the use of event detection, which we will describe in Section $\ref{subsection:intro_event_detection}$. We then provide an accurate solution to the state-dependent discontinuity problem in Section $\ref{subsection:state_with_event_detection}$ and perform a tolerance study on this problem in Section $\ref{subsection:state_tolerance_study}$.
 
-In Section $\ref{section:fortran_inaccuracies}$, we examine implementation details for solvers with exceptionally poor solutions to investigate the cause of their errors. We conclude the report in Section $\ref{section:summary}$ with a summary and a discussion of the potential for future work projects.
+%In Section $\ref{subsection:research_papers}$, we review examples of how IVODEs are used in epidemiology. 
+In Section $\ref{subsection:SEIR_model}$, we define the SEIR Covid-19 models which we will consider throughout this report. In Section $\ref{subsection:exponential_growth}$, we discuss numerical stability issues that arise in problems (such as Covid-19 models) with exponentially growing solutions. In Section $\ref{subsection:numerical software}$,
+%$\ref{subsection:fixed_vs_control}$, 
+we provide an overview of the
+software that we will consider in this report. We also explain the difference between fixed step-size and error-control IVODE solvers. 
+% are described in Section $\ref{subsection:numerical_software_used}$. 
+In Section $\ref{subsection:solution_output_points_impl}$,
+we discuss issues with the evaluation of approximate solutions at output points that lead to inefficiencies for some of these solvers. In Section $\ref{subsection:effect_of_discontinuity}$, we consider the effects of discontinuities on the performance of these solvers.
 
-\subsection{Epidemiological modelling}
-\label{subsection:research_papers}
-One common form of an epidemiological study is forecasting. Using previously obtained parameters, the researcher develops a mathematical model involving differential equations which are solved using an ODE solver. Often, the solver will be used to integrate over a large time period so that the researcher can examine how the disease will spread. In Section $\ref{subsection:exponential_growth}$, we discuss why it is unrealistic to attempt to compute a numerical solution for large time periods if the infection is still growing exponentially and how measures such as social distancing allow solvers to reduce errors so that reasonably accurate solutions can be computed over longer time periods.
+In Section $\ref{subsection:naive_time_problem}$, we apply the solvers in a straightforward fashion to a Covid-19 problem with a time-dependent discontinuity and show how, in some cases, this results in numerical solutions that are computed inefficiently and with errors of the same magnitude as the solutions being computed. In Section $\ref{subsection:time_disc_handling}$, we will use a discontinuity handling approach to accurately solve the time-dependent discontinuity problem. In Section $\ref{subsection:time_tolerance_study}$, we will apply some of the solvers to this model with a range of tolerances to investigate the effects of tolerance on the accuracy and efficiency of the solvers.
 
-A second type of epidemiology study involves parameter estimation. In this kind of study, data points are collected about the spread of a virus and we try to fit a mathematical model to that data. In so doing, we can estimate values for some modelling parameters that will minimize the error in the fit. An example of such a study can be found in Appendix $\ref{section:ebola_paper}$. Parameter estimation studies often involve using an ODE solver inside an optimization algorithm and thus the computing time, especially for large problems, can be significant. Since the computational cost is typically inversely proportional to the tolerance, we will investigate to what extent coarse tolerances can be employed in the computation of solutions to Covid-19 models.
+In Section $\ref{subsection:naive_state_problem}$, we apply the solvers to a Covid-19 problem with a state-dependent discontinuity and show how, when using a straightforward implementation of the problem, none of the solvers are able to obtain reasonably accurate solutions. In Section $\ref{subsection:state_sharp_tol_failed}$, we will explain how even the use of very sharp tolerances is not sufficient to improve the 
+accuracy of the computed solutions and show that a more effective way to solve this problem is through the use of 
+a capability provided in some solvers known as event detection, which we will describe in Section $\ref{subsection:intro_event_detection}$. We then show the results of using this approach to obtain accurate solutions to the state-dependent discontinuity problem in Section $\ref{subsection:state_with_event_detection}$ and perform a tolerance study on this problem in Section $\ref{subsection:state_tolerance_study}$.
 
-\subsection{Detailed description of two specific models to be considered in this report.} 
+In Section $\ref{section:fortran_inaccuracies}$, we employ the original Fortran implementation of the Radau solver provided in several of the software environments, in order to further investigate the poor performance of this solver on the state-dependent discontinuity model. We conclude  in Section $\ref{section:summary}$ with a summary and a discussion of potential  future work.
+
+%\subsection{Epidemiological modelling}
+%\label{subsection:research_papers}
+%One common form of an epidemiological study is forecasting. Using previously obtained parameters, the researcher develops a mathematical model involving differential equations which are solved using an ODE solver. Often, the solver will be used to integrate over a large time period so that the researcher can examine how the disease will spread. In Section $\ref{subsection:exponential_growth}$, we discuss why it is unrealistic to attempt to compute a numerical solution for large time periods if the infection is still growing exponentially and how measures such as social distancing when introduced into the model lead to changes in the numerical solution that then allow solvers to reduce errors so that reasonably accurate solutions can be computed over longer time periods by improving the stability of the model. Before the addition of measures such as social distancing, the SEIR problem has a component that is unstable. When measures are added, the problem gain some stability and thus allow more accurate modeling.
+
+%A second type of epidemiology study involves parameter estimation. In this kind of study, data points are collected about the spread of a virus and we try to fit a mathematical model to that data. In so doing, we can estimate values for some modelling parameters that will minimize the error in the fit. An example of such a study can be found in Appendix $\ref{section:ebola_paper}$. Parameter estimation studies often involve using an ODE solver inside an optimization algorithm and thus the computing time, especially for large problems, can be significant. Since the computational cost is typically inversely proportional to the tolerance, we will investigate to what extent coarse tolerances can be employed in the computation of solutions to Covid-19 models.
+
+\subsection{Two Covid-19 models with discontinuities.} 
 \label{subsection:SEIR_model}
-In this section, we explain how an IVODE problem is defined. We then describe the models that we are going to consider in this report. They involve typical SEIR models to which we add discontinuities.
+In this subsection, we describe the models that we are going to consider in this report. They involve a typical SEIR model to which we add discontinuities.
 
-An IVODE problem is defined by the equations and the initial conditions:
+An IVODE problem is defined by the ODEs and initial conditions:
 \begin{equation}
-y'(t) = f(t, y(t)), \quad y(t_0) = y_0 \nonumber
+y'(t) = f(t, y(t)), \quad y(t_0) = y_0. \nonumber
 \end{equation}
-where $f(t, y(t))$ is a function that defines the derivative at time, t. A complete definition also includes the initial values of the solution components. Given $f(t, y(t))$ and $y(t_0)$, the goal is to find an approximation to  $y(t)$ using numerical methods. 
+Given $f(t, y(t))$ and $y(t_0)$, the goal is to find an approximation to  $y(t)$ over a domain $[t_0, t_f]$. 
 
-In this report, we consider the Covid-19 model:
+In this report, we consider the Covid-19 model \cite{pdeModel}:
 \begin{equation}
 \frac{\textit{d}S}{\textit{dt}} = \mu N - \mu S - \frac{\beta}{N}IS, \nonumber
 \end{equation}
@@ -42,155 +60,166 @@ In this report, we consider the Covid-19 model:
 \end{equation}
 
 \begin{equation}
-\frac{\textit{d}R}{\textit{dt}} = \gamma I - \mu R \nonumber
+\frac{\textit{d}R}{\textit{dt}} = \gamma I - \mu R. \nonumber
 \end{equation} 
 
-In this SEIR model, we describe the epidemic over time. S is the number of susceptible individuals, E is the number of exposed individuals, I is the number of infected individuals and R is the number of recovered individuals at a point in time. We also use N to represent the population size.
-The other parameters in this model are as follows: $\alpha$ is such that $\alpha^{-1}$ is the average incubation period, $\beta$ is the transmission rate, $\gamma$ is the recovery rate and $\mu$ is the birth/death rate. In this report, we assume that all these parameters are known. Our goal is to investigate the performance of IVODE solvers on forms of this problem that have discontinuities. We will see that we can get approximate solutions that are not efficiently computed and/or that may have significant errors. This latter issue can have serious consequences as the computed solution will fail to show the actual impact of the virus corresponding to the actual epidemiology theories behind the mathematical models. These incorrect numerical solutions may lead epidemiologists into reaching incorrect conclusions and thus lead them into questioning the mathematical models themselves when, in fact, it is the solvers that are at fault.
+In this SEIR model, S is the number of susceptible individuals, E is the number of exposed individuals, I is the number of infected individuals and R is the number of recovered individuals. N is the population size.
+The other parameters in this model are as follows: $\alpha^{-1}$ is the average incubation period, $\beta$ is the transmission rate, $\gamma$ is the recovery rate and $\mu$ is the birth/death rate. In this report, we assume that all these parameters are known. Our goal is to investigate the performance of IVODE solvers on forms of this problem that have discontinuities. {\it We will see that, depending on how we solve the ODEs, we can get approximate solutions that are not efficiently computed and that may have significant errors.} This latter issue can have serious consequences as the computed solution will fail to show the actual impact of the virus corresponding to the epidemiology theories behind the mathematical models. These incorrect numerical solutions may lead epidemiologists into reaching incorrect conclusions and thus lead them into questioning the mathematical models themselves when, in fact, it is the solvers that are at fault.
 
-The discontinuities we are going to consider involve the parameter $\beta$.
-Before measures such as social distancing, masking, vaccinations, etc., are implemented, $\beta$ has a much higher value than after the measures are introduced. For the purpose of this study, we will use a large $\beta$ value equal to 0.9 before the measures and a small $\beta$ value equal to 0.005 after they are implemented, corresponding to a highly contagious variant and extreme shut down measures, respectively. These choices will come to highlight the different numerical issues as such an abrupt change in a modelling parameter introduces a discontinuity as we will show in Section $\ref{subsection:effect_of_discontinuity}$. We will consider two types of discontinuities. One depends only on $t$; the other depends on the value of one of the solution components. We will refer to the former as a time-dependent discontinuity and the latter as a state-dependent discontinuity.
+The discontinuities we are going to consider involve the virus transmission parameter, $\beta$.
+Before measures such as social distancing, masking, etc., are implemented, $\beta$ has a much higher value than after the measures are introduced. For the purpose of this study, we will use a large $\beta$ value - equal to 0.9 - before the measures are introduced, and a small $\beta$ value - equal to 0.005 - after they are implemented, corresponding to a highly contagious Covid-19 variant and extreme shut down measures, respectively. These  abrupt changes in the parameter $\beta$ introduce discontinuities into the model, as we will show in Section $\ref{subsection:effect_of_discontinuity}$. We will consider two types of discontinuities. One depends only on $t$; the other depends on the value of one of the solution components. We will refer to the former as a time-dependent discontinuity and the latter as a state-dependent discontinuity.
 
-For the time-dependent discontinuity, we will assume that at some point in time, measures are implemented that will lead to a reduction in the parameter $\beta$. We would like to solve the problem through this discontinuity but as we will show, this discontinuity introduces a numerical issue.
+For the time-dependent discontinuity, we will assume that at some point in time, measures are implemented that will lead to a reduction in the parameter $\beta$. We would like to solve the problem through this discontinuity, but as we will show, the discontinuity presents a significant issue for the ODE solvers.
 
-For the state-dependent discontinuity, we consider the following situation. If the population of exposed people reaches a certain maximum threshold, measures are introduced, which decreases the value of $\beta$. This introduces a discontinuity. Then, when the population of exposed people drops below a certain minimum threshold, the measures are relaxed, which increases $\beta$ back to its original value, which introduces another discontinuity. We will try to model this problem through multiple instances of shut-downs followed by periods where measures are relaxed. We consider a case where vaccines are not being used. This leads to setting $\beta$ back to its original value when the measures are removed. We note that each time we change the parameter $\beta$, a discontinuity is introduced and thus this problem is far more discontinuous than the previous one, which had only one discontinuity. For this problem, we show that all the solvers will fail.
+For the state-dependent discontinuity, we consider the following situation. If the population of exposed people reaches a certain maximum threshold, measures are introduced, which corresponds to decreasing the value of $\beta$, which in turn leads to a decrease in the number of exposed and infected cases. This abrupt decrease in the $\beta$ value introduces a discontinuity into the model. When the population of exposed people later drops below a certain minimum threshold, the measures are relaxed, which corrresponds to increasing $\beta$ back to its original value, which introduces another discontinuity. This increase in the $\beta$ value in turn leads to a exponential growth in the number of exposed and infected cases. We will try to model this problem through multiple instances of shut-downs followed by periods where measures are relaxed. We consider a case where vaccines are not being used. This corresponds to setting $\beta$ back to its original value when the measures are removed. We note that each time we change the parameter $\beta$, a discontinuity is introduced and thus this problem is far more discontinuous than the previous one, which had only one discontinuity. For this problem, we show that all the solvers, when used in a straigthforward manner, will fail.
 
-The other parameters are assumed to be constant with N = 37,741,000 (the approximate Canadian population size), $\alpha$ = 1/8, $\gamma$ = 0.06, and $\mu$ = 0.01/365. The initial values are E(0) = 103, I(0) = 1, R(0) = 0 and S(0) = N - E(0) - I(0) - R(0). This gives us a complete system of IVODEs that is in a form that can be solved by typical software packages.
+The other parameters are assumed to be constant with N = 37,741,000 (the approximate Canadian population size), $\alpha$ = 1/8, $\gamma$ = 0.06, and $\mu$ = 0.01/365. The initial values are E(0) = 103, I(0) = 1, R(0) = 0 and S(0) = N - E(0) - I(0) - R(0). This gives us a complete system of IVODEs that is in a form that can be treated by typical ODE software packages.
 
-\subsection{Exponential growth and the issue of instability for ODEs}
+\subsection{Exponential growth and instability for ODEs}
 \label{subsection:exponential_growth}
-Some of the solution components of the SEIR model exhibit exponential growth over certain time periods. In this section, we discuss exponentially growing solutions and their impact on the accurate computation of a numerical solution. First of all, we give a quick overview of stability for ODEs. Then we will show that the SEIR model is unstable over certain time intervals and how measures such as social distancing can improve the stability. This is important as this essentially means that before measures are implemented, accurate models are for the most part very difficult to obtain but the addition of the measures such as social distancing can lead to the solvers being able to compute more accurate solutions.
+Some of the solution components of the SEIR model exhibit exponential growth over certain time periods. In this section, we discuss exponentially growing solutions and their impact on the accurate computation of a numerical solution. Firstly, we give a quick overview of stability for ODEs. Then we will show that the SEIR model is unstable over certain time intervals and how changing the model in a way that corresponds to introducing measures such as social distancing can improve the stability of the model because, once this is done, none of the solution components are exponentially increasing. This is important as this  means that before measures are implemented, accurate solutions are difficult to obtain but the introduction of the measures results in changes to the model so that the solution components become exponentially decreasing instead of exponentially increasing. This corresponds to an improvement in the stability 
+of the model that can allow the solvers to compute more accurate solutions.
 
-The stability of an ODE is associated with the impact of small changes to the initial values of the solution to the problem. An ODE is unstable if a small change in the initial values results in a large change in the solution; otherwise, the ODE is said to be stable.
+The stability of an ODE is often defined in terms of the impact of small changes to the initial values on the solution to the problem. An ODE is unstable if a small change in the initial values results in a large change in the solution; otherwise, the ODE is said to be stable.
 
-It is straightforward to see that problems with a solution component that exhibits exponential growth are unstable. As mentioned above, this is the case with some of the solution components of a Covid-19 model. The population of infected people, $I$, grows exponentially as long as no measures are introduced to reduce the spread of the virus. This means that ODE solvers will experience difficulties in obtaining accurate numerical solutions. 
+It is straightforward to see that problems with a solution component that exhibits exponential growth are unstable. As mentioned above, this is the case with some of the solution components of a Covid-19 model. The population of infected people, $I$, grows exponentially as long as no measures are introduced to reduce the spread of the virus. 
+%This means that ODE solvers will experience 
+%difficulties in obtaining accurate numerical solutions. 
 
-In Figure $\ref{fig:unstability_of_exponential_growth}$, we show exponentially growing solutions corresponding to models with slightly different initial values for E(0). We can see that we get different solutions, that become even more different as time increases.
+In Figure $\ref{fig:unstability_of_exponential_growth}$, we show exponentially growing solutions corresponding to models with slightly different initial values for $I(0)$. We can see that we get different solutions, that become even more different as time increases.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/unstability_of_exponential_growth}
-\caption{When a solution exhibits exponential growth, relatively small changes in the initial value can eventually lead to much different solution values. Here we consider initial values of $E(t)$ equal to 70, 80, .., 120.}
+\caption{When a solution exhibits exponential growth, relatively small changes in the initial value can eventually lead to much different solution values. Here we consider initial values of $I(t)$ equal to 70, 80, .., 120.}
 \label{fig:unstability_of_exponential_growth}
 \end{figure}
 
-However, when we introduce measures such as social distancing, which corresponds to a smaller $\beta$ value, the solution will exhibit slower exponential growth or can even show exponential decay. Slower exponential growth means that the solution will not be as sensitive to changes to the initial values. Exponential decay is even better as the solutions from different initial values will converge.
+However, when we introduce measures which corresponds to employing a smaller $\beta$ value, the solution components that were growing exponentially will exhibit slower exponential growth or can even show exponential decay. Slower exponential growth or exponential decay means that the solution will not be as sensitive to small errors in the computation. 
 
-Epidemic modeling problems exhibit solutions with this type of behavior. At first, the problem is unstable but as measures are implemented, which lead to exponential decay rather than growth, the problem becomes stable. We show this in Figure $\ref{fig:regain_stability_after_measures}$ for the problem with the time-dependent discontinuity. At first, the solutions diverge when there is exponential growth, but the introduction of measures such as social distancing introduce exponential decay which makes them converge. Thus the measures not only save lives but also improve the capability of solvers to compute accurate solutions.
+Epidemic modeling problems exhibit solutions with this type of behavior. At first, the problem is unstable but as measures are implemented, which lead to exponential decay rather than growth for some of the solution components, the problem becomes stable. We show this in Figure $\ref{fig:regain_stability_after_measures}$ for the model with the time-dependent discontinuity. At first, the $I(t)$ solution components diverge when there is exponential growth, but the introduction of measures such as social distancing leads to exponential decay which makes them converge. Thus the measures not only save lives but also improve the capability of solvers to compute accurate solutions.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/regain_stability_after_measures}
-\caption{Unstable solutions in the region [0, 40] becomes stable in the region [40, 90] as measures are implemented. Here we consider initial values of $E(t)$ equal to 70, 80, .., 120.}
+\caption{Unstable solutions in the region [0, 40] becomes stable in the region [40, 90] as measures are implemented. Here we consider initial values of $I(t)$ equal to 70, 80, .., 120.}
 \label{fig:regain_stability_after_measures}
 \end{figure}
 
-\subsection{Brief overview of numerical software}
-We start by explaining how typical solvers attempt to solve an IVODE problem. Given initial values (at the initial time, $t_0$), the solver will use an initial step size, $h$, to compute a solution at time, $t_1 (= t_0 + h)$. Similarly, the solver will attempt to take a sequence of steps until it reaches the end time. High-quality solvers will also employ an interpolation algorithm usually locally within each step to get a continuous numerical solution. We note that a solver is said to have order $p$ if the difference between the true solution and the computed solution is $O(h^p)$.
+\subsection{Brief overview of numerical ODE solvers}
+\label{subsection:numerical software}
+We start by explaining how typical solvers attempt to solve an IVODE. Given initial values (at the initial time, $t_0$), the solver will use an initial step size, $h$, to compute a solution at time, $t_1 (= t_0 + h)$. The solver will attempt to take a sequence of steps until it reaches the end time. High-quality solvers will also employ an interpolation algorithm, usually locally within each step, to get a continuous numerical solution. We note that a solver is said to have order $p$ if the difference between the true solution and the computed solution is $O(h^p)$.
 
-In the next section, we describe what a solver will attempt to do to improve the accuracy of the computed solution. We then discuss the numerical solvers we are going to use throughout our investigation. We will then provide an additional discussion on the implementation of interpolation to get a continuous numerical solution and how certain programming environments have not set up their ODE solvers to use interpolation (correctly).
+In this section, we describe adaptive step-size error control for the numerical solution of an IVODE. We then discuss the numerical solvers we are going to use throughout our investigation. We will then provide an additional discussion on the implementation of interpolation to get a continuous numerical solution and how some programming environments have not set up their ODE solvers to use interpolation in an optimal fashion.
 
 \subsubsection{Fixed Step Size and Error Control Solvers}
 \label{subsection:fixed_vs_control}
-In this section, we explain the role of the tolerance and the difference between fixed step size and adaptive step-size error control solvers.
+In this subsection, we explain the role of the tolerance and the difference between fixed step size and adaptive step-size error control solvers.
 
-The tolerance is a measure of how accurate we want the solution computed by the solvers to be. A key point here is that solvers that can take a tolerance as input must have some way of computing an estimate of the error of the solution that they compute. Then that error estimate can be compared with the user-provided tolerance. Generally, an absolute tolerance means that we want the error estimate to be approximately equal to the tolerance, whereas a relative tolerance means that we want the ratio of the error estimate and the computed solution to be approximately equal to the tolerance. This is not always the case as some solvers will use a blended combination of the provided absolute and relative tolerances.
+The tolerance is a measure of how accurate we want the solution computed by the solvers to be. A key point here is that solvers that can take a tolerance as input must have some way of computing an estimate of the error of the solution that they compute. Then that error estimate can be compared with the user-provided tolerance. Generally, an absolute tolerance means that we want the error estimate to be approximately equal to the tolerance, whereas a relative tolerance means that we want the ratio of the error estimate and the computed solution to be approximately equal to the tolerance. Some solvers will use a blended combination of the user-provided absolute and relative tolerances.
 
-A solver is said to have a fixed step size if the solver begins with an initial step-size and this step-size is used throughout the whole integration. In this case, the solver will step from one point to the next and will not check if the numerical solution it obtains at the end of each step is sufficiently accurate. Thus, the distance between the points, i.e, the step size, is constant throughout the computation.
+A solver is said to have a fixed step size if the solver begins with an initial step-size and this step-size is used throughout the whole integration. In this case, the solver will step from one point to the next and will not check if the numerical solution it obtains at the end of each step is sufficiently accurate. This fixed step-size is a determing factor in the accuracy of the solution but fixed step-size solvers do not have a way of assessing the accuracy of the solutions that they compute.
 
-An error-controlled solver starts with an initial step size but as it takes a step, it will compute an error estimate and, based on the tolerances will repeat the computation with a smaller step-size if the error estimate is larger than the tolerance. It will repeat this process until the error estimate satisfies the given tolerance. Only then will it move to the next step. Thus it reduces the step-size as needed throughout the computation. We note that the error depends on the step-size and that a smaller step-size generally leads to a smaller error. However, a small step-size means that the computation is slower because more steps will be needed and thus if the error estimate is much smaller than the tolerance, a solver will increase the step-size for the next step. This allows it to make sure that the given tolerance is satisfied over the whole problem interval and that as large a step as possible is being taken to optimize the efficiency of the computation.
+An error-controlled solver starts with an initial step size but as it takes a step, it will also compute an error estimate and will repeat the computation with a smaller step-size if the error estimate is larger than the tolerance. It will repeat this process until the error estimate satisfies the given tolerance. Only then will it move to the next step. Thus it reduces the step-size as needed throughout the computation. We note that the error depends on the step-size and that a smaller step-size generally leads to a smaller error. However, a small step-size means that the computation is slower because more steps will be needed. If the error estimate is much smaller than the tolerance on an accepted step, the solver will increase the step-size for the next step. This allows it to make sure that the given tolerance is satisfied over the whole problem interval with as large a step as possible being taken to optimize the efficiency of the computation.
 
-Error control is not simple to implement. Some researchers may be tempted to write their own solvers, based on a non-error control method like a simple fixed step-size Euler or Runge-Kutta method. We will show, using some fixed step-size solvers in R, how these solvers simply cannot solve a Covid-19 model with reasonable accuracy. Without error control, these solvers cannot handle the discontinuity and stability issues that are present in these models and they will give very erroneous solutions, often without even a warning that the computed solutions should not be trusted.
+Some researchers may be tempted to write their own solvers, based on a non-error control method like a simple fixed step-size Euler or Runge-Kutta method \cite{MR3822086}. We will show, using some fixed step-size solvers, how these solvers simply cannot solve a Covid-19 model with reasonable accuracy. Without error control, these solvers cannot handle the discontinuity and stability issues that are present in these models and they will give erroneous solutions, often without even a warning that the computed solutions should not be trusted.
+
+In this report, we will be referring to numerical solutions that have ``reasonable accuracy". By this we mean 
+that when these solutions are plotted, they are visually indistinguishable from a high accuracy solution. This means that the numerical solutions agree with a high accuracy solution to at least two decimal places, which is quite a modest accuracy 
+requirement. We will see however, that for the models we consider in this report, even this modest accuracy requirement cannot be met by many of the solvers when straightforward implementations are employed.
 
 \subsubsection{The ODE Solvers}
 \label{subsection:numerical_software_used}
-The ODE solvers are grouped in the following classes: Runge-Kutta methods, Runge-Kutta pairs, and multi-step methods.
+The ODE solvers are grouped into the following classes: fixed-step Runge-Kutta methods, Runge-Kutta pairs \cite{MR3822086}, and multi-step methods \cite{MR3822086}.
 
-A Runge-Kutta method is a one-step method that uses function evaluations, i.e, evaluations of $f(t, y(t))$, within the step. An example is the classical four-stage, fourth-order Runge-Kutta method. A simple solver based on this type of method steps across the time domain with a fixed step-size and has no error control.
+A Runge-Kutta method is a one-step method that uses function evaluations, i.e, evaluations of $f(t, y(t))$, within the step. An example is the classical four-stage, fourth-order Runge-Kutta method \cite{MR3822086}. Another example is the well-known forward Euler method. A simple solver based on this type of method steps across the time domain with a fixed step-size and has no error control.
 
-A Runge-Kutta pair uses two Runge-Kutta methods. One of the methods is used to compute a solution and the second method is used to compute an error estimate. A solver that is based on a Runge-Kutta pair resizes the step based on the error estimate, as discussed previously. An example of such a solver is the DOPRI5 solver that uses a fifth-order method for the solution and a fourth-order method for the error estimate.
+A Runge-Kutta pair \cite{MR3822086} uses two Runge-Kutta methods of order $p$ and $p+1$ for some integer, $p$. One of the methods is used to compute a solution and the other method is used to compute an error estimate. A solver that is based on a Runge-Kutta pair resizes the step based on the error estimate, as discussed previously. An example of such a solver is the DOPRI5 solver \cite{MR3822086} that uses a fifth-order method for the solution and a fourth-order method for the error estimate.
 
-A multi-step method is a solver that will use a linear combination of the solutions and function values from the current and previous steps to take the next step. An example of such a solver is LSODA. Such solvers obtain an error estimate using two different multi-step methods. They use the error-estimate to control the step-size as discussed above.
+A multi-step method is a solver that will use a linear combination of solution and function values from the current and previous steps in order to obtain a solution approximation at the end of the current step. An example of such a solver is LSODA \cite{MR3822086}. Such solvers compute an error estimate for the numerical solution that they return and use the error-estimate to control the step-size as discussed above. Such solvers typically implement a family of multi-step methods and thus also have the capability to adapt the order of the method they used based on the error estimate.
 
 \subparagraph{R packages}
 Scientists who solve ODE models in R commonly use the deSolve package \cite{soetaert2010solving}, and the $ode()$ function within it.
-$ode()$ provides many numerical methods to solve a problem but we have focused our investigation only on the following popular choices: `lsoda', `daspk', `euler', `rk4', `ode45', `Radau', `bdf' and `adams'. The default method is `lsoda' and the default tolerances are $10^{-6}$ for both the absolute and relative tolerances. We also note that we did not consider the other integrators in the deSolve package like $rkMethod()$, which provides other Runge-Kutta methods, and the other methods which are called by the $ode()$ function itself.
+This function provides many numerical ODE solvers but we have focused our investigation only on the following popular choices: `lsoda', `daspk', `euler', `rk4', `ode45', `Radau', `bdf' and `adams'. The default method is `lsoda' and the default tolerances are $10^{-6}$ for both the absolute and relative tolerances. We also note that we did not consider the other integrators in the deSolve package like $rkMethod()$, which provides other Runge-Kutta methods, and the other methods which are available through the $ode()$ function itself.
 
 The error control solvers are:
 \begin{itemize}
-\item `lsoda' calls the Fortran LSODA routine from ODEPACK. It can automatically detect stiffness and choose between a stiff Backward Differentiation Formula (BDF) and a non-stiff Adams solver.
+\item `lsoda' which calls the Fortran LSODA routine from ODEPACK \cite{MR751604}. It can automatically detect stiffness and choose between a stiff Backward Differentiation Formula (BDF) \cite{MR3822086} and a non-stiff Adams solver \cite{MR3822086}.
 
-\item `daspk' calls the Fortran DAE solver of the same name.
+\item `daspk' which calls the Fortran DAE solver of the same name \cite{MR1379682}.
 
-\item `ode45' calls an implementation of Dormand-Prince (4)5 (DOPRI5) Runge-Kutta pair, written in C.
+\item `ode45' which calls an implementation of the Dormand-Prince (4)5 (DOPRI5) Runge-Kutta pair \cite{MR3822086}, written in C.
 
-\item `Radau' calls the Fortran solver RADAU5 which implements a Runge-Kutta method of $5^{th}$ order known as the RADAU IIA method.
+\item `Radau' which calls the Fortran solver RADAU5 \cite{MR1439506} which implements a Runge-Kutta method of $5^{th}$ order known as the RADAU IIA method.
 
-\item `bdf' calls the stiff solver inside the Fortran LSODE package which is based on a family of BDF methods.
+\item `bdf' which calls the stiff solver inside the Fortran LSODA package which is based on a family of BDF methods.
 
-\item `adams' calls the non-stiff solver inside the Fortran LSODE package which is based on a family of Adams methods.
+\item `adams' which calls the non-stiff solver inside the Fortran LSODA package which is based on a family of Adams methods.
 \end{itemize}
 
 The fixed step-size solvers are:
 \begin{itemize}
-\item `euler' calls the classical Euler method which is implemented in C.
-\item `rk4' uses the classical Runge-Kutta method of order 4 which is implemented in C. 
+\item `euler' which calls a simple solver based on the classical Euler method and is implemented in C.
+\item `rk4' which calls a simple solver that uses the classical Runge-Kutta method of order 4 and is implemented in C. 
 \end{itemize}
 
-We will use these two methods to demonstrate what happens when non-error-controlled solvers are applied to Covid-19 models.
+We will use these latter two methods to demonstrate what happens when non-error-controlled solvers are applied to the Covid-19 models.
 
-We next consider the R interface for handling output. The $ode()$ function is given a vector of output points.  The function will use interpolation by default but the interpolation schemes for all the solvers are not implemented in the most efficient way. As a result, the vector of output points affects the step sequence and efficiency of the solver in a manner which we describe in Section $\ref{subsection:solution_output_points_impl}$.
+We next consider the R interface for handling output. The $ode()$ function is given an array of output points.  However, in default mode, there is an issue with the way in which the output points are treated. The array of output points affects the step sequence and efficiency of the solver in a manner which we describe in Section $\ref{subsection:solution_output_points_impl}$.
 
 \subparagraph{Python packages}
-In Python, researchers can use the scipy.integrate package \cite{2020SciPy-NMeth}, and will normally use the $solve\_ivp()$ function due to its newer interface. It lets the user apply the following methods: `RK23', `RK45', `DOP853', `Radau', `BDF' and 'LSODA`. In this report, we will investigate all of these methods. The default solver in $solve\_ivp()$ is `RK45' and the default tolerance is $10^{-3}$ for the relative tolerance and $10^{-6}$ for the absolute tolerance. All of these solvers employ some form of error control:
+In Python, researchers can use the scipy.integrate package \cite{2020SciPy-NMeth}, and will normally use the $solve\_ivp()$ function due to its newer interface. It lets the user apply the following methods: `RK23', `RK45', `DOP853', `Radau', `BDF' and 'LSODA`. The default solver in $solve\_ivp()$ is `RK45' and the default tolerance is $10^{-3}$ for the relative tolerance and $10^{-6}$ for the absolute tolerance. All of these solvers employ some form of error control. The solvers are:
 
 \begin{itemize}
-\item `RK23' uses an explicit Runge-Kutta pair of order 3(2), the Bogacki-Shampine pair of formulas. It is a Python implementation.
+\item `RK23' which uses an explicit Runge-Kutta pair of order 3(2), the Bogacki-Shampine pair of formulas \cite{MR1025845}, and is implemented in Python.
 
-\item `RK45' uses the DOPRI5 pair of formulas, an explicit Runge-Kutta pair of order 5(4). It is a Python implementation.
+\item `RK45' which uses the DOPRI5 pair of formulas mentioned earlier, and is implemented in Python.
 
-\item `DOP853' uses an explicit Runge-Kutta triple of order 8(5, 3). It is a Python implementation.
+\item `DOP853' which uses an explicit Runge-Kutta triple of order 8(5, 3) \cite{hairerWebsite}, and is implemented in Python.
 
-\item `Radau' uses the implicit Radau IIA method of order 5. It is a Python implementation of the RADAU5 Fortran solver.
 
-\item `BDF' uses a method based on BDF methods with the order varying automatically from 1 to 5. It is a Python implementation.
+\item `Radau' which uses the implicit Radau IIA method of order 5. It is a Python implementation of the RADAU5 Fortran solver.
 
-\item `LSODA' calls the Fortran LSODA routine from ODEPACK. It can automatically detect stiffness and choose between a stiff Backward Differentiation Formula (BDF) and a non-stiff Adams solver.
+\item `BDF' which uses BDF methods with the order varying automatically from 1 to 5, and is implemented in Python.
+
+
+\item `LSODA' which calls the Fortran LSODA routine from ODEPACK. 
 \end{itemize}
 
-We note that all solvers in $solve\_ivp()$ have error control and that only 'LSODA' is using the Fortran package itself; the others are a Python implementation and will likely be slower.
+We note that all solvers in $solve\_ivp()$ have error control and that only 'LSODA' uses the Fortran package itself; the others are Python implementations.
 
-We next talk about Python's $solve\_ivp()$ interface. It can integrate using only the initial time and the final time and it will return the output at the end of each successful step. It can also take a $t\_eval$ vector of specified output points. The solver is allowed to take as big a step as needed and required solution approximations are obtained using interpolation. Thus it does not suffer from the inefficiencies described in Section $\ref{subsection:solution_output_points_impl}$. The interface also has a $dense\_output$ flag. This returns an interpolant for the solution over the whole time range.
+We next discuss Python's $solve\_ivp()$ interface. Given only the initial time and the final time, a solver from this method will adaptively step across the domain, returning the output at the end of each successful step. Alternatively, a solver can take a $t\_eval$ array of specified output points. The solver is allowed to take as big a step as needed and required solution approximations, as specified by $t\_eval$, are obtained using interpolation. Thus it does not suffer from the inefficiencies described in Section $\ref{subsection:solution_output_points_impl}$. The interface also has a $dense\_output$ flag. This returns an interpolant for the solution over the entire time range.
 
 \subparagraph{Scilab packages}
-In Scilab, researchers solve differential equations using a method from the $ode()$ function \cite{campbell2010modeling}, which has the following methods: `lsoda', `adams', `stiff', `rk', `rkf'. The default integrator is `lsoda'.
-Default values for the tolerances are $10^{-5}$ for the relative tolerance and $10^{-7}$ for the absolute tolerance for all solvers used except `rkf' for which the relative tolerance is $10^{-3}$ and the absolute tolerance is $10^{-4}$. All of these solvers are error control solvers.
+In Scilab, researchers solve differential equations using a method from the $ode()$ function \cite{campbell2010modeling}; the following methods are available: `lsoda', `adams', `stiff', `rk', `rkf'. The default integrator is `lsoda'.
+Default values for the tolerances are $10^{-5}$ for the relative tolerance and $10^{-7}$ for the absolute tolerance for all solvers except `rkf' for which the relative tolerance is $10^{-3}$ and the absolute tolerance is $10^{-4}$. All of these solvers are error control solvers. The solvers are as follows:
 
 \begin{itemize}
-\item `lsoda' calls the Fortran LSODA routine from ODEPACK. It can automatically detect stiffness and choose between a stiff Backward Differentiation Formula (BDF) and a non-stiff Adams solver.
+\item `lsoda' which calls the Fortran LSODA routine from ODEPACK. 
 
-\item `stiff' calls the stiff solver inside the Fortran LSODE package which is based on a family of BDF methods.
+\item `stiff' which calls the stiff solver inside the Fortran LSODA package which is based on a family of BDF methods.
 
-\item `adams' calls the non-stiff solver inside the Fortran LSODE package which is based on a family of Adams methods.
+\item `adams' which calls the non-stiff solver inside the Fortran LSODA package which is based on a family of Adams methods.
 
-\item `rk' calls an adaptive Runge-Kutta method of order 4. It uses Richardson extrapolation for the error estimation. It is implemented in Fortran in a program called `rkqc.f'.
+\item `rk' which is based on an adaptive Runge-Kutta method of order 4. It uses Richardson extrapolation \cite{MR1261869} for the error estimation. This method calls the Fortran program `rkqc.f' \cite{scilabGithub}.
 
-\item `rkf' calls the Fortran program written by Shampine and Watts based on Fehlberg's Runge-Kutta pair of order 4 and 5 (RKF45) pair. It is implemented in a Fortran program called `rkf45.f'.
+\item `rkf' which calls the Fortran program written by Shampine and Watts that is based on Fehlberg's Runge-Kutta pair of order 4 and 5 (RKF45) pair \cite{osti7318812}. The Fortran program is called `rkf45.f' \cite{scilabGithub}.
 \end{itemize}
 
-The $ode()$ function in Scilab takes as input a vector of output points and the code uses interpolation or stops the integration at the output points, as described in Section $\ref{subsection:solution_output_points_impl}$ of this report, based on the method used. For example, Scilab's `rkf' is an interface to an old software package, `rkf45.f' which does not have any interpolation capabilities.
+The $ode()$ function in Scilab takes as input a vector of output points and the computation uses interpolation or stops the integration at the output points, as described in Section $\ref{subsection:solution_output_points_impl}$, based on the method used. For example, Scilab's `rkf' is an interface to an old software package, `rkf45.f' which does not have interpolation capabilities and thus in order to obtain solution
+approximations at the output points, the solver must step to each output point.
 
 \subparagraph{Matlab packages}
-In Matlab, researchers can solve differential equations with the $ode()$ $suite$ \cite{shampine1997matlab} of functions. We will consider two of these: $ode45()$ and $ode15s()$.
-Default values for the tolerances are $10^{-3}$ for the relative tolerance and $10^{-6}$ for the absolute tolerance.
+In Matlab, researchers can solve differential equations with the $ode$ $suite$ \cite{shampine1997matlab} of functions. We will consider two of these functions: $ode45()$ and $ode15s()$.
+Default values for the tolerances are $10^{-3}$ for the relative tolerance and $10^{-6}$ for the absolute tolerance. The solvers are:
 
 \begin{itemize}
-\item Using $ode45()$ calls a Matlab implementation of DOPRI5.
+\item $ode45()$ which calls a Matlab implementation of DOPRI5.
 
-\item Using $ode15s()$ employs an algorithm that is a variable-step, variable-order (VSVO) solver based on the numerical differentiation formulas (NDFs) of orders 1 to 5. Optionally, it can use BDF methods but these are usually less efficient.
+\item $ode15s()$ which implements a variable-step, variable-order (VSVO) solver based on the numerical differentiation formulas (NDFs) \cite{shampine1997matlab} of orders 1 to 5. Optionally, it can use BDF methods but the authors indicate that these are usually less efficient.
 \end{itemize}
 
-Functions in the $ode$ $suite$ takes the initial and final time only and this allows a solver to take as big a step as needed. With such an interface, it does not suffer from the issues discussed in Section $\ref{subsection:solution_output_points_impl}$. 
+Functions in the $ode$ $suite$ take an array of output points as input but the solvers use adaptive step-size control and interpolation to obtain solution approximations at the output points. With such an interface, the solvers do not suffer from the issues discussed in Section $\ref{subsection:solution_output_points_impl}$. 
 
 \subparagraph{How the packages relate}
 We tried to find connections across the programming environment where the solvers appear to be using the same source code.
@@ -198,41 +227,41 @@ Here is what we found:
 
 In R, Python, and Scilab, the `lsoda' method is a wrapper around the Fortran LSODA code from ODEPACK.
 
-The R `bdf' method is equivalent to the Scilab `stiff' method in that they both use the LSODE code from ODEPACK; however, the Python `BDF' method is a different implementation in Python itself.
+The R `bdf' method is equivalent to the Scilab `stiff' method in that they both use the LSODA code from ODEPACK; however, the Python `BDF' method is a different implementation in Python itself.
 
-The R `adams' method and the Scilab `adams' method are the same since they both use the LSODE code from ODEPACK.
+The R `adams' method and the Scilab `adams' method are the same since they both use the LSODA code from ODEPACK.
 
 The R and Python Runge Kutta 5(4) pairs are both implementations of DOPRI5 but they have different source code as the version in Python is implemented in Python while the R version is implemented in C. The $ode45()$ function in Matlab is a Matlab implementation of DOPRI5. The Scilab `rkf' method does not use the same pair; it uses the Shampine and Watts implementation of the Fehlberg's Runge-Kutta pair, not the Dormand-Prince pair. 
 
 The Scilab `rk' method, which is of order 4, and the R `rk4' method are not the same solvers. The Scilab `rk' method is adaptive (error-controlled with Richardson extrapolation for the error estimate) whereas the R `rk4' method is a fixed step-size implementation of the classical 4-stage, 4$^{th}$ order Runge-Kutta method.
 
-The R and Python `Radau' methods have different source code as Python implements its own version of RADAU5 while R calls the Fortran version of RADAU5 through a C interface.
+The R and Python `Radau' methods have different source code as Python implements a Python version of RADAU5 while R calls the Fortran version of RADAU5 through a C interface.
 
 \subsection{Observations on obtaining solution approximations at output points}
 \label{subsection:solution_output_points_impl}
-In this section, we discuss an issue that we encountered with some of the ODE solvers in R and Scilab when it comes to obtaining output. In an ideal scenario, the user's desired output points should not interfere with the efficiency of the solvers. However, in these two platforms, a method for handling output points is used which makes treating a lot of output points very inefficient.
+In this section, we discuss an issue that we encountered with some of the ODE solvers in R and Scilab when it comes to obtaining output. In an ideal scenario, the user's desired output points should not interfere with the efficiency of the solvers. However, in these two platforms, a method for handling output points is used which makes treating a large number of output points very inefficient.
 
-Regarding the choice of a step-size, a standard ODE solver works as follows. Using a default initial step-size, the solver will take a fixed step. It will then accept or reject the step based on whether the error estimate satisfies the tolerance and will adjust the step-size based on this to take the next step or retake the step. This process is repeated until the solver reaches the end of the interval. However, often the users of an ODE solver will require output at specific points and these points may be internal to the steps. The current state-of-the-art approach to get solution approximations at these output points is to perform a high accuracy interpolation on the given step and to return the value of the interpolant at the required point. The interpolation error is usually at least of order $p$ if the numerical ODE solution is of order $p$. This way the accuracy of the solution approximation at a point that is interior to a step should be comparable to the accuracy of the solution approximation at the end of the step. However some solvers use a lower order interpolant in order to reduce the computational cost.
+As mentioned earlier, using a default initial step-size, a solver will take a trial step. This computation gives both a solution approximation at the end of the step and a corresponding error estimate. The solver will then accept or reject the step based on whether the error estimate satisfies the tolerance and will, respectively, adjust the step-size to take the next step or retake the current step with a smaller step-size. This process is repeated until the solver reaches the end of the interval. However, often the users of an ODE solver will require output at specific points and these points may be internal to the steps. The current state-of-the-art approach to get solution approximations at these output points is to construct a high accuracy interpolant on each step and to return the value of the interpolant at the required point. Ideally the interpolant is of order $p$ if the numerical ODE solution is of order $p$. This way the accuracy of the solution approximation at a point that is interior to a step should be comparable to the accuracy of the solution approximation at the end of the step. However some solvers use a lower order interpolant in order to reduce the computational cost.
 
 Note that the standard ODE solvers only control the error at the end of the step. That is, an error estimate is generated for the solution approximation at the end of the step and the step is accepted if this error estimate satisfies the tolerance. It is hoped that the solution approximations obtained through the use of the interpolant will be of comparable accuracy to the solution approximation at the end of the step. It is typically the case that no error control is actually applied to the continuous solution approximation.
 
-In R and Scilab, the above approach for handling output points is not used in all the solvers. Instead, some solvers in R and Scilab use the output points to dictate the step-size. An issue arises when many output points appear between the steps that would normally be taken by the solver. These solvers will use the difference between the current output point and the next output point to determine the step-size. We note that some R solvers, such as the `ode45' method, do have interpolants but that their implementation still allows the user defined output points to affect the efficiency of the solver. 
+In R and Scilab, the above approach for handling output points is not used in all the solvers. Instead, some solvers in R and Scilab use the output points to dictate the step-size. An issue arises when many output points appear between the steps that would normally be taken by the solver. These solvers will use the difference between the current output point and the next output point to determine the step-size. We note that some R solvers, such as the `ode45' method, do have interpolants but that their default implementation still treats the output points in a way that can negatively affect the efficiency of the solver. 
 
-In such approaches, the output points will limit the maximum step-size that can be taken and will lead to additional function evaluations being performed because the solver needs to compute a solution approximation using the numerical method at each output point. This will lead to a considerable drop in efficiency as we will show later in this report; see for example Tables $\ref{tab:tolerance_time_discontinuity_rk45_R}$ and $\ref{tab:tolerance_time_discontinuity_rk45_further_R}$. These tables show that a problem that can be solved with 150 function evaluations will be solved with 500 function evaluations when there are many output points. 
+In such approaches, the output points will limit the step-size that can be taken and will lead to additional function evaluations being performed because the solver needs to compute a solution approximation using the numerical method at each output point. This will lead to a considerable drop in efficiency as we will show later in this report; see for example Tables $\ref{tab:tolerance_time_discontinuity_rk45_R}$ and $\ref{tab:tolerance_time_discontinuity_rk45_further_R}$. These tables show that a problem that can be solved with 150 function evaluations will be solved with 500 function evaluations when there are many output points. 
 
 This method of handling output points in which the solver steps to each output point and uses the numerical method itself to compute a solution approximation also means that the accuracy of the solution depends on the space between the output points. Thus, we get the unusual behavior that the accuracy is increased by putting the output points closer together and the accuracy is decreased by putting them further apart. We will point out these inconsistencies as they become relevant later in this report. We also note that spacing the points closer together is not a good way to control the accuracy as it is impossible to know beforehand how close the points should be in order to obtain a desired accuracy.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/R_ode45_spacing_experiment}
-\caption{R `ode45' method solving the same problem at very coarse tolerance but with different spaces between the output points in the provided vector. Here the space between the points are 1, 3, 5 and 7. These are plotted alongside a highly accurate solution.}
+\caption{The result of using the R `ode45' method to solve the same problem with a very coarse tolerance but with different spaces between the output points. Here the spacing between the points is 1, 3, 5 and 7. The corresponding approximate solutions are plotted alongside a highly accurate solution (ANS).}
 \label{fig:ode45_spacing_experiment}
 \end{figure}
 
-Figure $\ref{fig:ode45_spacing_experiment}$ shows an experiment where we solve the time-dependent discontinuity Covid-19 problem using the R `ode45' method, which is an implementation of DOPRI5 which has error control and uses interpolation but allows the output points to affect the integration. We set both the absolute and relative tolerance to 0.1 and thus expect low accuracy but very good efficiency. However, the space between the output points becomes the limiting factor for the step-size. The computed solution has undue accuracy and is computed in a very inefficient manner considering the required tolerance. We recorded the number of function evaluations in Table $\ref{tab:ode45_spacing_experiment}$ and it can be seen that the solver is using a lot more function evaluations than are needed to satisfy such a coarse tolerance. In Table $\ref{tab:ode45_spacing_experiment}$, `spacing' refers to the distance between the output points and `nfev' is the number of function evaluations.
+Figure $\ref{fig:ode45_spacing_experiment}$ shows an experiment where we solve the time-dependent discontinuity Covid-19 problem using the R `ode45' method, which is an implementation of DOPRI5 which has error control and an interpolation capability but allows the output points to affect the integration. We set both the absolute and relative tolerance to 0.1 and thus expect low accuracy but very good efficiency. However, the space between the output points becomes the limiting factor for the step-size. When there are many output points, the computed solution has more accuracy than is requested and is computed in a very inefficient manner considering the required tolerance. We record the number of function evaluations in Table $\ref{tab:ode45_spacing_experiment}$ and it can be seen that the solver is using many more function evaluations than are needed to satisfy such a coarse tolerance. In Table $\ref{tab:ode45_spacing_experiment}$, `spacing' refers to the distance between the output points and `nfev' is the number of function evaluations. A spacing of 1 means that the set of output points is $[1, 2, ..., 95]$. A spacing of 3 means that only every third point from the above list of output points is defined, and so on.
 
 \begin{table}[h]
-\caption {R DOPRI5 output point spacing experiment} \label{tab:ode45_spacing_experiment} 
+\caption {R DOPRI5 output point spacing experiment number of function evaluations.} \label{tab:ode45_spacing_experiment} 
 \begin{center}
 \begin{tabular}{ c c }
 spacing & nfev \\ 
@@ -244,34 +273,34 @@ spacing & nfev \\
 \end{center}
 \end{table}
 
-From Figure $\ref{fig:ode45_spacing_experiment}$ and Table $\ref{tab:ode45_spacing_experiment}$, we note that we did not ask the solver for an accurate solution but it is giving us a solution that is much more accurate than requested when the spacing between the output points is small. This excess accuracy comes at a price of around 500 more function evaluations. Accuracy should ideally be completely determined by the tolerance but using this method of stepping to the output points substantially interferes with this ideal. This results in the solver not being allowed to take as big a step as it should be based on the tolerance, and this leads to substantial inefficiency. 
+From Figure $\ref{fig:ode45_spacing_experiment}$ and Table $\ref{tab:ode45_spacing_experiment}$, we note that we did not ask the solver for an accurate solution but it is giving us a solution that is much more accurate than requested when the spacing between the output points is small. This extra accuracy comes at a price of around 500 more function evaluations. Accuracy should ideally be completely determined by the tolerance but using this method of stepping to the output points substantially interferes with this ideal. This results in the solver not being allowed to take as big a step as it should, based on the tolerance, and this leads to substantial inefficiency. 
 
-It is important that users employ the interpolation option for an ODE solver whenever such an option is readily available so that the solvers can run as efficiently as possible. We also reiterate that the interpolant should have an interpolation error that is at least of order $p$ if the ODE solver gives a solution with an error that is of order $p$ so that the interpolation error is consistent with the accuracy of the numerical solution.
+It is important that users employ the interpolation option for an ODE solver whenever such an option is readily available so that the solvers can run as efficiently as possible. We also reiterate that the interpolant should have an interpolation error that is at least of order $p$ if the ODE solver gives a solution with an error that is of order $p$ so that the interpolation error is not larger than the error of the numerical solution.
 
 \subsection{Discontinuities and their effects on solvers}
 \label{subsection:effect_of_discontinuity}
-The main purpose of this report is to discuss how to solve models with discontinuities and how these discontinuities affect the process of computing an accurate numerical solution to the model. In this section, we will show what happens when a solver encounters a discontinuity and how this discontinuity leads to inaccurate solutions.
+The main purpose of this report is to discuss how to solve Covid-19 models with discontinuities and how these discontinuities affect the process of computing an accurate numerical solution to the model. In this section, we will show what happens when a solver encounters a discontinuity and how this discontinuity leads to inaccurate solutions.
 
-We first note that one of the core assumptions for all the solvers is that the function $f(t, y(t))$ and a sufficient number of its higher derivatives are continuous. If the right-hand side function is discontinuous, this can have a major (negative) impact on the performance and accuracy of the solvers. 
+We first note that one of the key assumptions made in the derivation of the numerical methods upon which ODE solvers are based is that the function $f(t, y(t))$ and a sufficient number of its higher derivatives are continuous. If the right-hand side function is discontinuous, this can have a major (negative) impact on the performance and accuracy of the solver. 
 
-We will see that discontinuities will have huge impacts on the accuracy and efficiency of the solvers, that some solvers, even with error control, will require an extremely sharp tolerance to step over the discontinuity in a way that allows them to obtain a reasonably accurate solution approximation, and that fixed-step solvers simply cannot solve these problems accurately. 
+We will see that discontinuities will have huge impacts on the accuracy and efficiency of the solvers, and that some solvers, even with error control, will require an extremely sharp tolerance in order to step over a discontinuity in a way that allows them to obtain a reasonably accurate solution approximation. We will also show that fixed-step solvers simply cannot solve these problems accurately. 
 
-It is important to note that the step taken by a solver that first meets a discontinuity will almost always fail. This is because in order for the solver to step over a discontinuity, the step size needs to be much smaller than the one that is being used before the discontinuity is encountered. The solver will thus have to retake the step with a smaller step size and as long as the error estimate associated with the numerical solution computed on the step is not small enough, it will need to continue reducing the step-size. This leads to a large number of function evaluations near the discontinuity. 
+It is important to note that the step taken by a solver that first meets a discontinuity will almost always fail. This is because in order for the solver to step over a discontinuity, the step size needs to be much smaller than the one that is typically being used before the discontinuity is encountered. The solver will thus have to retake the step with a smaller step size and as long as the error estimate associated with the numerical solution computed on the step is not small enough, it will need to continue reducing the step-size. This leads to a large number of function evaluations near the discontinuity. 
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/lsoda_vs_discontinuity}
-\caption{Function evaluations for the Python `LSODA' method for the time-dependent discontinuity problem with a discontinuity at t=27}
+\caption{Function evaluations for the Python `LSODA' method for the time-dependent discontinuity problem with a discontinuity at t=27.}
 \label{fig:lsoda_vs_discontinuity}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/dop853_vs_discontinuity}
-\caption{Function evaluations for the Python `DOP853' method for the time-dependent discontinuity problem with a discontinuity at t=27}
+\caption{Function evaluations for the Python `DOP853' method for the time-dependent discontinuity problem with a discontinuity at t=27.}
 \label{fig:dop853_vs_discontinuity}
 \end{figure}
 
-In Figures $\ref{fig:lsoda_vs_discontinuity}$ and $\ref{fig:dop853_vs_discontinuity}$, we run `LSODA' and `DOP853' from Python on the time-dependent discontinuity problem where the discontinuity is introduced at t=27 and plot the time at which the $i^{th}$ function evaluation occurs. We thus show the spike in the number of function evaluations at the discontinuity as the solvers repeatedly retake the step with smaller and smaller step-sizes.
+In Figures $\ref{fig:lsoda_vs_discontinuity}$ and $\ref{fig:dop853_vs_discontinuity}$, we run `LSODA' and `DOP853' from Python on the time-dependent discontinuity problem where a discontinuity is introduced at t=27 and plot the time at which each function evaluation occurs. We see a spike in the number of function evaluations at the discontinuity as the solvers repeatedly retake the step with smaller and smaller step-sizes.
 
-Following from the above discussion, we can suggest that, for the case where the location of the a time discontinuity is unknown, researchers should carry out a manual discontinuity detection experiment to see if their model has a discontinuity and if so, where it is located. For the case where it is not known if a discontinuity is present, a trivial experiment is done by collecting data that shows the time at which the solver made the $i^{th}$ call to the function that evaluates the right hand side of the ODE. When a plot of the time against the cumulative count of the function calls gives an almost vertical line, it typically indicates that the function was called repeatedly at a specific time and thus that the solver repeatedly changed the step-size in this region to step over a discontinuity. In the remainder of this report, we will outline ways to accurately and efficiently solve problems with such discontinuities.
+Following from the above discussion, we can suggest that, for the case where the location of the time discontinuity is unknown, researchers could carry out a manual discontinuity detection experiment to see if their model has a discontinuity and if so, where it is located. A trivial experiment can be done by collecting data that shows the time at which the solver makes each call to the function that evaluates the right hand side of the ODE. When a plot of the time against the cumulative count of the function calls gives an almost vertical line, this typically indicates that the function was called repeatedly at a specific time and thus that the solver repeatedly changed the step-size in this region in order to attempt to step over a discontinuity. In the remainder of this report, we will outline ways to accurately and efficiently solve problems with such discontinuities.

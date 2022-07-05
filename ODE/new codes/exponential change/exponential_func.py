@@ -25,61 +25,45 @@ l = 1.00 # 1
 
 with_measures = 0.005
 without_measures = 0.9
-time_measures_implemented = 27
-steepness_of_change = 25 # smaller means that the change is smoother
+time_measures_implemented = 50
+# steepness_of_change = 25 # smaller means that the change is smoother
 
-def time_beta_func(x):
-    if (x <= time_measures_implemented):
-        return without_measures # * exp(-0.01* (x - 27) ** 2)
-    else:
-        return (without_measures - with_measures) * exp(-steepness_of_change*(x - time_measures_implemented) ** 2) + with_measures
+# def time_beta_func(x):
+#     if (x <= time_measures_implemented):
+#         return without_measures # * exp(-0.01* (x - 27) ** 2)
+#     else:
+#         return (without_measures - with_measures) * exp(-steepness_of_change*(x - time_measures_implemented) ** 2) + with_measures
 
-def decrease(x, time_start_decrease):
-    return (without_measures - with_measures) * exp(-steepness_of_change*(x - time_start_decrease) ** 2) + with_measures
+# def decrease(x, time_start_decrease, steepness_of_change):
+#     return (without_measures - with_measures) * exp(-steepness_of_change*(x - time_start_decrease) ** 2) + with_measures
 
-def sigmoid(x, time_start_increase):
+def sigmoid(x, time_start_increase, steepness_of_change):
     return (without_measures - with_measures) * ( 1 / (1 + exp(-steepness_of_change*(x - time_start_increase)))) + with_measures
 
-def inverse_sigmoid(x, time_start_decrease):
+def inverse_sigmoid(x, time_start_decrease, steepness_of_change):
     e = exp(-steepness_of_change*(x - time_start_decrease))
     return (without_measures - with_measures) * e / (1 + e) + with_measures
 
 
-# def Dx_func(x):
-#     Dx = (exp(l *(w1 - x)) / ((exp(l * (w1 - x)) + 1.00) ** 2.00))
-#     temp = (exp(l *(x - w2))/((exp(l * (x - w2)) + 1.00) ** 2.00))
-#     Dx = (Dx - temp) * (1.00 - gamma) * l
-#     return Dx + 0.005 # Dx
-
 t_eval = [x/10 for x in range(1000)]
-# D_eval = [D_func(t) for t in t_eval]
-# Dx_eval = [Dx_func(t) for t in t_eval]
-# time_beta_func_eval = [time_beta_func(t) for t in t_eval]
-decrease_eval = [inverse_sigmoid(t, time_measures_implemented) for t in t_eval]
-increase_eval =  [sigmoid(t, time_measures_implemented) for t in t_eval]
-
-# plt.figure()
-# plt.plot(t_eval, D_eval)
-# plt.title("D")
-# plt.show()
-
-
-# plt.figure()
-# plt.plot(t_eval, Dx_eval)
-# plt.title("Dx")
-# plt.show()
-
-# plt.figure()
-# plt.plot(t_eval, time_beta_func_eval)
-# plt.title("time_beta_func")
-# plt.show()
+# decrease_eval = [inverse_sigmoid(t, time_measures_implemented) for t in t_eval]
+# increase_eval =  [sigmoid(t, time_measures_implemented) for t in t_eval]
 
 plt.figure()
-plt.plot(t_eval, decrease_eval)
-plt.title("decrease")
+for steepness_of_change in [0.1, 1, 10]:
+    plt.plot(t_eval, [inverse_sigmoid(t, time_measures_implemented, steepness_of_change) for t in t_eval], label=f"a={steepness_of_change}")
+# plt.title("inverse sigmoid with discontinuity at t=50 with steepness of change, a, at 0.1, 1, 10")
+plt.xlabel("t")
+plt.ylabel("beta(t) - inverse sigmoid")
+plt.legend()
 plt.show()
 
+
 plt.figure()
-plt.plot(t_eval, increase_eval)
-plt.title("increase")
+for steepness_of_change in [0.1, 1, 10]:
+    plt.plot(t_eval, [sigmoid(t, time_measures_implemented, steepness_of_change) for t in t_eval], label=f"a={steepness_of_change}")
+# plt.title("sigmoid with discontinuity at t=50 with steepness of change, a, at 0.1, 1, 10")
+plt.xlabel("t")
+plt.ylabel("beta(t) - inverse sigmoid")
+plt.legend()
 plt.show()
