@@ -1,0 +1,19 @@
+
+
+
+
+
+
+\section{Final recommendations}
+\label{section:defect_final_recommendations}
+As we have noted before, all the interpolants have a V-shaped defect. We should note that experimentally, the trough for these V-shapes seem to be problem-independent. We thus used the optimal $h$ value, that is the $h$ value where the minimum maximum defect is found, as the initial $h$ value for each solver. We need this, especially in the variable parameter case, so that the first few steps are accepted. These optimal values are as follows. For HB4, the optimal $h$ value seems to be at about $10^{-3}$, for HB6, the optimal $h$ value seems to be at around $10^{-2}$ and for HB8, the optimal value seems to be at around $10^{-1}$ and $10^{-2}$. See Appendix $\ref{section:v_shaped_graph}$ for more details.
+
+We also experimented with using representations of the polynomials other than the monomial form to reduce the effect of the rounding-off error. We can look to use the Barycentric or Horner form of the polynomials to improve the accuracy for example. (See Appendix $\ref{section:horner_bary_forms}$ for more details.)
+
+Some recommendations for a final solver will be to start with the optimal h for the respective interpolant as the first step size so that the $\alpha$ and $\beta$ parameters do not get too large or too small for the first steps. In an ideal case, we would like to keep accepting steps at the start and allow the parameters to be close to 1 for as long as possible.
+
+We should solve with a solver with variable $\alpha$ at the start and then if the solver fails too many step repeatedly, that is, the parameters get too far from 1, we should use the technique of forcing the parameters to be 1 and using the previous interpolants.
+
+The first recommendation guarantees that the first few steps are taken at the minimum error possible and thus that they succeed. The second recommendation guarantees that if we meet a challenging behaviour at some point, we would be able to step through it with static parameters at the cost of additional function evaluations.
+
+We note that because of the V-shape, there is a high likelihood that we cannot solve any problem at very sharp tolerances (as sharper as $10^{-12}$). However, as have shown in Appendix $\ref{section:solving_at_sharp_tolerances}$, the solvers that were created were able to solve for tolerances of $2.5 \times 10^{-12}$.
