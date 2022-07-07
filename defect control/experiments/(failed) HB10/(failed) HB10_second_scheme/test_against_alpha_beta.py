@@ -32,8 +32,8 @@ class Monitor:
 
 def perfect_convergence(alpha, beta, model, solution, model_num):
     monitor = Monitor()
-    the_xs = [0, 0.1, 1, 5, 9]
-    # the_xs = [9]
+    # the_xs = [0, 0.1, 1, 5, 9]
+    the_xs = [9]
     for x0 in the_xs:
         convergences = []
         for h in [1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
@@ -99,8 +99,8 @@ def perfect_convergence(alpha, beta, model, solution, model_num):
 
 def experiments(model, solution, model_num):
     plt.figure()
-    for alpha in [2]:
-        for beta in [2]:
+    for alpha in [1, 32, 1/32]:
+        for beta in [1, 32, 1/32]:
             hs, max_defects = perfect_convergence(alpha, beta, model, solution, model_num)
             plt.plot(hs, max_defects, label=f"alpha={alpha}, beta={beta}")
     plt.ylabel("log of defect")
@@ -143,8 +143,8 @@ def solution11(t):
     return [1/4 * (-1 + 5 * exp(-2 * x) + 2 * x) for x in t]
 
 experiments(model1, solution1, 1)
-experiments(model2, solution2, 2)
-experiments(model3, solution3, 3)
-experiments(model6, solution6, 6)
-experiments(model7, solution7, 7)
-experiments(model11, solution11, 11)
+# experiments(model2, solution2, 2)
+# experiments(model3, solution3, 3)
+# experiments(model6, solution6, 6)
+# experiments(model7, solution7, 7)
+# experiments(model11, solution11, 11)

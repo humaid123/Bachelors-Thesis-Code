@@ -1,5 +1,5 @@
 
-from HB10 import HB
+from HB10_fourth_scheme import HB
 from math import exp, log10, sqrt, sin, cos
 import matplotlib.pyplot as plt
 
@@ -32,8 +32,8 @@ class Monitor:
 
 def perfect_convergence(alpha, beta, model, solution, model_num):
     monitor = Monitor()
-    # the_xs = [0, 0.1, 1, 5, 9]
-    the_xs = [9]
+    the_xs = [0, 0.1, 1, 5, 9]
+    # the_xs = [9]
     for x0 in the_xs:
         convergences = []
         for h in [1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10]:
@@ -82,14 +82,14 @@ def perfect_convergence(alpha, beta, model, solution, model_num):
         hs = [-log10(convergence[0]) for convergence in convergences]
         max_defects = [log10(abs(convergence[1])) for convergence in convergences]
         max_defects_horner = [log10(abs(convergence[2])) for convergence in convergences]
-        plt.figure()
-        plt.plot(hs, max_defects, label="h vs max_defect")
-        plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
-        plt.ylabel("log of defect")
-        plt.xlabel("log of hs")
-        plt.legend()
-        plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, beta={beta}, model={model_num}")
-        plt.show()
+        # plt.figure()
+        # plt.plot(hs, max_defects, label="h vs max_defect")
+        # plt.plot(hs, max_defects_horner, label="h vs max_defect_horner")
+        # plt.ylabel("log of defect")
+        # plt.xlabel("log of hs")
+        # plt.legend()
+        # plt.title(f"h vs max defect at x0={x0}, alpha={alpha}, beta={beta}, model={model_num}")
+        # plt.show()
         monitor.print()
 
         # print("h", "\t\t", "max_defect", "\t\t", "log(h)", "\t\t", "log(defect)")
@@ -99,8 +99,8 @@ def perfect_convergence(alpha, beta, model, solution, model_num):
 
 def experiments(model, solution, model_num):
     plt.figure()
-    for alpha in [2]:
-        for beta in [2]:
+    for alpha in [2, 1/2, 8, 1/8]:
+        for beta in [2, 1/2, 8, 1/8]:
             hs, max_defects = perfect_convergence(alpha, beta, model, solution, model_num)
             plt.plot(hs, max_defects, label=f"alpha={alpha}, beta={beta}")
     plt.ylabel("log of defect")

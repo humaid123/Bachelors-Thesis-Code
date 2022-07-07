@@ -44,42 +44,60 @@ class ContinuousSolution:
         self.interps.extend(newInterps)
 
 
-# def create_continuous_sol_from_results(res, fn_s, monitor):
-#     interps = []
-#     for i in range(len(res) - 4):
-#         x_i_minus_2, y_i_minus_2     = res[i]    
-#         x_i_minus_1, y_i_minus_1     = res[i + 1]    
-#         x_i_minus_0_5, y_i_minus_0_5 = res[i + 2] # I WANT TO CACHE the middle evaluations now 
-#         x_i, y_i                     = res[i + 3]    
-#         x_i_plus_1, y_i_plus_1       = res[i + 4]
+def create_continuous_sol_from_results(res, fn_s, monitor):
+    interps = []
+    for i in range(len(res) - 4):
+        x_i_minus_2, y_i_minus_2     = res[i]    
+        x_i_minus_1, y_i_minus_1     = res[i + 1]    
+        x_i_minus_0_5, y_i_minus_0_5 = res[i + 2] # I WANT TO CACHE the middle evaluations now 
+        x_i, y_i                     = res[i + 3]    
+        x_i_plus_1, y_i_plus_1       = res[i + 4]
 
-#         f_i_minus_2   = fn_s[i]    
-#         f_i_minus_1   = fn_s[i + 1]    
-#         f_i_minus_0_5 = fn_s[i + 2]  # I WANT TO CACHE the middle evaluations now    
-#         f_i           = fn_s[i + 3]    
-#         f_i_plus_1    = fn_s[i + 4]
+        f_i_minus_2   = fn_s[i]    
+        f_i_minus_1   = fn_s[i + 1]    
+        f_i_minus_0_5 = fn_s[i + 2]  # I WANT TO CACHE the middle evaluations now    
+        f_i           = fn_s[i + 3]    
+        f_i_plus_1    = fn_s[i + 4]
         
-#         interps.append(
-#             HB (
-#             x_i_minus_2, x_i_minus_1, x_i_minus_0_5, x_i, x_i_plus_1,
-#             y_i_minus_2, f_i_minus_2,
-#             y_i_minus_1, f_i_minus_1,
-#             y_i_minus_0_5, f_i_minus_0_5,
-#             y_i, f_i,
-#             y_i_plus_1, f_i_plus_1,
-#             monitor
-#             )
-#         )
-#     continuous_sol = ContinuousSolution()
-#     continuous_sol.extend(interps)
-#     return continuous_sol
+        interps.append(
+            HB (
+            x_i_minus_2, x_i_minus_1, x_i_minus_0_5, x_i, x_i_plus_1,
+            y_i_minus_2, f_i_minus_2,
+            y_i_minus_1, f_i_minus_1,
+            y_i_minus_0_5, f_i_minus_0_5,
+            y_i, f_i,
+            y_i_plus_1, f_i_plus_1,
+            monitor
+            )
+        )
+    continuous_sol = ContinuousSolution()
+    continuous_sol.extend(interps)
+    return continuous_sol
 
-def create_defect_samplings(interps):
+def create_defect_samplings(res, fn_s, monitor):
     result = []
-    for interp in interps:
-        x_i_minus_1 = interp.x_i_minus_1
-        x_i = interp.x_i
-        x_i_plus_1 = interp.x_i_plus_1
+    for i in range(len(res) - 4):
+        x_i_minus_2, y_i_minus_2     = res[i]    
+        x_i_minus_1, y_i_minus_1     = res[i + 1]    
+        x_i_minus_0_5, y_i_minus_0_5 = res[i + 2] # I WANT TO CACHE the middle evaluations now 
+        x_i, y_i                     = res[i + 3]    
+        x_i_plus_1, y_i_plus_1       = res[i + 4]
+
+        f_i_minus_2   = fn_s[i]    
+        f_i_minus_1   = fn_s[i + 1]    
+        f_i_minus_0_5 = fn_s[i + 2]  # I WANT TO CACHE the middle evaluations now    
+        f_i           = fn_s[i + 3]    
+        f_i_plus_1    = fn_s[i + 4]
+        
+        interp = HB (
+            x_i_minus_2, x_i_minus_1, x_i_minus_0_5, x_i, x_i_plus_1,
+            y_i_minus_2, f_i_minus_2,
+            y_i_minus_1, f_i_minus_1,
+            y_i_minus_0_5, f_i_minus_0_5,
+            y_i, f_i,
+            y_i_plus_1, f_i_plus_1,
+            monitor
+        )
         result.append( (x_i_minus_1, x_i, x_i_plus_1, interp) )
     return result
         
@@ -295,11 +313,9 @@ class HB:
         h_i = x_i - x_i_minus_0_5
         h_i_minus_1 = x_i_minus_1 - x_i_minus_2
         h_i_plus_1 = x_i_plus_1 - x_i
-
+        
         self.alpha = h_i_minus_1 / h_i
         self.beta = h_i_plus_1 / h_i
-
-        print("x_i", x_i, "h_i", h_i, "h_i_minus_1", h_i_minus_1, "h_i_plus_1", h_i_plus_1, "alpha", self.alpha, "beta", self.beta)
 
         monitor.different_values_alpha.add(self.alpha)
         monitor.different_values_beta.add(self.beta)

@@ -1,7 +1,7 @@
 
 from math import sin, sqrt, exp, cos
 import matplotlib.pyplot as plt
-from rk8 import rk_defect_control_perfect_first_step,  rk_defect_control_static_alpha_beta_func_call
+from rk8 import rk_defect_control_second_trial
 
 def create_t_eval(start, end, num_points = 100):
     res = [start]
@@ -15,9 +15,8 @@ def create_t_eval(start, end, num_points = 100):
 
 def experiment(model, y0, t_span, solution):
     t_eval = create_t_eval(t_span[0], t_span[1])
-    tol = 1e-3
-    # (res, sol, first_deriv, derivs) = rk_defect_control_perfect_first_step(model, t_span, y0[0], tol, solution)
-    (res, sol, first_deriv, derivs) = rk_defect_control_static_alpha_beta_func_call(model, t_span, y0[0], tol, solution)
+    tol = 1e-6
+    (res, sol, first_deriv, derivs) = rk_defect_control_second_trial(model, t_span, y0[0], tol, solution)
     print("integration complete")
 
     # ====================================== figure of rk6 vs rk6_interps vs rk45
@@ -115,7 +114,7 @@ def experiment(model, y0, t_span, solution):
     plt.ylabel('defect/(max_defect on x_i to x_i_plus_1)')
     plt.show()
 
-t_span_1 = [0, 9]
+t_span_1 = [0, 10]
 y0_1 = [1]
 
 def model1(t, y):
