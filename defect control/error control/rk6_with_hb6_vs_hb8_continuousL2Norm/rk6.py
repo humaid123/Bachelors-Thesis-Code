@@ -65,7 +65,7 @@ class Monitor:
 # RK defect control that allows the first step be perfect
 # this allows us to do a successful first step...
 
-def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_rule=5):
+def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_rule=3):
     xn, xend = t_span
     yn = y0
     f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
@@ -180,12 +180,12 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
         else:
             h /= 2
 
-    # print("tolerance=", tol)
-    # print("Monitor8\n===================================")
-    # monitor8.print()
-    # print("\n\nMonitor6\n===============================")
-    # monitor6.print()
-    # print("================================\n")
+    print("tolerance=", tol)
+    print("Monitor8\n===================================")
+    monitor8.print()
+    print("\n\nMonitor6\n===============================")
+    monitor6.print()
+    print("================================\n")
     
     continuous_sol = ContinuousSolution()
     continuous_sol.extend(interps)
@@ -202,152 +202,152 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
 # the following attempt is when the solver is to keep alpha at 1 throughout the integration
 
 # will also have solution for the first step as a proof of concept
-def rk_error_control_static_alpha_beta(fun, t_span, y0, tol, solution):
-    xn, xend = t_span
-    yn = y0
-    f_start = fun(xn, yn)[0] 
+# def rk_error_control_static_alpha_beta(fun, t_span, y0, tol, solution):
+#     xn, xend = t_span
+#     yn = y0
+#     f_start = fun(xn, yn)[0] 
     
-    res = [ (xn, yn) ]
-    fn_s = [f_start]
+#     res = [ (xn, yn) ]
+#     fn_s = [f_start]
 
-    h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
-    xn = xn + h
-    yn = solution([ xn ])[0]
-    f_start = fun(xn, yn)[0]
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
+#     h = 3e-2 # as HB8 Vs at 1e-1 to 1e-2 sqrt(tol)
+#     xn = xn + h
+#     yn = solution([ xn ])[0]
+#     f_start = fun(xn, yn)[0]
+#     res.append( (xn, yn) )
+#     fn_s.append(f_start)
 
-    xn = xn + h
-    yn = solution([ xn ])[0]
-    f_start = fun(xn, yn)[0]
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
+#     xn = xn + h
+#     yn = solution([ xn ])[0]
+#     f_start = fun(xn, yn)[0]
+#     res.append( (xn, yn) )
+#     fn_s.append(f_start)
 
-    xn = xn + h
-    yn = solution([ xn ])[0]
-    f_start = fun(xn, yn)[0]
-    res.append( (xn, yn) )
-    fn_s.append(f_start)
+#     xn = xn + h
+#     yn = solution([ xn ])[0]
+#     f_start = fun(xn, yn)[0]
+#     res.append( (xn, yn) )
+#     fn_s.append(f_start)
 
-    x_i_plus_1, y_i_plus_1   = res[-1]
-    x_i, y_i                 = res[-2]
-    x_i_minus_1, y_i_minus_1 = res[-3]
-    x_i_minus_2, y_i_minus_2 = res[-4]
+#     x_i_plus_1, y_i_plus_1   = res[-1]
+#     x_i, y_i                 = res[-2]
+#     x_i_minus_1, y_i_minus_1 = res[-3]
+#     x_i_minus_2, y_i_minus_2 = res[-4]
 
-    f_i_plus_1  = fn_s[-1]
-    f_i         = fn_s[-2]
-    f_i_minus_1 = fn_s[-3]
-    f_i_minus_2 = fn_s[-4]
+#     f_i_plus_1  = fn_s[-1]
+#     f_i         = fn_s[-2]
+#     f_i_minus_1 = fn_s[-3]
+#     f_i_minus_2 = fn_s[-4]
 
-    monitor8 = Monitor()
-    monitor6 = Monitor()
+#     monitor8 = Monitor()
+#     monitor6 = Monitor()
 
-    this_interp = HB8(
-        x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-        y_i_minus_2, f_i_minus_2,
-        y_i_minus_1, f_i_minus_1,
-        y_i, f_i,
-        y_i_plus_1, f_i_plus_1,
-        monitor8
-    )
+#     this_interp = HB8(
+#         x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+#         y_i_minus_2, f_i_minus_2,
+#         y_i_minus_1, f_i_minus_1,
+#         y_i, f_i,
+#         y_i_plus_1, f_i_plus_1,
+#         monitor8
+#     )
 
-    continous_sol = ContinuousSolution()
-    continous_sol.append(this_interp)
+#     continous_sol = ContinuousSolution()
+#     continous_sol.append(this_interp)
 
-    while xn < xend:
-        (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
+#     while xn < xend:
+#         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
-        x_i, y_i = res[-1]
-        x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
+#         x_i, y_i = res[-1]
+#         x_i_plus_1, y_i_plus_1 = x_i + h, yn_plus_1_higher_order
 
-        f_i = fn_s[-1]
-        f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
+#         f_i = fn_s[-1]
+#         f_i_plus_1 = fun(x_i_plus_1, y_i_plus_1)[0]
 
-        x_i_minus_1 = x_i - h
-        y_i_minus_1 = continous_sol.eval(x_i_minus_1)
-        f_i_minus_1 = continous_sol.prime(x_i_minus_1)
+#         x_i_minus_1 = x_i - h
+#         y_i_minus_1 = continous_sol.eval(x_i_minus_1)
+#         f_i_minus_1 = continous_sol.prime(x_i_minus_1)
 
-        x_i_minus_2 = x_i_minus_1 - h
-        y_i_minus_2 = continous_sol.eval(x_i_minus_2)
-        f_i_minus_2 = continous_sol.prime(x_i_minus_2)
+#         x_i_minus_2 = x_i_minus_1 - h
+#         y_i_minus_2 = continous_sol.eval(x_i_minus_2)
+#         f_i_minus_2 = continous_sol.prime(x_i_minus_2)
 
-        this_interp_hb8 = HB8(
-            x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
-            y_i_minus_2, f_i_minus_2,
-            y_i_minus_1, f_i_minus_1,
-            y_i, f_i,
-            y_i_plus_1, f_i_plus_1,
-            monitor8
-        )
+#         this_interp_hb8 = HB8(
+#             x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
+#             y_i_minus_2, f_i_minus_2,
+#             y_i_minus_1, f_i_minus_1,
+#             y_i, f_i,
+#             y_i_plus_1, f_i_plus_1,
+#             monitor8
+#         )
 
         
-        this_interp_hb6 = HB6(
-            x_i_minus_1, x_i, x_i_plus_1,
-            y_i_minus_1, f_i_minus_1,
-            y_i, f_i,
-            y_i_plus_1, f_i_plus_1,
-            monitor6
-        )
+#         this_interp_hb6 = HB6(
+#             x_i_minus_1, x_i, x_i_plus_1,
+#             y_i_minus_1, f_i_minus_1,
+#             y_i, f_i,
+#             y_i_plus_1, f_i_plus_1,
+#             monitor6
+#         )
 
-        """
-        # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
-        if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
-        if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
-        if (abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))   > 1e-12: print("wrong y_i_plus_1",  abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))
+#         """
+#         # we test the interpolant to check if the Hermite Birkhoff conditions are met as intended
+#         if (abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))  > 1e-12: print("wrong y_i_minus_1", abs(this_interp.eval(x_i_minus_1) - y_i_minus_1))
+#         if (abs(this_interp.eval(x_i)         - y_i))          > 1e-12: print("wrong y_i",         abs(this_interp.eval(x_i)         - y_i))
+#         if (abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))   > 1e-12: print("wrong y_i_plus_1",  abs(this_interp.eval(x_i_plus_1)  - y_i_plus_1))
 
-        if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
-        if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
-        if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
-        """        
+#         if (abs(this_interp.prime(x_i_minus_1) - f_i_minus_1)) > 1e-12: print("wrong f_i_minus_1", abs(this_interp.prime(x_i_minus_1) - f_i_minus_1))
+#         if (abs(this_interp.prime(x_i)         - f_i))         > 1e-12: print("wrong f_i",         abs(this_interp.prime(x_i)         - f_i))
+#         if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
+#         """        
 
-        # error control on [x_i to x_i_plus_1]
-        h_i = x_i_plus_1 - x_i
-        x_sample_1 = x_i + 0.4 * h_i
-        error_sample1 = abs(
-            this_interp_hb6.eval(x_sample_1) - this_interp_hb8.eval(x_sample_1)
-        )
+#         # error control on [x_i to x_i_plus_1]
+#         h_i = x_i_plus_1 - x_i
+#         x_sample_1 = x_i + 0.4 * h_i
+#         error_sample1 = abs(
+#             this_interp_hb6.eval(x_sample_1) - this_interp_hb8.eval(x_sample_1)
+#         )
 
-        x_sample_2 = x_i + 0.8 * h_i
-        error_sample2 = abs(
-            this_interp_hb6.eval(x_sample_2) - this_interp_hb8.eval(x_sample_2)
-        )
+#         x_sample_2 = x_i + 0.8 * h_i
+#         error_sample2 = abs(
+#             this_interp_hb6.eval(x_sample_2) - this_interp_hb8.eval(x_sample_2)
+#         )
 
-        max_error_estimate = max(error_sample1, error_sample2)
+#         max_error_estimate = max(error_sample1, error_sample2)
 
-        monitor8.n_steps += 1
+#         monitor8.n_steps += 1
 
-        # print("max_defect", max_defect)
-        if max_error_estimate < tol:
-            # accept the step, by moving the x and the y
-            xn = x_i_plus_1
-            yn = y_i_plus_1
-            res.append( (xn, yn) )
+#         # print("max_defect", max_defect)
+#         if max_error_estimate < tol:
+#             # accept the step, by moving the x and the y
+#             xn = x_i_plus_1
+#             yn = y_i_plus_1
+#             res.append( (xn, yn) )
 
-            f_start = f_i_plus_1
-            fn_s.append(f_start)
+#             f_start = f_i_plus_1
+#             fn_s.append(f_start)
 
-            continous_sol.append(this_interp_hb8)
+#             continous_sol.append(this_interp_hb8)
 
-            monitor8.n_successful_steps += 1
+#             monitor8.n_successful_steps += 1
 
-            if max_error_estimate < (tol / 10):
-                h *= 2
-        else:
-            # print("tolerance not satisfied")
-            h /= 2
+#             if max_error_estimate < (tol / 10):
+#                 h *= 2
+#         else:
+#             # print("tolerance not satisfied")
+#             h /= 2
 
-    print("tolerance=", tol)
-    print("monitor8\n============================")
-    monitor8.print()
-    print()
+#     print("tolerance=", tol)
+#     print("monitor8\n============================")
+#     monitor8.print()
+#     print()
 
-    print("monitor6\n============================")
-    monitor6.print()
-    print("================================\n")
+#     print("monitor6\n============================")
+#     monitor6.print()
+#     print("================================\n")
 
-    return (
-        res, 
-        continous_sol.eval,
-        continous_sol.prime,
-        continous_sol.create_error_samplings()
-    )
+#     return (
+#         res, 
+#         continous_sol.eval,
+#         continous_sol.prime,
+#         continous_sol.create_error_samplings()
+#     )
