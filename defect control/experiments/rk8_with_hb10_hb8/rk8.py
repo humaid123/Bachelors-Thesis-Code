@@ -1,4 +1,5 @@
 from math import sqrt
+from math import sqrt
 from HB8_second_scheme import HB8, HB8ContinuousSolution
 from scipy.integrate import fixed_quad
 from HB10_fourth_scheme import HB10, HB10ContinuousSolution
@@ -53,7 +54,7 @@ C = [0.0, 0.05, 0.1065625, 0.15984375, 0.39, 0.465, 0.155, 0.943, 0.901802041735
 B = [0.04427989419007951, 0.0, 0.0, 0.0, 0.0, 0.3541049391724449, 0.2479692154956438, -15.694202038838084, 25.084064965558564, -31.738367786260277, 22.938283273988784, -0.2361324633071542, 0.0, 0, 0, 0, 0, 0, 0, 0, 0]
 B_HAT = [0.044312615229089795, 0.0, 0.0, 0.0, 0.0, 0.35460956423432266, 0.2478480431366653, 4.4481347324757845, 19.846886366118735, -23.58162337746562, 0.0, 0.0, 
 -0.36016794372897754, 0, 0, 0, 0, 0, 0, 0, 0]
-n_stages = 13 # 21
+n_stages =  13 # 21
 # ===================================================================================================================================
 # taking one rk step with a Runge Kutta pair
 
@@ -98,13 +99,11 @@ class Monitor:
 # RK defect control that allows the first step be perfect
 # this allows us to do a successful first step...
 
-def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_rule=3):
+def rk_defect_control_perfect_first_step(fun, t_span, y0, tol, solution):
     xn, xend = t_span
     yn = y0
     f_start = fun(xn, yn)[0] # each time we call, the function 'fun', we will have to extract the first value as solve_ivp wants vectorised model functions
-
-    ratios = []
-
+    
     res = [(xn, yn)]
     fn_s = [f_start]
     interps = []
@@ -148,6 +147,7 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
             monitor8
         )
 
+
         # to eliminate one parameter, we define an x value between x_i_minus_1 and x_i
         # this allows us to have a more resilient interpolant
         # we are forced to make a function evaluation so that the data is of the correct order and not affected by interpolant order
@@ -171,6 +171,7 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
             y_i_plus_1, f_i_plus_1,
             monitor10
         )
+
         monitor8.n_steps += 1
 
         """
@@ -184,33 +185,20 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
         if (abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))  > 1e-12: print("wrong f_i_plus_1",  abs(this_interp.prime(x_i_plus_1)  - f_i_plus_1))
         """
 
-        def error_func(x_array):
-            res = [
-                ((this_interp_hb10.eval(x) - this_interp_hb8.eval(x)) / (1 + abs(this_interp_hb8.eval(x))))**2 
-                for x in x_array
-            ]
-            return res
-
-        def exact_error_func(x_array):
-            res = [
-                ((solution([ x ])[0] - this_interp_hb8.eval(x)) / (1 + abs(this_interp_hb8.eval(x))))**2 
-                for x in x_array
-            ]
-            return res
-
-        error_estimate = sqrt(
-            fixed_quad(error_func, x_i, x_i_plus_1, n=gauss_rule)[0]
+        # defect control on [x_i to x_i_plus_1]
+        h_i = x_i_plus_1 - x_i
+        x_sample_1 = x_i + 0.4 * h_i
+        defect_sample_1 = abs( 
+            this_interp_hb10.prime(x_sample_1) - fun( x_sample_1, this_interp_hb10.eval(x_sample_1) )[0] 
         )
 
-        exact_error = sqrt(
-            fixed_quad(exact_error_func, x_i, x_i_plus_1, n=gauss_rule)[0]
+        x_sample_2 = x_i + 0.8 * h_i
+        defect_sample_2 = abs(
+            this_interp_hb10.prime(x_sample_2) - fun( x_sample_2, this_interp_hb10.eval(x_sample_2) )[0]
         )
-        # print(error_estimate, exact_error)
-        ratio = (error_estimate / exact_error)
-        # print(f"RATIO: {ratio} should be close to 1")
-        
+        max_defect = max(defect_sample_1, defect_sample_2)
 
-        if error_estimate < tol:
+        if max_defect < tol:
             # accept the step, by moving the x and the y
             xn = x_i_plus_1
             yn = y_i_plus_1
@@ -221,13 +209,10 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
 
             monitor8.n_successful_steps += 1
 
-            # step was accepted so we also save the ratio
-            ratios.append((xn, ratio))
-
             interps.append(this_interp_hb10)
             lower_order_interps.append(this_interp_hb8)
-            
-            if error_estimate < (tol / 10):
+
+            if max_defect < (tol / 10):
                 h *= 2
         else:
             h /= 2
@@ -237,11 +222,11 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
     monitor8.print()
     print("\n\nMonitor10\n===============================")
     monitor10.print()
+
     print("================================\n")
-    
     continuous_sol = HB10ContinuousSolution()
     continuous_sol.extend(interps)
-
+    
     lower_continuous_sol = HB8ContinuousSolution()
     lower_continuous_sol.extend(lower_order_interps)
     return (
@@ -249,14 +234,12 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
         continuous_sol.eval,
         continuous_sol.prime,
         continuous_sol.create_error_samplings(),
-        ratios,
-        monitor8
     )
 
-# =================================================================================
-# the following attempt is when the solver is to keep alpha at 1 throughout the integration
+# # =================================================================================
+# # the following attempt is when the solver is to keep alpha at 1 throughout the integration
 
-# will also have solution for the first step as a proof of concept
+# # will also have solution for the first step as a proof of concept
 # def rk_error_control_static_alpha_beta(fun, t_span, y0, tol, solution):
 #     xn, xend = t_span
 #     yn = y0
@@ -362,7 +345,7 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
 #             this_interp_hb6.eval(x_sample_1) - this_interp_hb8.eval(x_sample_1)
 #         )
 
-#         x_sample_2 = x_i + 0.8 * h_i
+#         x_sample_2 = x_i + 0.6 * h_i
 #         error_sample2 = abs(
 #             this_interp_hb6.eval(x_sample_2) - this_interp_hb8.eval(x_sample_2)
 #         )
