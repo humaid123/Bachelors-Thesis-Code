@@ -137,6 +137,16 @@ Though the defect is defined for the whole step, the estimation of the maximum d
 
 In the approach outlined in this chapter, we have observed experimentally that the maximum defect will tend to appear at one of two locations within the step. Thus in our approach, only two defect samplings must be done to get the maximum defect. Though we make an additional function evaluation compared to the asymptotically correct defect control, using no function evaluations to construct the interpolant guarantees that our method is more efficient especially for higher orders.
 
+============================================================
+I dont think we can put the Butcher Tablau, the numbers are too big.
+I think we can just reference Jim Verner's website for crk65 and crk87.
+Rk4 is the classical rk4 currently. You might want to gievv me a crk4 but we ruled that out as it does seem that crk4 will be much better than rk4 with hb6 as it makes only one additional stage.
+
+I included the following rk6 and rk8:
+the rk6 is his 'most efficient pair': https://www.sfu.ca/~jverner/RKV65.IIIXb.Efficient.00000144617.081204.RATOnWeb for which he gave a 5th and 6th order interpolant at a cost of +1 and +2 more function evaluations.
+
+the rk8 is his 'most efficient pair' again: https://www.sfu.ca/~jverner/RKV87.IIa.Efficient.000000282866.081208.FLOAT40OnWeb for which he gave a 7th and 8th order interpolant at a cost of +4 and +4 additional function evaluations
+============================================================
 
 \subsection{Overview of our approach}
 \label{section:basic_runge_kutta}

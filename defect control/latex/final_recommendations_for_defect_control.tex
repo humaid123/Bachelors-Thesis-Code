@@ -99,4 +99,4 @@ We should solve with a solver with variable $\alpha$ at the start and then if th
 
 The first recommendation guarantees that the first few steps are taken at the minimum error possible and thus that they succeed. The second recommendation guarantees that if we meet a challenging behaviour at some point, we would be able to step through it with static parameters at the cost of additional function evaluations.
 
-We note that because of the V-shape, there is a high likelihood that we cannot solve any problem at very sharp tolerances (as sharper as $10^{-12}$). However, as have shown in Appendix $\ref{section:solving_at_sharp_tolerances}$, the solvers that were created were able to solve for tolerances of $2.5 \times 10^{-12}$.
+Another recommendation is to use different HB orders. An idea would be to use a lower order interpolant at coarser tolerances and use a higher order interpolant at sharper tolerances. 

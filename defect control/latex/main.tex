@@ -40,10 +40,11 @@ In this report, we consider the concept of `defect control'. We discuss its impo
 
 \include{introduction}
 \include{rk4_with_multistep_interps}
-\include{higher_order_runge_kutta_methods}
+\include{comparison_crks_vs_hbs} % it looks bad, hb8 is weaker than hb6. a plot at 1e-5, a plot at 1e-10 for all hbs, at 1e-5, the lower order is better but at 1e-10, higher order is better. steps are small. 
+\include{higher_order_runge_kutta_methods} 
+% hb8 in practive takes less steps than hb6
 \include{static_parameters}
 \include{final_recommendations_for_defect_control}
-\include{defect_control_sharp_tol}
 \include{assymptotically_correct_HB6}
 \include{error_control_instead_of_defect}
 \include{conclusion_future_works}
