@@ -305,3 +305,96 @@ Problem & succ. steps & nsteps \\
 \end{tabular}
 \end{center}
 \end{table}
+
+============================================================================
+\subsection{RK8 with HB10}
+In this section, we fit the RK8 method, described in Section $\ref{section:basic_runge_kutta}$, with HB10. From Section $\ref{}$ we do not expect HB10 to work well because of the order of the method shows that HB10 is only more accurate at higher tolerances compared to HB10.
+
+\paragraph{Problem 1 results}
+Figures $\ref{fig:rk8_with_hb10_p1_global_defect}$, $\ref{fig:rk8_with_hb10_p1_global_error}$ and $\ref{fig:rk8_with_hb10_p1_scaled_defects}$ shows the results of using RK8 with HB10 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb10_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk8_with_hb10_p1_global_defect}$. 
+ 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p1_global_defect}
+\caption{Defect across the entire domain for RK8 with HB10 on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb10_p1_global_defect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p1_global_error}
+\caption{Global Error for RK8 with HB10 on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb10_p1_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p1_scaled_defects}
+\caption{Scaled defects for RK8 with HB10 on problem 1 at an absolute tolerance of $10^{-6}$  mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb10_p1_scaled_defects}
+\end{figure}
+
+\paragraph{Problem 2 results}
+Figures $\ref{fig:rk8_with_hb10_p2_global_defect}$, $\ref{fig:rk8_with_hb10_p2_global_error}$ and $\ref{fig:rk8_with_hb10_p2_scaled_defects}$ shows the results of using RK8 with HB10 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.4h$ or $xx0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb10_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk8_with_hb10_p2_global_defect}$. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p2_global_defect}
+\caption{Defect across the entire domain for RK8 with HB10 on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb10_p2_global_defect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p2_global_error}
+\caption{Global Error for RK8 with HB10 on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb10_p2_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p2_scaled_defects}
+\caption{Scaled defects for RK8 with HB10 on problem 2 at an absolute tolerance of $10^{-6}$  mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb10_p2_scaled_defects}
+\end{figure}
+
+\paragraph{Problem 3 results}
+Figures $\ref{fig:rk8_with_hb10_p3_global_defect}$, $\ref{fig:rk8_with_hb10_p3_global_error}$ and $\ref{fig:rk8_with_hb10_p3_scaled_defects}$ shows the results of using the modification of RK8 with HB10 on Problem 3. 
+We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.25h$ or $xx0.8h$ along a step of size, h. See Figure $\ref{fig:rk8_with_hb10_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk8_with_hb10_p3_global_defect}$. 
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p3_global_defect}
+\caption{Defect across the entire domain for RK8 with HB10 on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb10_p3_global_defect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p3_global_error}
+\caption{Global Error for RK8 with HB10 on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb10_p3_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb10_p3_scaled_defects}
+\caption{Scaled defects for RK8 with HB10 on problem 3 at an absolute tolerance of $10^{-6}$  mapped onto $[0, 1]$. Despite the noise, the maximum defect mostly appears near $0.8h$.}
+\label{fig:rk8_with_hb10_p3_scaled_defects}
+\end{figure}
+
+\begin{table}[h]
+\caption {Number of steps taken by RK8 when modified to do defect control with HB10.} \label{tab:rk8_with_hb10_nsteps}
+\begin{center}
+\begin{tabular}{ c c c } 
+Problem & succ. steps & nsteps \\ 
+1       & 14             &        16 \\ 
+2       & 10             &        13 \\
+3       & 20             &        28 \\
+\end{tabular}
+\end{center}
+\end{table}
+
+Table $\ref{tab:rk8_with_hb10_nsteps}$ is surprising. From Section $\ref{section:crks_vs_hb}$, we do not expect HB10 to be better than HB8 at a tolerance of $10^{-6}$ but the number of steps taken has decreased compared to rk8 with HB8.

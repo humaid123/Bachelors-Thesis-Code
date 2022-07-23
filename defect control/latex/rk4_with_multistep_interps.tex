@@ -417,7 +417,7 @@ Figures $\ref{fig:rk4_with_hb8_p1_global_defect}$, $\ref{fig:rk4_with_hb8_p1_glo
 \end{figure}
 
 \paragraph{Problem 2 results}
-Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_global_error}$ and $\ref{fig:rk4_with_hb8_p2_scaled_defects}$ shows the results of using RK4 with HB6 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb8_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p2_global_defect}$. 
+Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_global_error}$ and $\ref{fig:rk4_with_hb8_p2_scaled_defects}$ shows the results of using RK4 with HB8 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb8_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p2_global_defect}$. 
 
 \begin{figure}[H]
 \centering
@@ -441,7 +441,7 @@ Figures $\ref{fig:rk4_with_hb8_p2_global_defect}$, $\ref{fig:rk4_with_hb8_p2_glo
 \end{figure}
 
 \paragraph{Problem 3 results}
-Figures $\ref{fig:rk4_with_hb8_p3_global_defect}$, $\ref{fig:rk4_with_hb8_p3_global_error}$ and $\ref{fig:rk4_with_hb8_p3_scaled_defects}$ shows the results of using RK4 with HB6 on Problem 3. 
+Figures $\ref{fig:rk4_with_hb8_p3_global_defect}$, $\ref{fig:rk4_with_hb8_p3_global_error}$ and $\ref{fig:rk4_with_hb8_p3_scaled_defects}$ shows the results of using RK4 with HB8 on Problem 3. 
 We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.3h$ or $0.8h$ along a step of size, h.  See Figure $\ref{fig:rk4_with_hb8_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb8_p3_global_defect}$. 
 
 \begin{figure}[H]
@@ -480,3 +480,163 @@ Problem & succ. steps HB8 & succ. steps HB6 & nsteps HB8 & nsteps HB6 \\
 \end{table}
 
 From Table $\ref{tab:rk4_with_hb8_nsteps}$, we can see that the number of steps with HB6 and with HB8 are relatively similar. This indicates that the interpolation error is no longer the limiting factor, even in HB6. The limiting factor is the discrete numerical solution which is as required. Thus though we can use RK4 with HB8 at the same cost as modifying RK4 with HB6, using HB8 does not improve the efficiency. Furthermore, HB8 is less stable to changes in $\alpha$ and $\beta$ than HB6 is to changes to $\alpha$. Thus RK4 is best augmented with HB6. However HB8 provides a new opportunity, we can now augment a $6^{th}$ order Runge Kutta method and possibly an $8^{th}$ order Runge-Kutta method, but in the latter case, the interpolation error will still affect the accuracy. Augmenting higher order methods with our HB6 and HB8 schemes is significant because as we have discussed in Section $\ref{section:crk_related_work}$ when using continuous Runge-Kutta solvers to obtain the interpolants, the number of stages grows exponentially with the order of the method. Our scheme is zero-cost and thus effective defect control using this approach will be relatively more efficient.
+
+
+\subsection{RK4 with an $10^{th}$ order Hermite-Birkhoff interpolant}
+\label{section:HB10_derivation}
+\paragraph{Derivation of HB10 - the one that worked}
+
+
+\paragraph{HB10 which by using HB8 in the middle}
+We tried several HB10 scheme and the one that worked is created as follows. 
+We extend HB8 second scheme by breaking its middle step and using the first half of the split middle step as the base step. So we break the step between $x_{i-1}$ and $x_i$ with an $x_{i - \frac{1}{2}}$. We then use the embedded HB8 that has been extended to calculate $y_{i- \frac{1}{2}}$ and make a function evaluation with these values to get $f_{i- \frac{1}{2}}$ to get 5 data points on which to build the interpolant.
+
+The interpolant is thus defined over 4 steps of size $\alpha h$, $h$, $h$ and $\beta h$ over the data points $(x_{i-2}, y_{i-2}, f_{i-2})$, $(x_{i-1}, y_{i-1}, f_{i-1})$, $(x_{i-\frac{1}{2}}, y_{i-\frac{1}{2}}, f_{i-\frac{1}{2}})$, $(x_i, y_i, f_i)$ and $(x_{i + 1}, y_{i + 1}, f_{i + 1})$ is defined as such:
+
+\begin{equation}
+\begin{split}
+u(t_{i-\frac{1}{2}} + \theta h) =
+      d_0(\theta)y_{i-2}           + h_id_1(\theta)f_{i-2}\\
+    + d_2(\theta)y_{i-1}           + h_id_3(\theta)f_{i-1}\\
+    + d_4(\theta)y_{i-\frac{1}{2}} + h_id_5(\theta)f_{i-\frac{1}{2}}\\
+    + d_6(\theta)y_i               + h_id_7(\theta)f_i \\
+    + d_8(\theta)y_{i+1}           + h_id_9(\theta)f_{i+1}\\
+\end{split}
+\end{equation}
+and the derivative is:
+\begin{equation}
+\begin{split}
+u'(t_{i-\frac{1}{2}} + \theta h) = 
+      d_0'(\theta)y_{i-2}/h_i           + d_1'(\theta)f_{i-2}\\
+    + d_2'(\theta)y_{i-1}/h_i           + d_3'(\theta)f_{i-1}\\
+    + d_4'(\theta)y_{i-\frac{1}{2}}/h_i + d_5'(\theta)f_{i-\frac{1}{2}}\\
+    + d_6'(\theta)y_i/h_i               + d_7'(\theta)f_i \\
+    + d_8'(\theta)y_{i+1}/h_i           + d_9'(\theta)f_{i+1}\\
+\end{split}
+\end{equation}
+Again $\theta$ is:
+\begin{equation}
+\theta = (t - x_{i-\frac{1}{2}}) / h_i.
+\end{equation}
+
+The step between $x_{i-1}$ and $x_{i-\frac{1}{2}}$ is the base step with $\theta=0$ at $x_\frac{1}{2}$. This way the error terms have terms in $1 + \alpha$ and $1 + \beta$ instead of $2 + \alpha$ on one side and $\beta$ on another side. Not having $2 + \alpha$ reduces the error term. 
+
+This time $\theta$ is allowed to vary between $-1-\alpha$ and $1+\beta$ such that $t_{i-\frac{1}{2}} + \theta$h is $t_{i-2}$ when $\theta$ is $-1-\alpha$, $t_{i-1}$ when $\theta$ is $-1$, $t_{i-\frac{1}{2}}$ at $\theta$ is 0, $t_i$ when $\theta$ is $1$ and $t_{i + 1}$ when $\theta$ is $1+\beta$. Also $d_0(\theta)$, $d_1(\theta)$, $d_2(\theta)$, $d_3(\theta)$, $d_4(\theta)$, $d_5(\theta)$, $d_6(\theta)$, $d_7(\theta)$, $d_8(\theta)$ and $d_9(\theta)$ are all nonic polynomials that will each have 10 coefficients.
+
+Each nonic polynomial is assumed to have the form $a\theta^9 + b\theta^8 + c\theta^7 + d\theta^6 + e\theta^5 + f\theta^4 + g\theta^3 + h\theta^2 + i\theta + j$ where the 10 coefficients for each can be found in terms of $\alpha$ and $\beta$ by solving a linear system of 10 equations in terms of $\alpha$ and $\beta$. 
+
+
+First at $\theta = -1-\alpha$, only $d_0(\theta)$ evaluates to 1 and all the other nonic polynomials evaluate to 0 as $u(t_{i-\frac{1}{2}} - (1+\alpha) h) = u(t_{i - 2}) = y_{i - 2}$.  Also at this $\theta$ value, only the derivative of $d_1(\theta)$ evaluates to 1 and all the other nonic polynomial derivatives evaluate to 0 as $u'(t_{i-\frac{1}{2}} - (1+\alpha) h) = u'(t_{i - 2}) = f_{i - 2}$. 
+
+When $\theta = -1$, only $d_2(\theta)$ evaluates to 1 and all the other nonic polynomials evaluate to 0 as $u(t_{i-\frac{1}{2}} - h) = u(t_{i - 1}) = y_{i - 1}$. Also at this $\theta$ value, only the derivative of $d_3(\theta)$ evaluates to 1 and all the other nonic polynomial derivatives evaluate to 0 as $u'(t_{i-\frac{1}{2}} - h) = u'(t_{i - 1}) = f_{i - 1}$. 
+
+When $\theta$ is 0, only $d_4(\theta)$ evaluates to 1 and all the other nonic polynomials evaluate to 0 as $u(t_{i-\frac{1}{2}} - 0(h)) = u(t_{i-\frac{1}{2}}) = y_{i-\frac{1}{2}}$. Also at this $\theta$ value, only the derivative of $d_5(\theta)$ evaluates to 1 and all the other nonic polynomial derivatives evaluate to 0 as $u'(t_{i-\frac{1}{2}} - 0(h)) = u'(t_{i-\frac{1}{2}}) = f_{i-\frac{1}{2}}$. 
+
+When $\theta$ is 1, only $d_6(\theta)$ evaluates to 1 and all the other nonic polynomials evaluate to 0 as $u(t_{i-\frac{1}{2}} + 1(h)) = u(t_{i}) = y_{i}$. Also at this $\theta$ value, only the derivative of $d_7(\theta)$ evaluates to 1 and all the other nonic polynomial derivatives evaluate to 0 as $u'(t_{i-\frac{1}{2}} - 1(h)) = u'(t_{i}) = f_{i}$. 
+
+When $\theta$ is $1 + \beta$, only $d_8(\theta)$ evaluates to 1 and all the other nonic polynomials evaluate to 0 as $u(t_{i-\frac{1}{2}} + (1 + \beta)(h)) = u(t_{i+1}) = y_{i+1}$. Also at this $\theta$ value, only the derivative of $d_9(\theta)$ evaluates to 1 and all the other nonic polynomial derivatives evaluate to 0 as $u'(t_{i-\frac{1}{2}} - (1 + \beta)(h)) = u'(t_{i+1}) = f_{i+1}$. 
+
+With these 10 conditions, we can get 10 equations for each polynomial in terms of $\alpha$ and $\beta$ and, using a symbolic management package, we can solve all of these to find the 10 nonic polynomials.
+
+The interpolant defined as above using the embedded HB8 to get $y_{i-\frac{1}{2}}$ and an additional function evaluation at $f_{i-\frac{1}{2}}$ will be referred to as HB10 for the remainder of this chapter. We note that it is of order 10 and its derivative is of order 9.
+
+In Figure $\ref{fig:hb10_alpha_beta_test}$, we see that the interpolant is relatively accuracte with a variety of different $\alpha$ and $\beta$ values and the scheme can be used to do defect control.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/hb10_alpha_beta_test}
+\caption{HB10 - maximum size of the defect based on different values of $\alpha$ and $\beta$.}
+\label{fig:hb10_alpha_beta_test}
+\end{figure}
+
+
+\paragraph{Results}
+\paragraph{Problem 1 results}
+Figures $\ref{fig:rk4_with_hb10_p1_global_defect}$, $\ref{fig:rk4_with_hb10_p1_global_error}$ and $\ref{fig:rk4_with_hb10_p1_scaled_defects}$ shows the results of using RK4 with HB10 on Problem 1. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.3h$ and $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb10_p1_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb10_p1_global_defect}$. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p1_global_defect}
+\caption{Defect across the entire domain for RK4 with HB10 on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk4_with_hb10_p1_global_defect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p1_global_error}
+\caption{Global Error for RK4 with HB10 on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk4_with_hb10_p1_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p1_scaled_defects}
+\caption{Scaled defects for RK4 with HB10 on problem 1 at an absolute tolerance of $10^{-6}$ mapped into $[0, 1]$.}
+\label{fig:rk4_with_hb10_p1_scaled_defects}
+\end{figure}
+
+\paragraph{Problem 2 results}
+Figures $\ref{fig:rk4_with_hb10_p2_global_defect}$, $\ref{fig:rk4_with_hb10_p2_global_error}$ and $\ref{fig:rk4_with_hb10_p2_scaled_defects}$ shows the results of using RK4 with HB10 on Problem 2. We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.8h$ along a step of size, h. See Figure $\ref{fig:rk4_with_hb10_p2_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb10_p2_global_defect}$. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p2_global_defect}
+\caption{Defect across the entire domain for RK4 with HB10 on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk4_with_hb10_p2_global_defect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p2_global_error}
+\caption{Global Error for RK4 with HB10 on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk4_with_hb10_p2_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p2_scaled_defects}
+\caption{Scaled defects of RK4 with HB10 for problem 2 at an absolute tolerance of $10^{-6}$ mapped into $[0, 1]$.}
+\label{fig:rk4_with_hb10_p2_scaled_defects}
+\end{figure}
+
+\paragraph{Problem 3 results}
+Figures $\ref{fig:rk4_with_hb10_p3_global_defect}$, $\ref{fig:rk4_with_hb10_p3_global_error}$ and $\ref{fig:rk4_with_hb10_p3_scaled_defects}$ shows the results of using RK4 with HB10 on Problem 3. 
+We note that an absolute tolerance of $10^{-6}$ is applied on the maximum defect within the step and this can be shown to occur at $0.3h$ or $0.8h$ along a step of size, h.  See Figure $\ref{fig:rk4_with_hb10_p3_scaled_defects}$, to see the scaled defect reaching a maximum near these points. We note that we are able to successfully control the defect of the continuous numerical solution using this approach, see Figure $\ref{fig:rk4_with_hb10_p3_global_defect}$. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p3_global_defect}
+\caption{Defect across the entire domain of RK4 with HB10 on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk4_with_hb10_p3_global_defect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p3_global_error}
+\caption{Global Error of RK4 with HB10 on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk4_with_hb10_p3_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb10_p3_scaled_defects}
+\caption{Scaled defects of RK4 with HB10 on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk4_with_hb10_p3_scaled_defects}
+\end{figure}
+
+
+\begin{table}[h]
+\caption {Number of steps taken by RK4 when modified to do defect control with HB8 vs when modified with HB10.} \label{tab:rk4_with_hb10_nsteps}
+\begin{center}
+\begin{tabular}{ c c c c c } 
+Problem & succ. steps HB8 & succ. steps HB10 & nsteps HB8 & nsteps HB10 \\ 
+1       & 20                 &        24          & 20         & 25\\ 
+2       & 37                 &        50          & 60         & 50\\
+3       & 69                 &        93          & 89         & 97\\
+\end{tabular}
+\end{center}
+\end{table}
+
+HB10 seems to be worse than HB8. We will explain this in Section $\ref{section:crks_vs_hbs}$. This is because at coarser tolerance HB10 works worse than HB8. This is because though the order is $O(h^{10})$ versus $O(h^8)$, the coefficient for HB10 is much worse. Thus it is only when the step sizes are smaller that HB10 works better than HB8.
+
+
