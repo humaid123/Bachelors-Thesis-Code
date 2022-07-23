@@ -61,6 +61,7 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
     res = [(xn, yn)]
     fn_s = [f_start]
     interps = []
+    lower_order_interps = []
 
     # we do a perfect step for the one_step
     h = 1e-2 # HB6 V is at 1e-2. sqrt(tol)
@@ -136,6 +137,8 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
 
 
             interps.append(this_interp_hb6)
+            lower_order_interps.append(this_interp_hb4)
+
             if max_error_estimate < (tol / 10):
                 h *= 2
         else:
@@ -147,11 +150,16 @@ def rk_error_control_perfect_first_step(fun, t_span, y0, tol, solution, gauss_ru
     
     continuous_sol = ContinuousSolution()
     continuous_sol.extend(interps)
+
+    lower_continuous_sol = ContinuousSolution()
+    lower_continuous_sol.extend(lower_order_interps)
     return (
         res, 
         continuous_sol.eval,
         continuous_sol.prime,
-        continuous_sol.create_error_samplings()
+        continuous_sol.create_error_samplings(),
+        lower_continuous_sol,
+        lower_continuous_sol.create_error_samplings(),
     )
 
 # =================================================================================

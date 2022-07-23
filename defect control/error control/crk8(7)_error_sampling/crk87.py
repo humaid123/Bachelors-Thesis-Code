@@ -84,7 +84,7 @@ def rk_error_control(fun, t_span, y0, tol):
     nsteps = 0
     n_successful_steps = 0
 
-    h = sqrt(tol)
+    h = 1e-1 # sqrt(tol)
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 

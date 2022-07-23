@@ -20,10 +20,11 @@ class ContinuousSolution:
                 return hb.eval(x)
 
         first_hb = self.interps[0]
-        if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
-            return first_hb.eval(x)
-        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
-        return -1
+        # if (first_hb.x_i_minus_2 <= x <= first_hb.x_i):
+        #     return first_hb.eval(x)
+        # print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_2} <= x <= {self.interps[-1].x_i_plus_1}")
+        print(f"ERROR: {x} is outside of the solution range: {first_hb.x_i_minus_1} <= x <= {self.interps[-1].x_i_plus_1} - evaluating the first interp")
+        return first_hb.eval(x)
 
     def prime(self, x) -> float:
         for hb in self.interps:

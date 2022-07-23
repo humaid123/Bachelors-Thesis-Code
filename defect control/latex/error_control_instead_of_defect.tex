@@ -24,17 +24,16 @@ Figure $\ref{fig:defect_is_v_shape}$ and $\ref{fig:error_is_not_v_shape}$ shows 
 \label{fig:error_is_not_v_shape}
 \end{figure}
 
-\subsection{sampling error}
 we sample
 \begin{equation}
 | h(x) - l(x) |
 \end{equation}
 at two x values within $x_i$ and $x_{i+1}$ and take the max to get the error estimate within the step.
 
-\subsubsection{rk4 with hb4 vs hb6 with sampling}
+\subsection{rk4 with hb4 vs hb6 with sampling}
 Because we do not differentiate and that hb4 has order 4, we can use with rk4 with HB4 for error control. Thus HB4 and HB6 should not suffer from much interpolation error and we can use rk4 with the hb4 and hb6 using the error scheme
 
-\paragraph{Problem 1} Figures $\ref{fig:rk4_with_hb4_hb6_sampling_p1_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb4 vs hb6 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p1_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
+\paragraph{Problem 1} Figures $\ref{fig:rk4_with_hb4_hb6_sampling_p1_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb4 vs hb6 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p1_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p1_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$.
 
 \begin{figure}[H]
 \centering
@@ -46,11 +45,18 @@ Because we do not differentiate and that hb4 has order 4, we can use with rk4 wi
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_sampling_p1_scaled_errors}
-\caption{Scaled errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\caption{Scaled exact errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
 \label{fig:rk4_with_hb4_hb6_sampling_p1_scaled_errors}
 \end{figure}
 
-\paragraph{Problem 2} Figures $\ref{fig:rk4_with_hb4_hb6_sampling_p2_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb4 vs hb6 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p2_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_sampling_p1_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk4_with_hb4_hb6_sampling_p1_scaled_estimated_errors}
+\end{figure}
+
+\paragraph{Problem 2} Figures $\ref{fig:rk4_with_hb4_hb6_sampling_p2_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb4 vs hb6 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p2_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p2_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$.
 
 \begin{figure}[H]
 \centering
@@ -62,11 +68,19 @@ Because we do not differentiate and that hb4 has order 4, we can use with rk4 wi
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_sampling_p2_scaled_errors}
-\caption{Scaled errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\caption{Scaled exact errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
 \label{fig:rk4_with_hb4_hb6_sampling_p2_scaled_errors}
 \end{figure}
 
-\paragraph{Problem 3} Figures $\ref{fig:rk4_with_hb4_hb6_sampling_p3_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb4 vs hb6 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p3_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_sampling_p2_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk4_with_hb4_hb6_sampling_p2_scaled_estimated_errors}
+\end{figure}
+
+
+\paragraph{Problem 3} Figures $\ref{fig:rk4_with_hb4_hb6_sampling_p3_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb4 vs hb6 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p3_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk4_with_hb4_hb6_sampling_p3_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$
 
 \begin{figure}[H]
 \centering
@@ -78,9 +92,17 @@ Because we do not differentiate and that hb4 has order 4, we can use with rk4 wi
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_sampling_p3_scaled_errors}
-\caption{Scaled errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\caption{Scaled exact errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
 \label{fig:rk4_with_hb4_hb6_sampling_p3_scaled_errors}
 \end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_sampling_p3_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK4 with HB4 vs HB6 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk4_with_hb4_hb6_sampling_p3_scaled_estimated_errors}
+\end{figure}
+
 
 \begin{table}[h]
 \caption {Number of steps taken by RK4 using error control with HB4 vs HB6 by sampling the error.} \label{tab:rk4_with_hb4_hb6_sampling_nsteps}
@@ -95,73 +117,21 @@ Problem & successful steps & total steps \\
 \end{table}
 
 
-\subsubsection{rk4 with hb6 vs hb8 with sampling}
-rk4 can also be use with hb6  and hb8 and not suffer from much interpolation error.
+\subsubsection{rk4 with hb4 vs hb8}
+can be considered
+\subsubsection{rk4 with hb4 vs hb10}
+can be considered
+\subsubsection{rk4 with hb6 vs hb8}
+can be considered
+\subsubsection{rk4 with hb6 vs hb10}
+can be considered
+\subsubsection{rk4 with hb8 vs hb10}
+can be considered
 
-\paragraph{Problem 1} Figures $\ref{fig:rk4_with_hb6_hb8_sampling_p1_global_error}$ and $\ref{fig:rk4_with_hb6_hb8_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb6 vs hb8 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb6_hb8_sampling_p1_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_sampling_p1_global_error}
-\caption{Global Error for RK4 with HB6 vs HB8 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_sampling_p1_global_error}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_sampling_p1_scaled_errors}
-\caption{Scaled errors over all steps for RK4 with HB6 vs HB8 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
-\label{fig:rk4_with_hb6_hb8_sampling_p1_scaled_errors}
-\end{figure}
-
-\paragraph{Problem 2} Figures $\ref{fig:rk4_with_hb6_hb8_sampling_p2_global_error}$ and $\ref{fig:rk4_with_hb6_hb8_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb6 vs hb8 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb6_hb8_sampling_p2_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_sampling_p2_global_error}
-\caption{Global Error for RK4 with HB6 vs HB8 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_sampling_p2_global_error}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_sampling_p2_scaled_errors}
-\caption{Scaled errors over all steps for RK4 with HB6 vs HB8 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
-\label{fig:rk4_with_hb6_hb8_sampling_p2_scaled_errors}
-\end{figure}
-
-\paragraph{Problem 3} Figures $\ref{fig:rk4_with_hb6_hb8_sampling_p3_global_error}$ and $\ref{fig:rk4_with_hb6_hb8_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using rk4 with hb6 vs hb8 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb6_hb8_sampling_p3_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_sampling_p3_global_error}
-\caption{Global Error for RK4 with HB6 vs HB8 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_sampling_p3_global_error}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_sampling_p3_scaled_errors}
-\caption{Scaled errors over all steps for RK4 with HB6 vs HB8 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
-\label{fig:rk4_with_hb6_hb8_sampling_p3_scaled_errors}
-\end{figure}
-
-\begin{table}[h]
-\caption {Number of steps taken by RK4 using error control with HB6 vs HB8 by sampling the error.} \label{tab:rk4_with_hb6_hb8_sampling_nsteps}
-\begin{center}
-\begin{tabular}{ c c c } 
-Problem & successful steps & total steps \\ 
-1       & 17                         & 17 \\ 
-2       & 24                         & 42 \\
-3       & 36                         & 57 \\
-\end{tabular}
-\end{center}
-\end{table}
-
-\subsubsection{rk6 with hb6 vs hb8 with sampling}
+\subsection{rk6 with hb6 vs hb8 with sampling}
 Because we do not differentiate and that hb6 has order 6, we can use with rk6 with HB6 for error control. Thus HB6 and HB8 should not suffer from much interpolation error and we can use rk6 with the hb4 and hb6 using the error scheme
 
-\paragraph{Problem 1} Figures $\ref{fig:rk6_with_hb6_hb8_sampling_p1_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using rk6 with hb6 vs hb8 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p1_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
+\paragraph{Problem 1} Figures $\ref{fig:rk6_with_hb6_hb8_sampling_p1_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using rk6 with hb6 vs hb8 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p1_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p1_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$.
 
 \begin{figure}[H]
 \centering
@@ -173,11 +143,19 @@ Because we do not differentiate and that hb6 has order 6, we can use with rk6 wi
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_sampling_p1_scaled_errors}
-\caption{Scaled errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\caption{Scaled exact errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
 \label{fig:rk6_with_hb6_hb8_sampling_p1_scaled_errors}
 \end{figure}
 
-\paragraph{Problem 2} Figures $\ref{fig:rk6_with_hb6_hb8_sampling_p2_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using rk6 with hb6 vs hb8 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p2_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_sampling_p1_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk6_with_hb6_hb8_sampling_p1_scaled_estimated_errors}
+\end{figure}
+
+
+\paragraph{Problem 2} Figures $\ref{fig:rk6_with_hb6_hb8_sampling_p2_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using rk6 with hb6 vs hb8 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p2_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p2_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$.
 
 \begin{figure}[H]
 \centering
@@ -189,11 +167,18 @@ Because we do not differentiate and that hb6 has order 6, we can use with rk6 wi
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_sampling_p2_scaled_errors}
-\caption{Scaled errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\caption{Scaled exact errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
 \label{fig:rk6_with_hb6_hb8_sampling_p2_scaled_errors}
 \end{figure}
 
-\paragraph{Problem 3} Figures $\ref{fig:rk6_with_hb6_hb8_sampling_p3_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using rk6 with hb6 vs hb8 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p3_scaled_errors}$, we can see that there is no consistent location where we can sample the error to get the maximum error.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_sampling_p2_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk6_with_hb6_hb8_sampling_p2_scaled_estimated_errors}
+\end{figure}
+
+\paragraph{Problem 3} Figures $\ref{fig:rk6_with_hb6_hb8_sampling_p3_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using rk6 with hb6 vs hb8 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p3_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk6_with_hb6_hb8_sampling_p3_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$.
 
 \begin{figure}[H]
 \centering
@@ -205,8 +190,15 @@ Because we do not differentiate and that hb6 has order 6, we can use with rk6 wi
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_sampling_p3_scaled_errors}
-\caption{Scaled errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\caption{Scaled exact errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
 \label{fig:rk6_with_hb6_hb8_sampling_p3_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_sampling_p3_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK6 with HB6 vs HB8 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk6_with_hb6_hb8_sampling_p3_scaled_estimated_errors}
 \end{figure}
 
 \begin{table}[h]
@@ -221,244 +213,273 @@ Problem & successful steps & total steps \\
 \end{center}
 \end{table}
 
-\subsection{Problems with error sampling.}
-The shape of the error across each step is very inconsistent (See the Scaled errors plots in the previous section).One idea would be to find the max error by sampling at even more points. However, a lot of samplings would be required to reach a consistent error estimate scheme. In the next section, we present a way to sample the error using a continuous L2 norm. This essentially measures the distance between the two interpolants. By designing a continuous L2-norm scheme that maintain ratio of the error estimate from an L2 norm between two interpolants and the actual error between the interpolant and the actual solution, we guarantee that controlling the L2 norm controls the global error.
+\subsubsection{rk6 with hb6 vs hb10}
+can be considered
+\subsubsection{rk6 with hb8 vs hb10}
+can be considered
 
-\subsection{continuous L2 norm}
-The error estimate is calculated with a continuous L2 norm as follows.
-\begin{equation}
-estimated\_error_i = \sqrt{ \int_{x_i}^{x_{i+1}} (\frac{h(x) - l(x)}{1 + |l(x)|})^2 \,dx }
-\end{equation}
-where h(x) is the higher order interpolant and l(x) is the lower order interpolant. This formula gives the error for one step and we compare it with the user provided atol for error control. 
+\subsection{rk8 with hb8 vs hb10}
+Because we do not differentiate and that hb8 has order 8, we can use with rk8 with HB8 for error control. Thus HB8 and HB10 should not suffer from much interpolation error and we can use rk8 with the hb8 and hb10 using the error scheme
 
-========================
-We ignored rtol as we had to factorise tol from the denominator so that we can use tol and $tol/10$ for comparisons. Essentially we assume $atol == rtol$
-===================
-
-We note that the solver performs error control through the continuous L2 norm but we want to control the actual error between the exact solution and the interpolant that was returned. To that effect, we define the following ratio: $\frac{estimated\_error_i}{exact\_error_i}$. Ideally, we want this ratio to be 1 for the scheme that we designed as a ratio of 1 entails that controlling the L2-norm would control the error between the interpolant and the exact solution.
-
-We note that we consider the exact error is calculated with
-\begin{equation}
-exact\_error_i = \sqrt{ \int_{x_i}^{x_{i+1}} (\frac{sol(x) - l(x)}{1 + |l(x)|})^2 \,dx }
-\end{equation}
-where $sol(x)$ is the solution at point, x so that we can plot $\frac{estimated\_error_i}{exact\_error_i}$. 
-
-To perform the integration, we use a Gauss rule. Through experimentation, we have seen that a 3-point Gauss rule was enough to produce efficient solution. A 2-point rule increased was being affected by the integration error whereas 4- and 5-points rules were not improving the number of steps taken by much showing that the integration error was no longer a limiting factor as from the 3-point rule. We note that we want to use as the smallest Gauss rule we can get away with to improve efficiency.
-
-\subsubsection{rk4 with hb4 vs hb6 with continuous L2 norm}
-Because we do not differentiate and that hb4 has order 4, we can use with rk4 with HB4 for error control. Thus HB4 and HB6 should not suffer from much interpolation error and we can use rk4 with the hb4 and hb6 using the error scheme
-
-
-\paragraph{Problem 1} Figures $\ref{fig:rk4_with_hb4_hb6_L2norm_p1_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_L2norm_p1_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk4 with hb4 vs hb6 with continuous L2 norm on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_L2norm_p1_error_ratio}$, we can see that the ratio is relatively close to 1 and we can see in Figure  $\ref{fig:rk4_with_hb4_hb6_L2norm_p1_global_error}$ that the exact error is within the tolerance even when the continuous L2 norm between the two interpolant was used to control the error.
+\paragraph{Problem 1} Figures $\ref{fig:rk8_with_hb8_hb10_sampling_p1_global_error}$ and $\ref{fig:rk8_with_hb8_hb10_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using rk8 with hb8 vs hb10 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk8_with_hb8_hb10_sampling_p1_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk8_with_hb8_hb10_sampling_p1_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_L2norm_p1_global_error}
-\caption{Global Error for RK4 with HB4 vs HB6 with continuous L2 norm on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb4_hb6_L2norm_p1_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p1_global_error}
+\caption{Global Error for RK8 with HB8 vs HB10 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_L2norm_p1_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK4 with HB4 vs HB6 with continuous L2 norm on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb4_hb6_L2norm_p1_error_ratio}
-\end{figure}
-
-\paragraph{Problem 2} Figures $\ref{fig:rk4_with_hb4_hb6_L2norm_p2_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_L2norm_p2_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk4 with hb4 vs hb6 with continuous L2 norm on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_L2norm_p2_error_ratio}$, we can see that the ratio is not relatively close to 1 and we can see in Figure $\ref{fig:rk4_with_hb4_hb6_L2norm_p2_global_error}$ that the exact error is not within the tolerance.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_L2norm_p2_global_error}
-\caption{Global Error for RK4 with HB4 vs HB6 with continuous L2 norm on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb4_hb6_L2norm_p2_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p1_scaled_errors}
+\caption{Scaled exact errors over all steps for RK8 with HB8 vs HB10 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p1_scaled_errors}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_L2norm_p2_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK4 with HB4 vs HB6 with continuous L2 norm on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb4_hb6_L2norm_p2_error_ratio}
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p1_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK8 with HB8 vs HB10 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p1_scaled_estimated_errors}
 \end{figure}
 
-\paragraph{Problem 3} Figures $\ref{fig:rk4_with_hb4_hb6_L2norm_p3_global_error}$ and $\ref{fig:rk4_with_hb4_hb6_L2norm_p3_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk4 with hb4 vs hb6 with continuous L2 norm on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb4_hb6_L2norm_p3_error_ratio}$, we can see that the ratio is relatively close to 1 and we can see in Figure  $\ref{fig:rk4_with_hb4_hb6_L2norm_p3_global_error}$ that the exact error is within the tolerance even when the continuous L2 norm between the two interpolant was used to control the error.
+
+\paragraph{Problem 2} Figures $\ref{fig:rk8_with_hb8_hb10_sampling_p2_global_error}$ and $\ref{fig:rk8_with_hb8_hb10_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using rk8 with hb8 vs hb10 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk8_with_hb8_hb10_sampling_p2_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk8_with_hb8_hb10_sampling_p2_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_L2norm_p3_global_error}
-\caption{Global Error for RK4 with HB4 vs HB6 with continuous L2 norm on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb4_hb6_L2norm_p3_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p2_global_error}
+\caption{Global Error for RK8 with HB8 vs HB10 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb4_hb6_L2norm_p3_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK4 with HB4 vs HB6 with continuous L2 norm on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb4_hb6_L2norm_p3_error_ratio}
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p2_scaled_errors}
+\caption{Scaled exact errors over all steps for RK8 with HB8 vs HB10 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p2_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p2_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK8 with HB8 vs HB10 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p2_scaled_estimated_errors}
+\end{figure}
+
+\paragraph{Problem 3} Figures $\ref{fig:rk8_with_hb8_hb10_sampling_p3_global_error}$ and $\ref{fig:rk8_with_hb8_hb10_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using rk8 with hb8 vs hb10 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk8_with_hb8_hb10_sampling_p3_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:rk8_with_hb8_hb10_sampling_p3_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p3_global_error}
+\caption{Global Error for RK8 with HB8 vs HB10 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p3_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p3_scaled_errors}
+\caption{Scaled exact errors over all steps for RK8 with HB8 vs HB10 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p3_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/rk8_with_hb8_hb10_sampling_p3_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for RK8 with HB8 vs HB10 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:rk8_with_hb8_hb10_sampling_p3_scaled_estimated_errors}
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK4 using error control with HB4 vs HB6 by using a continuous L2 norm.} \label{tab:rk4_with_hb4_hb6_L2norm_nsteps}
+\caption {Number of steps taken by RK8 using error control with HB8 vs HB10 by sampling the error.} \label{tab:rk8_with_hb8_hb10_sampling_nsteps}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & successful steps & total steps \\ 
-1       & 27                         & 29 \\ 
-2       & 20                         & 21 \\
-3       & 61                         & 68 \\
+1       & 14               & 16 \\ 
+2       & 10               & 15 \\
+3       & 16               & 24 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-\subsubsection{rk4 with hb6 vs hb8 with continuous L2 norm}
-rk4 can also be use with hb6  and hb8 and not suffer from much interpolation error.
+\subsection{comparison with crk65 and crk87 error sampling}
+We also do continuous error sampling with crk65 and crk87 because both are equipped with a lower order interpolants and higher order interpolants. 
 
+In this section we compare crk65 with rk6 with hb6 vs hb8 and compare crk87 with rk8 with hb8 vs hb10.
 
+We use the same initial step size and same step selection algorithm as we did in both experiments. However we should note that all the solvers above can be optimised based on their respective theories.
 
-\paragraph{Problem 1} Figures $\ref{fig:rk4_with_hb6_hb8_L2norm_p1_global_error}$ and $\ref{fig:rk4_with_hb6_hb8_L2norm_p1_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk4 with hb6 vs hb8 with continuous L2 norm on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb6_hb8_L2norm_p1_error_ratio}$, we can see that the ratio is relatively close to 1 and we can see in Figure  $\ref{fig:rk4_with_hb6_hb8_L2norm_p1_global_error}$ that the exact error is within the tolerance even when the continuous L2 norm between the two interpolant was used to control the error.
+\subsubsection{crk65 vs rk6 with hb6 vs hb8}
+
+\paragraph{Problem 1} Figures $\ref{fig:crk65_sampling_p1_global_error}$ and $\ref{fig:crk65_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using crk65 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:crk65_sampling_p1_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:crk65_sampling_p1_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_L2norm_p1_global_error}
-\caption{Global Error for RK4 with HB6 vs HB8 with continuous L2 norm on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_L2norm_p1_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p1_global_error}
+\caption{Global Error for CRK65 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:crk65_sampling_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_L2norm_p1_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK4 with HB6 vs HB8 with continuous L2 norm on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_L2norm_p1_error_ratio}
-\end{figure}
-
-\paragraph{Problem 2} Figures $\ref{fig:rk4_with_hb6_hb8_L2norm_p2_global_error}$ and $\ref{fig:rk4_with_hb6_hb8_L2norm_p2_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk4 with hb6 vs hb8 with continuous L2 norm on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb6_hb8_L2norm_p2_error_ratio}$, we can see that the ratio is not relatively close to 1 and we can see in Figure $\ref{fig:rk4_with_hb6_hb8_L2norm_p2_global_error}$ that the exact error is not within the tolerance.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_L2norm_p2_global_error}
-\caption{Global Error for RK4 with HB6 vs HB8 with continuous L2 norm on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_L2norm_p2_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p1_scaled_errors}
+\caption{Scaled exact errors over all steps for CRK65 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk65_sampling_p1_scaled_errors}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_L2norm_p2_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK4 with HB6 vs HB8 with continuous L2 norm on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_L2norm_p2_error_ratio}
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p1_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for CRK65 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk65_sampling_p1_scaled_estimated_errors}
 \end{figure}
 
-\paragraph{Problem 3} Figures $\ref{fig:rk4_with_hb6_hb8_L2norm_p3_global_error}$ and $\ref{fig:rk4_with_hb6_hb8_L2norm_p3_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk4 with hb6 vs hb8 with continuous L2 norm on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk4_with_hb6_hb8_L2norm_p3_error_ratio}$, we can see that the ratio is not relatively close to 1 and we can see in Figure $\ref{fig:rk4_with_hb6_hb8_L2norm_p3_global_error}$ that the exact error is not within the tolerance.
 
+\paragraph{Problem 2} Figures $\ref{fig:crk65_sampling_p2_global_error}$ and $\ref{fig:crk65_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using crk65 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:crk65_sampling_p2_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:crk65_sampling_p2_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_L2norm_p3_global_error}
-\caption{Global Error for RK4 with HB6 vs HB8 with continuous L2 norm on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_L2norm_p3_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p2_global_error}
+\caption{Global Error for CRK65 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:crk65_sampling_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk4_with_hb6_hb8_L2norm_p3_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK4 with HB6 vs HB8 with continuous L2 norm on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk4_with_hb6_hb8_L2norm_p3_error_ratio}
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p2_scaled_errors}
+\caption{Scaled exact errors over all steps for CRK65 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk65_sampling_p2_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p2_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for CRK65 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk65_sampling_p2_scaled_estimated_errors}
+\end{figure}
+
+\paragraph{Problem 3} Figures $\ref{fig:crk65_sampling_p3_global_error}$ and $\ref{fig:crk65_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using crk65 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:crk65_sampling_p3_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:crk65_sampling_p3_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p3_global_error}
+\caption{Global Error for CRK65 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:crk65_sampling_p3_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p3_scaled_errors}
+\caption{Scaled exact errors over all steps for CRK65 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk65_sampling_p3_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk65_sampling_p3_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for CRK65 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk65_sampling_p3_scaled_estimated_errors}
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK4 using error control with HB6 vs HB8 by using a continuous L2 norm.} \label{tab:rk4_with_hb6_hb8_L2norm_nsteps}
+\caption {Number of steps taken by CRK65 using error control with error sampling its two interpolants.} \label{tab:crk65_sampling_nsteps}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & successful steps & total steps \\ 
-1       & 15                         & 16 \\ 
-2       & 15                         & 15 \\
-3       & 26                         & 29 \\
+1       & 12               & 12 \\ 
+2       & 13               & 19 \\
+3       & 20               & 30 \\
 \end{tabular}
 \end{center}
 \end{table}
 
+Comparing Table $\ref{tab:rk6_with_hb6_hb8_sampling_nsteps}$ and Table $\ref{tab:crk65_sampling_nstep}$, we can see that we can get similar number of steps without paying for additional stages. We can also see that we get similar levels of accuracy.
 
-\subsubsection{rk6 with hb6 vs hb8 with continuous L2 norm}
-Because we do not differentiate and that hb6 has order 6, we can use with rk6 with HB6 for error control. Thus HB6 and HB8 should not suffer from much interpolation error and we can use rk6 with the hb4 and hb6 using the error scheme.
+\subsubsection{crk87 vs rk8 with hb8 vs hb10}
 
-\paragraph{Problem 1} Figures $\ref{fig:rk6_with_hb6_hb8_L2norm_p1_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_L2norm_p1_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk6 with hb6 vs hb8 with continuous L2 norm on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_L2norm_p1_error_ratio}$, we can see that the ratio is relatively close to 1 and we can see in Figure $\ref{fig:rk6_with_hb6_hb8_L2norm_p1_global_error}$ that the exact error is within the tolerance even when the continuous L2 norm between the two interpolant was used to control the error.
+\paragraph{Problem 1} Figures $\ref{fig:crk87_sampling_p1_global_error}$ and $\ref{fig:crk87_sampling_p1_scaled_errors}$ shows the global error and the shape of the error on each step of using crk87 with sampling on Problem 1 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:crk87_sampling_p1_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:crk87_sampling_p1_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.5h$. CONSISTENT MAXIMUM IS NOT THE CASE FOR crk87 =============================================
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_L2norm_p1_global_error}
-\caption{Global Error for RK6 with HB6 vs HB8 with continuous L2 norm on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk6_with_hb6_hb8_L2norm_p1_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p1_global_error}
+\caption{Global Error for CRK87 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$.}
+\label{fig:crk87_sampling_p1_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_L2norm_p1_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK6 with HB6 vs HB8 with continuous L2 norm on problem 1 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk6_with_hb6_hb8_L2norm_p1_error_ratio}
-\end{figure}
-
-\paragraph{Problem 2} Figures $\ref{fig:rk6_with_hb6_hb8_L2norm_p2_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_L2norm_p2_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk6 with hb6 vs hb8 with continuous L2 norm on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_L2norm_p2_error_ratio}$, we can see that the ratio is relatively close to 1 and we can see in Figure $\ref{fig:rk6_with_hb6_hb8_L2norm_p2_global_error}$ that the exact error is within the tolerance even when the continuous L2 norm between the two interpolant was used to control the error.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_L2norm_p2_global_error}
-\caption{Global Error for RK6 with HB6 vs HB8 with continuous L2 norm on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk6_with_hb6_hb8_L2norm_p2_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p1_scaled_errors}
+\caption{Scaled exact errors over all steps for CRK87 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk87_sampling_p1_scaled_errors}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_L2norm_p2_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK6 with HB6 vs HB8 with continuous L2 norm on problem 2 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk6_with_hb6_hb8_L2norm_p2_error_ratio}
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p1_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for CRK87 with error sampling on problem 1 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk87_sampling_p1_scaled_estimated_errors}
 \end{figure}
 
-\paragraph{Problem 3} Figures $\ref{fig:rk6_with_hb6_hb8_L2norm_p3_global_error}$ and $\ref{fig:rk6_with_hb6_hb8_L2norm_p3_error_ratio}$ shows the global error and the ratio $\frac{estimated\_error_i}{exact\_error_i}$ on each step of using rk6 with hb6 vs hb8 with continuous L2 norm on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:rk6_with_hb6_hb8_L2norm_p3_error_ratio}$, we can see that the ratio is relatively close to 1 and we can see in Figure $\ref{fig:rk6_with_hb6_hb8_L2norm_p3_global_error}$ that the exact error is within the tolerance even when the continuous L2 norm between the two interpolant was used to control the error.
 
+\paragraph{Problem 2} Figures $\ref{fig:crk87_sampling_p2_global_error}$ and $\ref{fig:crk87_sampling_p2_scaled_errors}$ shows the global error and the shape of the error on each step of using crk87 with sampling on Problem 2 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:crk87_sampling_p2_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:crk87_sampling_p2_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.  CONSISTENT MAXIMUM IS NOT THE CASE FOR crk87 =============================================
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_L2norm_p3_global_error}
-\caption{Global Error for RK6 with HB6 vs HB8 with continuous L2 norm on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk6_with_hb6_hb8_L2norm_p3_global_error}
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p2_global_error}
+\caption{Global Error for CRK87 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$.}
+\label{fig:crk87_sampling_p2_global_error}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./figures/rk6_with_hb6_hb8_L2norm_p3_error_ratio}
-\caption{Ratio $\frac{estimated\_error_i}{exact\_error_i}$ at the end of each successful step for RK6 with HB6 vs HB8 with continuous L2 norm on problem 3 at an absolute tolerance of $10^{-6}$.}
-\label{fig:rk6_with_hb6_hb8_L2norm_p3_error_ratio}
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p2_scaled_errors}
+\caption{Scaled exact errors over all steps for CRK87 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk87_sampling_p2_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p2_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for CRK87 with error sampling on problem 2 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk87_sampling_p2_scaled_estimated_errors}
+\end{figure}
+
+\paragraph{Problem 3} Figures $\ref{fig:crk87_sampling_p3_global_error}$ and $\ref{fig:crk87_sampling_p3_scaled_errors}$ shows the global error and the shape of the error on each step of using crk87 with sampling on Problem 3 at an absolute tolerance of $10^{-6}$. From Figure $\ref{fig:crk87_sampling_p3_scaled_errors}$, we can see that there is no consistent location where the exact error between the returned interpolant and the exact solution can be sampled. However, internally, the solver uses an estimated error between the two interpolants that it uses. In Figure $\ref{fig:crk87_sampling_p3_scaled_estimated_errors}$, we can see that the maximum error occurs reasonably consistently at $0.6h$.  CONSISTENT MAXIMUM IS NOT THE CASE FOR crk87 =============================================
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p3_global_error}
+\caption{Global Error for CRK87 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$.}
+\label{fig:crk87_sampling_p3_global_error}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p3_scaled_errors}
+\caption{Scaled exact errors over all steps for CRK87 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk87_sampling_p3_scaled_errors}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{./figures/crk87_sampling_p3_scaled_estimated_errors}
+\caption{Scaled estimated errors over all steps for CRK87 with error sampling on problem 3 at an absolute tolerance of $10^{-6}$ mapped onto $[0, 1]$.}
+\label{fig:crk87_sampling_p3_scaled_estimated_errors}
 \end{figure}
 
 \begin{table}[h]
-\caption {Number of steps taken by RK6 using error control with HB6 vs HB8 by using a continuous L2 norm.} \label{tab:rk6_with_hb6_hb8_L2norm_nsteps}
+\caption {Number of steps taken by CRK87 using error control with error sampling its two interpolants.} \label{tab:crk87_sampling_nsteps}
 \begin{center}
 \begin{tabular}{ c c c } 
 Problem & successful steps & total steps \\ 
-1       & 13                         & 15 \\ 
-2       & 10                         & 10 \\
-3       & 26                         & 36 \\
+1       & 8               & 8 \\ 
+2       & 8               & 10 \\
+3       & 10              & 12 \\
 \end{tabular}
 \end{center}
 \end{table}
 
-========================================================================================
-Hello Prof.
-The figures and the number of steps for RK6 using error control with HB6 vs HB8 by using a continuous L2 norm are extremely good. The solution is both very accurate and very efficient compared to everything we have so far.... What is even more impressive is that we can solve very efficiently at 1e-12, we are talking 2 to 3 times more efficient than rk6 with HB8 defect control.
+Table $\ref{tab:rk8_with_hb8_hb10_sampling_nsteps}$ and $\ref{tab:crk87_sampling_nsteps}$ shows the number of steps for crk87 are not too close to rk8 with hb8 vs hb10 but close enough. WE also note that rk8 with hb8 vs hb10 is two times less expensive.
 
-\begin{table}[h]
-\caption {Number of steps taken by RK6 using error control with HB6 vs HB8 by using a continuous L2 norm at a tolerance of $10^{-12}$.} \label{tab:rk6_with_hb6_hb8_L2norm_compared}
-\begin{center}
-\begin{tabular}{ c c c } 
-Problem & successful steps & total steps \\ 
-1       & 109vs261            & 158vs290 \\ 
-2       & 50vs134             & 53vs196 \\
-3       & 189vs297            & 236vs466 \\
-\end{tabular}
-\end{center}
-\end{table}
-
-Table $\ref{tab:rk6_with_hb6_hb8_L2norm_compared}$ shows the comparison between rk6 with hb6 vs hb8 with L2 norm and rk6 with hb8 defect control. We note that the solution for rk6 with hb6 vs hb8 with L2 norm keeps the global error within $10^{-12}$.
-========================================================================================================
-\subsection{conclusion}
-The continuous L2 norm works expect from Problem 2 where the ratio is often off. We note that Problem 2 has an exponentially growing solution. A better error estimate that takes this into account may help the situation.
-
-rk6 with hb6 vs hb8 using a continuous L2 norm is very efficient and accurate and should be explored further.
+ 
