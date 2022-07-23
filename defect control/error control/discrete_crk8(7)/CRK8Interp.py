@@ -54,6 +54,17 @@ class CRK8Interp:
         theta_powers = [theta**pow for pow in range(1, n_degree_polys + 1)] 
         return sigma_prod(b_i, theta_powers, 0, n_degree_polys)
 
+    def prime(self, x):
+        theta = (x - self.x_i) / (self.h_i)
+        b_primes = [self._b_prime(i, theta) for i in range(n_stages_for_interp)]
+        return sigma_prod(self.k, b_primes, 0, n_stages_for_interp)
+
+    def _b_prime(self, i, theta):
+        b_i = B_I8[i]
+        b_i_prime_coeff = [coeff * bij for (coeff, bij) in zip(range(1, n_degree_polys + 1), b_i)]
+        theta_powers = [theta**pow for pow in range(n_degree_polys)] # go from 0 to n_degree_polys - 1
+        res = sigma_prod(b_i_prime_coeff, theta_powers, 0, n_degree_polys)
+        return res
 
 class CRK8ContinuousSolution:
     def __init__(self):

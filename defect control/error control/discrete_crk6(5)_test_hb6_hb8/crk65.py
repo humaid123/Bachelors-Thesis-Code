@@ -1,7 +1,9 @@
 from math import sqrt
 from CRK6Interp import CRK6ContinuousSolution, CRK6Interp
+from CRK5Interp import CRK5ContinuousSolution, CRK5Interp
 from HB6 import HB6ContinuousSolution, HB6
 from HB8_second_scheme import HB8ContinuousSolution, HB8
+from HB10_fourth_scheme import HB10ContinuousSolution, HB10
 
 # http://people.math.sfu.ca/~jverner/RKV65.IIIXb.Efficient.00000144617.081204.RATOnWeb
 A = [
@@ -68,21 +70,24 @@ def rk_error_control(fun, t_span, y0, tol):
     fn_s = [f_start]
 
     crk6_continous_sol = CRK6ContinuousSolution()
+    crk5_continous_sol = CRK5ContinuousSolution()
     hb6_continous_sol  = HB6ContinuousSolution()
     hb8_continous_sol  = HB8ContinuousSolution()
+    hb10_continous_sol  = HB10ContinuousSolution()
 
     nsteps = 0
     n_successful_steps = 0
 
-    h = sqrt(tol)
+    h = 1
     while xn < xend:
         (k, yn_plus_1, yn_plus_1_higher_order) = one_step(fun, xn, yn, f_start, h)
 
         error = abs(yn_plus_1_higher_order - yn_plus_1)
 
+        print("tried step", xn, "estimated_error=", error)
         nsteps += 1
 
-        if error < tol:
+        if error < (tol):
             # accept the step, by moving the x and the y
             x_i = xn
             x_i_plus_1 = xn + h
@@ -92,6 +97,8 @@ def rk_error_control(fun, t_span, y0, tol):
             yn = yn_plus_1
             res.append( (xn, yn) )
 
+            print("step accepted", x_i, "estimated_error=", error)
+
             # so for now, I do an additional function evaluation
             f_start = fun(xn, yn)[0]
             fn_s.append(f_start)
@@ -100,6 +107,7 @@ def rk_error_control(fun, t_span, y0, tol):
 
             # create interps and append to continuous solutionhere
             crk6_continous_sol.append(CRK6Interp(k, y_i, x_i, x_i_plus_1))
+            crk5_continous_sol.append(CRK5Interp(k, y_i, x_i, x_i_plus_1))
             if (len(res) >= 3):
                 (x_i_plus_1, y_i_plus_1)   = res[-1]
                 (x_i, y_i)                 = res[-2]
@@ -117,26 +125,43 @@ def rk_error_control(fun, t_span, y0, tol):
                 if len(res) >= 4:
                     f_i_minus_2 = fn_s[-4]
                     (x_i_minus_2, y_i_minus_2) = res[-4]
-                    hb8_continous_sol.append(HB8(
+                    this_interp_hb8 = HB8(
                         x_i_minus_2, x_i_minus_1, x_i, x_i_plus_1,
                         y_i_minus_2, f_i_minus_2,
                         y_i_minus_1, f_i_minus_1,
                         y_i, f_i,
                         y_i_plus_1, f_i_plus_1
-                    ))
+                    )
+                    prev_interp = this_interp_hb8 # interps[-1] if len(interps) >= 1 else this_interp_hb8
+                    x_i_minus_0_5 = x_i - ((x_i - x_i_minus_1) / 2)
+                    y_i_minus_0_5_eval = prev_interp.eval(x_i_minus_0_5)
+                    # print("difference between sol and eval", abs(y_i_minus_0_5 - y_i_minus_0_5_eval))
+                    f_i_minus_0_5 = fun(x_i_minus_0_5, y_i_minus_0_5_eval)[0]
 
-            if error < (tol / 10):
-                h *= 2
+                    this_interp_hb10 = HB10(
+                        x_i_minus_2, x_i_minus_1, x_i_minus_0_5, x_i, x_i_plus_1,
+                        y_i_minus_2, f_i_minus_2,
+                        y_i_minus_1, f_i_minus_1,
+                        y_i_minus_0_5_eval, f_i_minus_0_5,
+                        y_i, f_i,
+                        y_i_plus_1, f_i_plus_1,
+                    )
+                    hb8_continous_sol.append(this_interp_hb8)
+                    hb10_continous_sol.append(this_interp_hb10)            
+            if error < (tol / 2):
+                h *= 1.2 # 2
         else:
-            h /= 2
+            h /= 1.2 # 2
     print("nsteps =", nsteps)
     print("nsuccessful_steps =", n_successful_steps)
     print("=========================================================")
     return (
         res, 
+        crk5_continous_sol,
         crk6_continous_sol,
         hb6_continous_sol,
         hb8_continous_sol,
+        hb10_continous_sol,
     )
 
 # =================================================================================================================
