@@ -15,7 +15,7 @@ def create_t_eval(start, end, num_points = 100):
 
 def experiment(model, y0, t_span, solution):
     t_eval = create_t_eval(t_span[0], t_span[1])
-    tol = 1e-6
+    tol = 1e-10
     (res, sol, first_deriv, derivs) = rk_defect_control_second_trial(model, t_span, y0[0], tol, solution)
     print("integration complete")
 
